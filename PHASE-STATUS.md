@@ -1,7 +1,7 @@
 # Grease Trap Florida — Phase Status
 
 **Last updated:** 2026-04-03
-**Updated by:** Phase 7A (design system + homepage)
+**Updated by:** Phase 7B-1 (directory components + listing pages)
 
 ---
 
@@ -17,7 +17,7 @@
 | Final DB count | 2,710 businesses | April 3, 2026 |
 | Counties with 2+ listings | 46 counties | April 3, 2026 |
 | Cities with 2+ listings | 131 cities | April 3, 2026 |
-| Total pages generated | [pending] | — |
+| Total pages generated | 2,716 (after 7B-1) | April 3, 2026 |
 
 ---
 
@@ -178,24 +178,39 @@
 - **Deviations:** Blueprint Section 9 updated from teal-navy palette to amber/gold palette per design reference. Header now has transparent hero mode (blueprint originally specified solid-only).
 
 ### Phase 7B: Directory Pages
-- **Status:** ⬜ NOT STARTED
+- **Status:** 🟡 IN PROGRESS
+- **Sub-phases:**
+  - [x] 7B-1: Directory components + listing pages (ListingCard, ListingGrid, TrustBadges, ServicePills, Stars, Pagination, FilterBar, DirectoryShell, LeadForm, MobileQuoteCTA, /companies, /companies/[slug], /api/leads)
+  - [ ] 7B-2: County/city/service pages (/county, /county/[slug], /city/[slug], /services, /services/[slug])
+  - [ ] 7B-3: Compare tool (/compare)
+- **7B-1 Details:**
+  - Components created (9): Stars, ServicePills, TrustBadges, ListingCard, ListingGrid, Pagination, FilterBar, DirectoryShell, MobileQuoteCTA
+  - Form components (1): LeadForm (src/components/forms/LeadForm.tsx)
+  - Pages created (2): /companies (master directory), /companies/[slug] (individual listing)
+  - API routes (1): /api/leads (POST — insert lead + Resend email notification)
+  - Total static pages generated: 2,716 (2,710 business listings + index + homepage + not-found + api)
+  - JSON-LD schemas: ItemList + BreadcrumbList on /companies; LocalBusiness + BreadcrumbList + FAQPage on /companies/[slug]
+  - Features: client-side filtering (service type, county, emergency, DEP licensed), pagination (24/page), trust badges, star ratings, lead capture form, mobile quote CTA overlay, nearby businesses section, templated FAQ, claim listing banner
+  - Package added: resend (for email notifications)
+  - `npm run build` — zero errors, 63s generation time
+  - Commit: "Phase 7B-1: directory components + listing pages"
 - **Checklist:**
-  - [ ] ListingCard component
-  - [ ] ListingGrid component
-  - [ ] /companies — master directory (paginated)
-  - [ ] /companies/[slug] — individual listing + LeadForm + JSON-LD
+  - [x] ListingCard component
+  - [x] ListingGrid component
+  - [x] /companies — master directory (paginated)
+  - [x] /companies/[slug] — individual listing + LeadForm + JSON-LD
   - [ ] /county — counties index
   - [ ] /county/[slug] — county directory
   - [ ] /city/[slug] — city directory
   - [ ] /services — services index
   - [ ] /services/[slug] — service filter page
   - [ ] /compare — comparison tool
-  - [ ] TrustBadges, FilterBar, Pagination components
-  - [ ] FAQ sections with FAQPage JSON-LD
-  - [ ] `npm run build` — zero errors
+  - [x] TrustBadges, FilterBar, Pagination components
+  - [x] FAQ sections with FAQPage JSON-LD
+  - [x] `npm run build` — zero errors
   - [ ] Commit: "Phase 7B: directory pages complete"
-- **Notes:** —
-- **Deviations:** —
+- **Notes:** Phase 7B split into sub-phases (7B-1, 7B-2, 7B-3) due to scope. opening_hours JSONB is array of {day, hours} objects from Google Maps — formatter handles both array and object formats.
+- **Deviations:** FilterBar + Pagination use client-side state (not URL search params) since filtering is also client-side. DirectoryShell wraps both FilterBar, ListingGrid, and Pagination as a single client component to coordinate filter + page state.
 
 ### Phase 7C: Content Pages
 - **Status:** 🟡 IN PROGRESS
@@ -346,4 +361,5 @@
 | 2026-04-03 | 7C-2 | 10 supporting guides (800-1,200 words each) inserted into content_pages | 14 total guides; data/guides/ markdown source files + insert script |
 | 2026-04-03 | 6 | Populated DB: 2,710 businesses, 46 counties, 131 cities, 6,299 junction rows | Batched inserts (50 biz, 100 junction), paginated count updates |
 | 2026-04-03 | 7A | Design system + homepage: QuoteIQ-inspired amber/gold palette, 100vh hero, autocomplete search, real DB data | Blueprint Section 9 updated from teal-navy to amber/gold |
+| 2026-04-03 | 7B-1 | Directory components + listing pages: 9 components, /companies, /companies/[slug], /api/leads, 2,716 static pages | FilterBar/Pagination use client-side state; resend added |
 | | | | |
