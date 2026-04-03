@@ -18,8 +18,6 @@ import {
   Gauge,
 } from 'lucide-react';
 import { createStaticClient } from '@/lib/supabase/static';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
 import HeroSearch from '@/components/ui/HeroSearch';
 
 const SERVICE_ICONS = [
@@ -119,9 +117,7 @@ export default async function HomePage() {
   };
 
   return (
-    <>
-      <Header heroMode={true} />
-
+    <div className="-mt-16">
       {/* JSON-LD */}
       <script
         type="application/ld+json"
@@ -368,7 +364,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <Footer />
-    </>
+    </div>
   );
 }

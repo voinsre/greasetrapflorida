@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 
@@ -11,9 +12,12 @@ const NAV_LINKS = [
   { href: '/guides', label: 'Guides' },
 ];
 
-export default function Header({ heroMode = false }: { heroMode?: boolean }) {
-  const [scrolled, setScrolled] = useState(false);
+export default function Header() {
+  const pathname = usePathname();
+  const heroMode = pathname === '/';
+  const [scrolled, setScrolled] = useState(!heroMode);
   const [mobileOpen, setMobileOpen] = useState(false);
+
   useEffect(() => {
     if (!heroMode) {
       setScrolled(true);
@@ -28,7 +32,7 @@ export default function Header({ heroMode = false }: { heroMode?: boolean }) {
     return () => window.removeEventListener('scroll', onScroll);
   }, [heroMode]);
 
-  const solid = !heroMode || scrolled;
+  const solid = scrolled;
 
   return (
     <>

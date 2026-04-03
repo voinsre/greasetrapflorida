@@ -180,7 +180,7 @@
 ### Phase 7B: Directory Pages
 - **Status:** 🟡 IN PROGRESS
 - **Sub-phases:**
-  - [x] 7B-1: Directory components + listing pages (ListingCard, ListingGrid, TrustBadges, ServicePills, Stars, Pagination, FilterBar, DirectoryShell, LeadForm, MobileQuoteCTA, /companies, /companies/[slug], /api/leads)
+  - [x] 7B-1: Directory components + listing pages + fixes (ListingCard, ListingGrid, TrustBadges, ServicePills, Stars, Pagination, FilterBar, DirectoryShell, LeadForm, MobileQuoteCTA, VerifiedBadge, BusinessMap, MapWrapper, /companies with dark hero, /companies/[slug] with map + interlinking, /api/leads)
   - [ ] 7B-2: County/city/service pages (/county, /county/[slug], /city/[slug], /services, /services/[slug])
   - [ ] 7B-3: Compare tool (/compare)
 - **7B-1 Details:**
@@ -190,8 +190,9 @@
   - API routes (1): /api/leads (POST — insert lead + Resend email notification)
   - Total static pages generated: 2,716 (2,710 business listings + index + homepage + not-found + api)
   - JSON-LD schemas: ItemList + BreadcrumbList on /companies; LocalBusiness + BreadcrumbList + FAQPage on /companies/[slug]
-  - Features: client-side filtering (service type, county, emergency, DEP licensed), pagination (24/page), trust badges, star ratings, lead capture form, mobile quote CTA overlay, nearby businesses section, templated FAQ, claim listing banner
-  - Package added: resend (for email notifications)
+  - Features: client-side filtering (service type, county, cascading city, emergency), pagination (24/page), trust badges, star ratings, lead capture form, mobile quote CTA overlay, nearby businesses section, templated FAQ, claim listing banner
+  - 7B-1 fixes: Header+Footer moved to root layout (auto hero mode on /), sticky FilterBar, dark hero on /companies, Leaflet map on listings, about section fallback, VerifiedBadge (Instagram-style amber checkmark), cascading county→city filter, removed DEP Licensed filter, enhanced interlinking (city/compliance/service/guide links), removed years_in_business display
+  - Package added: resend, leaflet, react-leaflet, @types/leaflet
   - `npm run build` — zero errors, 63s generation time
   - Commit: "Phase 7B-1: directory components + listing pages"
 - **Checklist:**
@@ -362,4 +363,5 @@
 | 2026-04-03 | 6 | Populated DB: 2,710 businesses, 46 counties, 131 cities, 6,299 junction rows | Batched inserts (50 biz, 100 junction), paginated count updates |
 | 2026-04-03 | 7A | Design system + homepage: QuoteIQ-inspired amber/gold palette, 100vh hero, autocomplete search, real DB data | Blueprint Section 9 updated from teal-navy to amber/gold |
 | 2026-04-03 | 7B-1 | Directory components + listing pages: 9 components, /companies, /companies/[slug], /api/leads, 2,716 static pages | FilterBar/Pagination use client-side state; resend added |
+| 2026-04-03 | 7B-1 fix | Navbar in layout, sticky filter, dark hero, Leaflet map, about fallback, verified badge, cascading filter, interlinking, removed years+DEP filter | leaflet+react-leaflet added; Header auto-detects hero via pathname |
 | | | | |

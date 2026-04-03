@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import FilterBar, { type Filters } from './FilterBar';
+import FilterBar, { type Filters, type CityOption } from './FilterBar';
 import ListingGrid from './ListingGrid';
 import Pagination from './Pagination';
 import type { BusinessListing } from './ListingCard';
@@ -15,18 +15,20 @@ interface DirectoryShellProps {
   })[];
   serviceTypes: { slug: string; name: string }[];
   counties: { slug: string; name: string }[];
+  cities: CityOption[];
 }
 
 export default function DirectoryShell({
   businesses,
   serviceTypes,
   counties,
+  cities,
 }: DirectoryShellProps) {
   const [filters, setFilters] = useState<Filters>({
     service: '',
     county: '',
+    city: '',
     emergencyOnly: false,
-    depLicensed: false,
   });
   const [page, setPage] = useState(1);
 
@@ -35,11 +37,19 @@ export default function DirectoryShell({
       if (filters.service && !b.service_slugs.includes(filters.service))
         return false;
       if (filters.county && b.county_slug !== filters.county) return false;
+      if (filters.city) {
+        // Match city by converting business city to slug-like format
+        const bizCitySlug = b.city.toLowerCase().replace(/\s+/g, '-');
+        const cityObj = cities.find((c) => c.slug === filters.city);
+        if (cityObj) {
+          const cityNameSlug = cityObj.name.toLowerCase().replace(/\s+/g, '-');
+          if (bizCitySlug !== cityNameSlug && bizCitySlug !== filters.city) return false;
+        }
+      }
       if (filters.emergencyOnly && !b.emergency_24_7) return false;
-      if (filters.depLicensed && !b.dep_licensed) return false;
       return true;
     });
-  }, [businesses, filters]);
+  }, [businesses, filters, cities]);
 
   const paginated = useMemo(() => {
     const start = (page - 1) * ITEMS_PER_PAGE;
@@ -59,6 +69,7 @@ export default function DirectoryShell({
       <FilterBar
         serviceTypes={serviceTypes}
         counties={counties}
+        cities={cities}
         onFilter={handleFilter}
       />
       <ListingGrid businesses={paginated} />

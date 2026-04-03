@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { createStaticClient } from '@/lib/supabase/static';
 import Breadcrumbs from '@/components/layout/Breadcrumbs';
 import DirectoryShell from '@/components/directory/DirectoryShell';
+import { isVerified } from '@/components/directory/VerifiedBadge';
 
 export const metadata: Metadata = {
   title: { absolute: 'Grease Trap Companies in Florida' },
@@ -30,7 +31,7 @@ export default async function CompaniesPage() {
   while (hasMore) {
     const { data } = await supabase
       .from('businesses')
-      .select('id, slug, name, city, county, county_slug, rating, review_count, is_featured, dep_licensed, emergency_24_7, manifest_provided, insured, years_in_business')
+      .select('id, slug, name, city, county, county_slug, rating, review_count, is_featured, dep_licensed, emergency_24_7, manifest_provided, insured, website_status, phone, place_id')
       .order('is_featured', { ascending: false })
       .order('rating', { ascending: false, nullsFirst: false })
       .range(from, from + PAGE_SIZE - 1);
@@ -64,6 +65,13 @@ export default async function CompaniesPage() {
   const { data: counties } = await supabase
     .from('counties')
     .select('slug, name')
+    .gt('business_count', 0)
+    .order('name');
+
+  // Fetch cities with county_slug for cascading filter
+  const { data: cities } = await supabase
+    .from('cities')
+    .select('slug, name, county_slug, business_count')
     .gt('business_count', 0)
     .order('name');
 
@@ -102,16 +110,24 @@ export default async function CompaniesPage() {
     emergency_24_7: b.emergency_24_7 as boolean,
     manifest_provided: b.manifest_provided as boolean,
     insured: b.insured as boolean,
-    years_in_business: b.years_in_business as number | null,
     services: bizServices.get(b.id as string)?.names || [],
     service_slugs: bizServices.get(b.id as string)?.slugs || [],
+    verified: isVerified({
+      website_status: b.website_status as string | null,
+      phone: b.phone as string | null,
+      review_count: b.review_count as number | null,
+      place_id: b.place_id as string | null,
+      rating: b.rating as number | null,
+    }),
   }));
+
+  const totalCount = businesses.length;
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Grease Trap Companies in Florida',
-    numberOfItems: businesses.length,
+    numberOfItems: totalCount,
     itemListElement: businesses.slice(0, 50).map((b, i) => ({
       '@type': 'ListItem',
       position: i + 1,
@@ -126,18 +142,37 @@ export default async function CompaniesPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <Breadcrumbs items={[{ label: 'Companies' }]} />
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Grease Trap Service Companies in Florida
-        </h1>
+      {/* Dark Hero Section */}
+      <section className="bg-[#1A1A1A] -mt-16 pt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+          <div className="max-w-3xl">
+            <nav aria-label="Breadcrumb" className="mb-6">
+              <ol className="flex items-center gap-1 text-sm">
+                <li>
+                  <a href="/" className="text-gray-400 hover:text-amber-400 transition-colors">Home</a>
+                </li>
+                <li className="text-gray-600 mx-1">/</li>
+                <li className="text-gray-300 font-medium">Companies</li>
+              </ol>
+            </nav>
+            <h1 className="text-3xl md:text-4xl font-bold text-white">
+              Grease Trap Service Companies in Florida
+            </h1>
+            <p className="mt-4 text-lg text-gray-300 leading-relaxed">
+              Browse {totalCount.toLocaleString()} licensed grease trap cleaning and pumping companies across Florida. Compare services, check verification status, read reviews, and request free quotes from verified providers in all {(counties || []).length} Florida counties. Our directory helps restaurant owners, hotel operators, and food service managers find compliant grease trap services under Chapter 62-705.
+            </p>
+          </div>
+        </div>
+      </section>
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <Suspense fallback={<div className="h-12 bg-gray-100 rounded-xl animate-pulse mb-6" />}>
           <DirectoryShell
             businesses={businesses}
             serviceTypes={(serviceTypes || []).map((s) => ({ slug: s.slug, name: s.name }))}
             counties={(counties || []).map((c) => ({ slug: c.slug, name: c.name }))}
+            cities={(cities || []).map((c) => ({ slug: c.slug, name: c.name, county_slug: c.county_slug, business_count: c.business_count }))}
           />
         </Suspense>
       </div>

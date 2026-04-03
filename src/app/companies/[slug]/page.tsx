@@ -6,6 +6,8 @@ import Breadcrumbs from '@/components/layout/Breadcrumbs';
 import Stars from '@/components/directory/Stars';
 import TrustBadges from '@/components/directory/TrustBadges';
 import ListingCard from '@/components/directory/ListingCard';
+import VerifiedBadge, { isVerified } from '@/components/directory/VerifiedBadge';
+import MapWrapper from '@/components/directory/MapWrapper';
 import LeadForm from '@/components/forms/LeadForm';
 import MobileQuoteCTA from './MobileQuoteCTA';
 import {
@@ -17,6 +19,8 @@ import {
   CheckCircle,
   Clock,
   Building,
+  BookOpen,
+  ArrowRight,
 } from 'lucide-react';
 
 export async function generateStaticParams() {
@@ -73,13 +77,41 @@ async function getBusiness(slug: string) {
   // Get nearby businesses in same county
   const { data: nearby } = await supabase
     .from('businesses')
-    .select('id, slug, name, city, county, rating, review_count, is_featured, dep_licensed, emergency_24_7, manifest_provided, insured, years_in_business')
+    .select('id, slug, name, city, county, rating, review_count, is_featured, dep_licensed, emergency_24_7, manifest_provided, insured, website_status, phone, place_id')
     .eq('county_slug', business.county_slug)
     .neq('id', business.id)
     .order('rating', { ascending: false, nullsFirst: false })
     .limit(4);
 
-  return { business, services, nearby: nearby || [] };
+  // Check if business's city has a city page (2+ businesses)
+  const { data: cityPage } = await supabase
+    .from('cities')
+    .select('slug, name, business_count')
+    .eq('name', business.city)
+    .eq('county_slug', business.county_slug)
+    .maybeSingle();
+
+  // Check if compliance page exists for this county
+  const complianceSlug = business.county_slug
+    ? `${business.county_slug}-requirements`
+    : null;
+  let hasCompliancePage = false;
+  if (complianceSlug) {
+    const { data: compPage } = await supabase
+      .from('content_pages')
+      .select('slug')
+      .eq('slug', complianceSlug)
+      .maybeSingle();
+    hasCompliancePage = !!compPage;
+  }
+
+  return {
+    business,
+    services,
+    nearby: nearby || [],
+    cityPage,
+    hasCompliancePage,
+  };
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -108,21 +140,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 function formatHours(hours: unknown): [string, string][] | null {
   if (!hours) return null;
-
-  // Handle array of {day, hours} objects (Google Maps format)
   if (Array.isArray(hours)) {
     const entries = hours
       .filter((h) => h && typeof h === 'object' && 'day' in h && 'hours' in h)
       .map((h) => [String(h.day), String(h.hours)] as [string, string]);
     return entries.length ? entries : null;
   }
-
-  // Handle plain key-value object
   if (typeof hours === 'object') {
     const entries = Object.entries(hours as Record<string, string>);
     return entries.length ? entries : null;
   }
-
   return null;
 }
 
@@ -131,10 +158,15 @@ export default async function CompanyPage({ params }: Props) {
   const result = await getBusiness(slug);
   if (!result) notFound();
 
-  const { business, services, nearby } = result;
+  const { business, services, nearby, cityPage, hasCompliancePage } = result;
   const hours = formatHours(business.opening_hours);
+  const verified = isVerified(business);
 
-  // JSON-LD: LocalBusiness + BreadcrumbList + FAQPage
+  const description =
+    business.description ||
+    `${business.name} provides professional grease trap cleaning and maintenance services in ${business.city}, ${business.county ? `${business.county} County` : ''} Florida. Serving local restaurants and food service establishments with reliable grease trap pumping, interceptor cleaning, and FOG compliance support. Contact them for a free quote.`;
+
+  // FAQ
   const faqs = [
     {
       q: `What services does ${business.name} offer?`,
@@ -196,7 +228,6 @@ export default async function CompanyPage({ params }: Props) {
     },
   ];
 
-  // Build nearby listings for cards
   const nearbyListings = nearby.map((n: Record<string, unknown>) => ({
     id: n.id as string,
     slug: n.slug as string,
@@ -210,8 +241,14 @@ export default async function CompanyPage({ params }: Props) {
     emergency_24_7: n.emergency_24_7 as boolean,
     manifest_provided: n.manifest_provided as boolean,
     insured: n.insured as boolean,
-    years_in_business: n.years_in_business as number | null,
     services: [] as string[],
+    verified: isVerified({
+      website_status: n.website_status as string | null,
+      phone: n.phone as string | null,
+      review_count: n.review_count as number | null,
+      place_id: n.place_id as string | null,
+      rating: n.rating as number | null,
+    }),
   }));
 
   return (
@@ -237,8 +274,9 @@ export default async function CompanyPage({ params }: Props) {
           <div className="lg:col-span-2 space-y-8">
             {/* Header */}
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                {business.name}
+              <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-start">
+                <span>{business.name}</span>
+                {verified && <VerifiedBadge />}
               </h1>
               <div className="flex items-center gap-1.5 text-gray-500 mb-3">
                 <MapPin className="w-4 h-4" />
@@ -257,22 +295,18 @@ export default async function CompanyPage({ params }: Props) {
                   emergency24_7={business.emergency_24_7}
                   manifestProvided={business.manifest_provided}
                   insured={business.insured}
-                  yearsInBusiness={business.years_in_business}
+                  verified={verified}
                 />
               </div>
             </div>
 
-            {/* Description */}
-            {business.description && (
-              <section>
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">
-                  About {business.name}
-                </h2>
-                <p className="text-gray-600 leading-relaxed">
-                  {business.description}
-                </p>
-              </section>
-            )}
+            {/* About — always shows */}
+            <section>
+              <h2 className="text-xl font-semibold text-gray-900 mb-3">
+                About {business.name}
+              </h2>
+              <p className="text-gray-600 leading-relaxed">{description}</p>
+            </section>
 
             {/* Services */}
             {services.length > 0 && (
@@ -283,7 +317,7 @@ export default async function CompanyPage({ params }: Props) {
                 <ul className="grid sm:grid-cols-2 gap-2">
                   {services.map((s) => (
                     <li key={s.slug} className="flex items-center gap-2 text-gray-700">
-                      <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0" />
                       <Link
                         href={`/services/${s.slug}`}
                         className="hover:text-amber-600 transition-colors"
@@ -363,6 +397,21 @@ export default async function CompanyPage({ params }: Props) {
               )}
             </section>
 
+            {/* Map */}
+            {business.lat != null && business.lng != null && (
+              <section>
+                <h2 className="text-xl font-semibold text-gray-900 mb-3">
+                  Location
+                </h2>
+                <MapWrapper
+                  lat={Number(business.lat)}
+                  lng={Number(business.lng)}
+                  name={business.name}
+                  address={business.address}
+                />
+              </section>
+            )}
+
             {/* FAQ */}
             <section>
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
@@ -391,6 +440,110 @@ export default async function CompanyPage({ params }: Props) {
                 </div>
               </section>
             )}
+
+            {/* Related Resources — Interlinking */}
+            <section className="bg-gray-50 rounded-xl p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-amber-500" />
+                Related Resources
+              </h2>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {/* City page link */}
+                {cityPage && cityPage.business_count >= 2 && (
+                  <Link
+                    href={`/city/${cityPage.slug}`}
+                    className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-100 hover:border-amber-200 hover:shadow-sm transition-all group"
+                  >
+                    <div>
+                      <p className="font-medium text-gray-900 group-hover:text-amber-600 transition-colors text-sm">
+                        Grease Trap Services in {business.city}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        {cityPage.business_count} companies
+                      </p>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-amber-500 transition-colors" />
+                  </Link>
+                )}
+
+                {/* County compliance link */}
+                {hasCompliancePage && business.county_slug && (
+                  <Link
+                    href={`/compliance/${business.county_slug}-requirements`}
+                    className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-100 hover:border-amber-200 hover:shadow-sm transition-all group"
+                  >
+                    <div>
+                      <p className="font-medium text-gray-900 group-hover:text-amber-600 transition-colors text-sm">
+                        {business.county} County Compliance Info
+                      </p>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        Local FOG regulations
+                      </p>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-amber-500 transition-colors" />
+                  </Link>
+                )}
+
+                {/* Service links */}
+                {services.slice(0, 2).map((s) => (
+                  <Link
+                    key={s.slug}
+                    href={`/services/${s.slug}`}
+                    className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-100 hover:border-amber-200 hover:shadow-sm transition-all group"
+                  >
+                    <div>
+                      <p className="font-medium text-gray-900 group-hover:text-amber-600 transition-colors text-sm">
+                        {s.name} in Florida
+                      </p>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        Browse all providers
+                      </p>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-amber-500 transition-colors" />
+                  </Link>
+                ))}
+
+                {/* Static guide links */}
+                <Link
+                  href="/guides/how-to-choose-grease-trap-service"
+                  className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-100 hover:border-amber-200 hover:shadow-sm transition-all group"
+                >
+                  <div>
+                    <p className="font-medium text-gray-900 group-hover:text-amber-600 transition-colors text-sm">
+                      How to Choose a Service
+                    </p>
+                    <p className="text-xs text-gray-500 mt-0.5">Guide</p>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-amber-500 transition-colors" />
+                </Link>
+
+                <Link
+                  href="/cost/grease-trap-cleaning-cost"
+                  className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-100 hover:border-amber-200 hover:shadow-sm transition-all group"
+                >
+                  <div>
+                    <p className="font-medium text-gray-900 group-hover:text-amber-600 transition-colors text-sm">
+                      Cleaning Cost Guide
+                    </p>
+                    <p className="text-xs text-gray-500 mt-0.5">Pricing info</p>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-amber-500 transition-colors" />
+                </Link>
+
+                <Link
+                  href="/compliance/chapter-62-705-guide"
+                  className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-100 hover:border-amber-200 hover:shadow-sm transition-all group"
+                >
+                  <div>
+                    <p className="font-medium text-gray-900 group-hover:text-amber-600 transition-colors text-sm">
+                      Chapter 62-705 Guide
+                    </p>
+                    <p className="text-xs text-gray-500 mt-0.5">Florida compliance</p>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-amber-500 transition-colors" />
+                </Link>
+              </div>
+            </section>
 
             {/* Claim CTA */}
             <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
