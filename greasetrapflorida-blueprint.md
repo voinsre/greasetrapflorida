@@ -427,29 +427,30 @@ Located at `/compliance/[county]-requirements`. One per county with a documented
 
 ---
 
-## 9. Design System (60/30/10 Principle)
+## 9. Design System (60/30/10 Principle) — QuoteIQ-Inspired
 
 ```css
-/* 60% — Backgrounds */
+/* 60% — Clean backgrounds */
 --color-bg: #FFFFFF;
---color-bg-alt: #F8FAFB;
+--color-bg-alt: #FAFAFA;
 --color-bg-card: #FFFFFF;
 
-/* 30% — Authority (deep, trustworthy) */
---color-primary: #1B3A4B;        /* Dark teal-navy */
---color-text: #1B3A4B;
---color-text-muted: #5A7A8A;
---color-footer-bg: #1B3A4B;
+/* 30% — Dark authority */
+--color-primary: #1A1A1A;
+--color-text: #1A1A1A;
+--color-text-muted: #6B7280;
+--color-hero-overlay: rgba(0, 0, 0, 0.55);
+--color-footer-bg: #1A1A1A;
 
-/* 10% — Action (bright, clickable) */
---color-accent: #0D9488;          /* Teal-green (Florida feel) */
---color-accent-dark: #0B7C72;
---color-accent-light: #CCFBF1;
+/* 10% — Warm amber/gold accent (like QuoteIQ) */
+--color-accent: #F59E0B;
+--color-accent-dark: #D97706;
+--color-accent-light: #FEF3C7;
 
 /* Semantic */
---color-verified: #059669;        /* Green for DEP verified badge */
---color-featured: #D97706;        /* Amber for featured listings */
---color-emergency: #DC2626;       /* Red for emergency badges */
+--color-verified: #10B981;
+--color-featured: #F59E0B;
+--color-emergency: #EF4444;
 --color-border: #E5E7EB;
 ```
 
@@ -457,10 +458,12 @@ Located at `/compliance/[county]-requirements`. One per county with a documented
 
 **Design rules:**
 - Mobile-first (restaurant owners search on phones)
-- No gradients, no shadows heavier than shadow-sm
-- Cards: white bg, 1px border-gray-200, rounded-lg, hover:shadow-sm
-- Buttons: accent color bg, white text, rounded-lg, hover:accent-dark
-- Generous white space
+- Bold, modern, professional with warm amber accent
+- Cards: white bg, rounded-xl, border border-gray-100, shadow-sm, hover:shadow-md transition
+- Primary buttons: bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg px-6 py-3
+- Secondary buttons: bg-white border-2 border-amber-500 text-amber-600 rounded-lg px-6 py-3
+- Full viewport hero with dark overlay, transparent-to-solid header
+- Dark #1A1A1A footer and CTA sections
 - Lucide React icons throughout (consistent 20px default size)
 
 ---

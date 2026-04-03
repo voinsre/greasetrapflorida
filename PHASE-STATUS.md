@@ -1,7 +1,7 @@
 # Grease Trap Florida — Phase Status
 
 **Last updated:** 2026-04-03
-**Updated by:** Phase 6 (database populated: 2,710 businesses)
+**Updated by:** Phase 7A (design system + homepage)
 
 ---
 
@@ -154,18 +154,28 @@
 - **Deviations:** None. All data loaded per blueprint spec.
 
 ### Phase 7A: Design System & Homepage
-- **Status:** ⬜ NOT STARTED
+- **Status:** ✅ COMPLETE
+- **Date completed:** April 3, 2026
 - **Checklist:**
-  - [ ] CSS variables (60/30/10 palette)
-  - [ ] Global styles + Inter font
-  - [ ] Header component (solid, not transparent)
-  - [ ] Footer component (4-column, compliance badges)
-  - [ ] Homepage: hero, search, stats, county grid, popular cities, value props, business CTA
-  - [ ] Mobile responsive check
-  - [ ] `npm run build` — zero errors
-  - [ ] Commit: "Phase 7A: design system + homepage"
-- **Notes:** —
-- **Deviations:** —
+  - [x] CSS variables (60/30/10 palette — amber/gold accent, dark authority, white backgrounds)
+  - [x] Global styles + Inter font (variable weight via next/font/google)
+  - [x] Header component (transparent hero mode with IntersectionObserver → solid on scroll, solid on all other pages)
+  - [x] Footer component (4-column grid, #1A1A1A background, gray-400 text, amber hover)
+  - [x] Breadcrumbs component (ChevronRight separator, BreadcrumbList JSON-LD)
+  - [x] Homepage: 100vh hero with dark overlay, autocomplete search, live stats, 6 service type icons, trust banner, top 12 counties grid, top 12 cities grid, 3 value prop cards, dark CTA banner
+  - [x] HeroSearch client component (autocomplete filtering counties/cities, keyboard navigation, wrapped in Suspense)
+  - [x] WebSite + SearchAction + BreadcrumbList JSON-LD
+  - [x] Real Supabase data: 2,710 companies, 46 counties, 131 cities
+  - [x] Mobile responsive: stacking grids, mobile hamburger menu with full-screen overlay
+  - [x] `npm run build` — zero errors (Turbopack, static generation)
+  - [x] Commit: "Phase 7A: design system + homepage — QuoteIQ-inspired design"
+- **Components created:**
+  - src/components/layout/Header.tsx (transparent/solid dual mode, mobile menu)
+  - src/components/layout/Footer.tsx (4-column dark footer)
+  - src/components/layout/Breadcrumbs.tsx (with JSON-LD)
+  - src/components/ui/HeroSearch.tsx (client-side autocomplete)
+- **Notes:** Design inspired by myquoteiq.com — bold hero, warm amber accent, clean white sections, dark footer/CTA. Header uses IntersectionObserver on hero sentinel element for transparent→solid transition. Search bar wrapped in Suspense to avoid useSearchParams gotcha.
+- **Deviations:** Blueprint Section 9 updated from teal-navy palette to amber/gold palette per design reference. Header now has transparent hero mode (blueprint originally specified solid-only).
 
 ### Phase 7B: Directory Pages
 - **Status:** ⬜ NOT STARTED
@@ -335,4 +345,5 @@
 | 2026-04-03 | 7C-4 | 6 blog posts (800+ words each) inserted into Supabase content_pages | Staggered published_at Mar 21 – Apr 2; warning signs, pro cleaning, health inspection, food trucks, new restaurant checklist, myths |
 | 2026-04-03 | 7C-2 | 10 supporting guides (800-1,200 words each) inserted into content_pages | 14 total guides; data/guides/ markdown source files + insert script |
 | 2026-04-03 | 6 | Populated DB: 2,710 businesses, 46 counties, 131 cities, 6,299 junction rows | Batched inserts (50 biz, 100 junction), paginated count updates |
+| 2026-04-03 | 7A | Design system + homepage: QuoteIQ-inspired amber/gold palette, 100vh hero, autocomplete search, real DB data | Blueprint Section 9 updated from teal-navy to amber/gold |
 | | | | |
