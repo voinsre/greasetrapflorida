@@ -1,11 +1,10 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { createBrowserSupabaseClient } from '@/lib/supabase/client';
-import { CheckCircle, XCircle, Phone, Globe, Star } from 'lucide-react';
-import VerifiedBadge, { isVerified } from '@/components/directory/VerifiedBadge';
+import { createClient } from '@supabase/supabase-js';
+import { CheckCircle, XCircle, Phone, Globe, Star, Loader2 } from 'lucide-react';
+import VerifiedBadge from '@/components/directory/VerifiedBadge';
 
 interface CompareBusiness {
   id: string;
@@ -19,10 +18,8 @@ interface CompareBusiness {
   manifest_provided: boolean;
   phone: string | null;
   website: string | null;
-  website_status: string | null;
-  place_id: string | null;
+  is_verified: boolean;
   services: string[];
-  verified: boolean;
 }
 
 function BoolCell({ value }: { value: boolean }) {
@@ -33,81 +30,112 @@ function BoolCell({ value }: { value: boolean }) {
   );
 }
 
-export default function CompareTable() {
-  const searchParams = useSearchParams();
-  const idsParam = searchParams.get('ids') || '';
-  const ids = idsParam
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean);
+function getIdsFromUrl(): string[] {
+  if (typeof window === 'undefined') return [];
+  const params = new URLSearchParams(window.location.search);
+  const idsParam = params.get('ids') || '';
+  return idsParam.split(',').map((s) => s.trim()).filter(Boolean);
+}
 
+export default function CompareTable() {
   const [businesses, setBusinesses] = useState<CompareBusiness[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const ids = getIdsFromUrl();
+
     if (ids.length === 0) {
       setLoading(false);
       return;
     }
 
-    const supabase = createBrowserSupabaseClient();
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
 
     async function load() {
-      const { data: bizData } = await supabase
-        .from('businesses')
-        .select('id, slug, name, city, county, rating, review_count, emergency_24_7, manifest_provided, phone, website, website_status, place_id')
-        .in('id', ids);
+      try {
+        const { data: bizData, error: bizError } = await supabase
+          .from('businesses')
+          .select('id, slug, name, city, county, rating, review_count, emergency_24_7, manifest_provided, phone, website, is_verified')
+          .in('id', ids);
 
-      if (!bizData?.length) {
-        setLoading(false);
-        return;
-      }
-
-      // Get services
-      const { data: junctions } = await supabase
-        .from('business_services')
-        .select('business_id, service_id')
-        .in('business_id', bizData.map((b) => b.id));
-
-      const serviceIds = [...new Set((junctions || []).map((j) => j.service_id))];
-      let serviceMap = new Map<string, string>();
-      if (serviceIds.length) {
-        const { data: serviceData } = await supabase
-          .from('service_types')
-          .select('id, name')
-          .in('id', serviceIds);
-        for (const s of serviceData || []) {
-          serviceMap.set(s.id, s.name);
+        if (bizError) {
+          setError(`Query error: ${bizError.message}`);
+          setLoading(false);
+          return;
         }
+
+        if (!bizData?.length) {
+          setLoading(false);
+          return;
+        }
+
+        // Get services
+        const { data: junctions } = await supabase
+          .from('business_services')
+          .select('business_id, service_id')
+          .in('business_id', bizData.map((b) => b.id));
+
+        const serviceIds = [...new Set((junctions || []).map((j) => j.service_id))];
+        const serviceMap = new Map<string, string>();
+        if (serviceIds.length) {
+          const { data: serviceData } = await supabase
+            .from('service_types')
+            .select('id, name')
+            .in('id', serviceIds);
+          for (const s of serviceData || []) {
+            serviceMap.set(s.id, s.name);
+          }
+        }
+
+        const bizServiceMap = new Map<string, string[]>();
+        for (const j of junctions || []) {
+          if (!bizServiceMap.has(j.business_id)) bizServiceMap.set(j.business_id, []);
+          const name = serviceMap.get(j.service_id);
+          if (name) bizServiceMap.get(j.business_id)!.push(name);
+        }
+
+        const result: CompareBusiness[] = bizData.map((b) => ({
+          ...b,
+          services: bizServiceMap.get(b.id) || [],
+        }));
+
+        // Maintain order from URL
+        const ordered = ids
+          .map((id) => result.find((b) => b.id === id))
+          .filter(Boolean) as CompareBusiness[];
+
+        setBusinesses(ordered);
+      } catch (e) {
+        setError(`Unexpected error: ${e}`);
       }
-
-      const bizServiceMap = new Map<string, string[]>();
-      for (const j of junctions || []) {
-        if (!bizServiceMap.has(j.business_id)) bizServiceMap.set(j.business_id, []);
-        const name = serviceMap.get(j.service_id);
-        if (name) bizServiceMap.get(j.business_id)!.push(name);
-      }
-
-      const result: CompareBusiness[] = bizData.map((b) => ({
-        ...b,
-        services: bizServiceMap.get(b.id) || [],
-        verified: isVerified(b),
-      }));
-
-      // Maintain order from URL
-      const ordered = ids
-        .map((id) => result.find((b) => b.id === id))
-        .filter(Boolean) as CompareBusiness[];
-
-      setBusinesses(ordered);
       setLoading(false);
     }
 
     load();
-  }, [idsParam]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   if (loading) {
-    return <div className="h-64 bg-gray-100 rounded-xl animate-pulse" />;
+    return (
+      <div className="flex items-center justify-center py-16">
+        <Loader2 className="w-8 h-8 text-amber-500 animate-spin" />
+        <span className="ml-3 text-gray-500">Loading comparison...</span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-16">
+        <p className="text-red-500 mb-4">{error}</p>
+        <Link href="/companies" className="text-amber-600 hover:text-amber-700 font-medium">
+          Back to Companies
+        </Link>
+      </div>
+    );
   }
 
   if (businesses.length === 0) {
@@ -126,7 +154,6 @@ export default function CompareTable() {
     );
   }
 
-  // Collect all unique services across all businesses
   const allServices = [...new Set(businesses.flatMap((b) => b.services))].sort();
 
   const rowClass = 'border-b border-gray-100';
@@ -144,7 +171,7 @@ export default function CompareTable() {
                 <Link href={`/companies/${b.slug}`} className="hover:text-amber-600 transition-colors">
                   <span className="flex items-center justify-center gap-1">
                     {b.name}
-                    {b.verified && <VerifiedBadge />}
+                    {b.is_verified && <VerifiedBadge />}
                   </span>
                 </Link>
               </th>
