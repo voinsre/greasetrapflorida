@@ -192,6 +192,7 @@
   - JSON-LD schemas: ItemList + BreadcrumbList on /companies; LocalBusiness + BreadcrumbList + FAQPage on /companies/[slug]
   - Features: client-side filtering (service type, county, cascading city, emergency), pagination (24/page), trust badges, star ratings, lead capture form, mobile quote CTA overlay, nearby businesses section, templated FAQ, claim listing banner
   - 7B-1 fixes: Header+Footer moved to root layout (auto hero mode on /), sticky FilterBar, dark hero on /companies, Leaflet map on listings, about section fallback, VerifiedBadge (Instagram-style amber checkmark), cascading county→city filter, removed DEP Licensed filter, enhanced interlinking (city/compliance/service/guide links), removed years_in_business display
+  - 7B-1 additions: Logo SVG component (droplet in circle), custom amber teardrop map marker with logo, Get Directions link below map, favicon.svg
   - Package added: resend, leaflet, react-leaflet, @types/leaflet
   - `npm run build` — zero errors, 63s generation time
   - Commit: "Phase 7B-1: directory components + listing pages"
@@ -364,4 +365,5 @@
 | 2026-04-03 | 7A | Design system + homepage: QuoteIQ-inspired amber/gold palette, 100vh hero, autocomplete search, real DB data | Blueprint Section 9 updated from teal-navy to amber/gold |
 | 2026-04-03 | 7B-1 | Directory components + listing pages: 9 components, /companies, /companies/[slug], /api/leads, 2,716 static pages | FilterBar/Pagination use client-side state; resend added |
 | 2026-04-03 | 7B-1 fix | Navbar in layout, sticky filter, dark hero, Leaflet map, about fallback, verified badge, cascading filter, interlinking, removed years+DEP filter | leaflet+react-leaflet added; Header auto-detects hero via pathname |
+| 2026-04-03 | 7B-1 | Logo SVG component, custom amber map marker, Get Directions link, favicon.svg | Logo adapts white/amber via currentColor |
 | | | | |

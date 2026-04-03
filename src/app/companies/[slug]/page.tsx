@@ -21,6 +21,7 @@ import {
   Building,
   BookOpen,
   ArrowRight,
+  Navigation,
 } from 'lucide-react';
 
 export async function generateStaticParams() {
@@ -409,6 +410,15 @@ export default async function CompanyPage({ params }: Props) {
                   name={business.name}
                   address={business.address}
                 />
+                <a
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${Number(business.lat)},${Number(business.lng)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-amber-600 hover:text-amber-700 font-medium text-sm mt-3"
+                >
+                  <Navigation className="w-4 h-4" />
+                  Get Directions
+                </a>
               </section>
             )}
 

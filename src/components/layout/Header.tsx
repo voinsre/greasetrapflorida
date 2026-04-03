@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
+import Logo from './Logo';
 
 const NAV_LINKS = [
   { href: '/county', label: 'Browse Counties' },
@@ -46,7 +47,12 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-18">
             {/* Logo */}
-            <Link href="/" className="flex-shrink-0">
+            <Link href="/" className="flex-shrink-0 flex items-center gap-2">
+              <Logo
+                className={`w-7 h-7 lg:w-8 lg:h-8 transition-colors duration-300 ${
+                  solid ? 'text-amber-500' : 'text-white'
+                }`}
+              />
               <span
                 className={`text-lg font-bold tracking-wider uppercase transition-colors duration-300 ${
                   solid ? 'text-gray-900' : 'text-white'
@@ -97,9 +103,12 @@ export default function Header() {
       {mobileOpen && (
         <div className="fixed inset-0 z-[60] bg-white">
           <div className="flex items-center justify-between h-16 px-4">
-            <span className="text-lg font-bold tracking-wider uppercase text-gray-900">
-              GREASE TRAP FLORIDA
-            </span>
+            <div className="flex items-center gap-2">
+              <Logo className="w-7 h-7 text-amber-500" />
+              <span className="text-lg font-bold tracking-wider uppercase text-gray-900">
+                GREASE TRAP FLORIDA
+              </span>
+            </div>
             <button
               onClick={() => setMobileOpen(false)}
               className="p-2 text-gray-900"

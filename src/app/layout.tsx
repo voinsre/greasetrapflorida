@@ -25,6 +25,9 @@ export const metadata: Metadata = {
     type: 'website',
   },
   metadataBase: new URL('https://greasetrapflorida.com'),
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({
