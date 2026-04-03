@@ -1,7 +1,7 @@
 # Grease Trap Florida — Phase Status
 
 **Last updated:** 2026-04-03
-**Updated by:** Phase 7C-2 (10 supporting guides inserted)
+**Updated by:** Phase 6 (database populated: 2,710 businesses)
 
 ---
 
@@ -14,9 +14,9 @@
 | After dedup | 2,710 (-784 duplicates) | April 3, 2026 |
 | After website verification | 1,817 live / 477 blocked / 300 no-website / 116 dead+err+timeout | April 3, 2026 |
 | After enrichment | 2,710 enriched (66.9% with scraped text, +76 from retry) | April 3, 2026 |
-| Final DB count | [pending] | — |
-| Counties with 2+ listings | [pending] | — |
-| Cities with 2+ listings | [pending] | — |
+| Final DB count | 2,710 businesses | April 3, 2026 |
+| Counties with 2+ listings | 46 counties | April 3, 2026 |
+| Cities with 2+ listings | 131 cities | April 3, 2026 |
 | Total pages generated | [pending] | — |
 
 ---
@@ -128,18 +128,30 @@
 - **Deviations:** Used rule-based enrichment instead of Claude API enrichment. This is more cost-effective and sufficient for the extracted fields. Claude API can be used later for higher-quality descriptions if needed.
 
 ### Phase 6: Database Population
-- **Status:** ⬜ NOT STARTED
+- **Status:** ✅ COMPLETE
+- **Date completed:** April 3, 2026
 - **Checklist:**
-  - [ ] Create `scripts/populate-db.mjs`
-  - [ ] Insert counties (67)
-  - [ ] Insert cities (threshold: 2+ businesses)
-  - [ ] Insert businesses
-  - [ ] Insert junction tables
-  - [ ] Update business_count on counties and cities
-  - [ ] Validate counts
-  - [ ] Commit: "Phase 6: populated [X] businesses, [Y] counties, [Z] cities"
-- **Notes:** —
-- **Deviations:** —
+  - [x] Create `scripts/populate-db.mjs`
+  - [x] Insert counties (67 seeded, 46 with businesses)
+  - [x] Insert cities (131 cities with 2+ businesses)
+  - [x] Insert businesses (2,710)
+  - [x] Insert junction tables (business_services: 614, business_establishment_types: 893, business_service_areas: 4,792)
+  - [x] Update business_count on counties and cities
+  - [x] Validate counts
+  - [x] Commit: "Phase 6: populated 2710 businesses, 46 counties, 131 cities"
+- **Validation results:**
+  - Total businesses: 2,710
+  - Counties with businesses: 46 (of 67 total)
+  - Cities created: 131 (2+ business threshold)
+  - business_services rows: 614
+  - business_establishment_types rows: 893
+  - business_service_areas rows: 4,792
+  - Businesses with description: 878
+  - Businesses with emergency_24_7: 596
+  - Top 5 counties: Broward (258), Lee (228), Orange (192), Miami-Dade (182), Volusia (168)
+  - Top 5 cities: Fort Myers (106), Tallahassee (105), Pensacola (103), Orlando (99), Sarasota (97)
+- **Notes:** Initial county count update had a bug (zero-out query clobbered 26 counties). Fixed by paginating business query and updating each county individually. serves_* boolean fields derived from establishment_types_served array data.
+- **Deviations:** None. All data loaded per blueprint spec.
 
 ### Phase 7A: Design System & Homepage
 - **Status:** ⬜ NOT STARTED
@@ -322,4 +334,5 @@
 | 2026-04-03 | 7C-1 | 4 cornerstone guides (1,500+ words each) inserted into Supabase content_pages | Ch. 62-705, Cost, Choosing a Service, Frequency — all with 5 FAQs, internal links, AEO openings |
 | 2026-04-03 | 7C-4 | 6 blog posts (800+ words each) inserted into Supabase content_pages | Staggered published_at Mar 21 – Apr 2; warning signs, pro cleaning, health inspection, food trucks, new restaurant checklist, myths |
 | 2026-04-03 | 7C-2 | 10 supporting guides (800-1,200 words each) inserted into content_pages | 14 total guides; data/guides/ markdown source files + insert script |
+| 2026-04-03 | 6 | Populated DB: 2,710 businesses, 46 counties, 131 cities, 6,299 junction rows | Batched inserts (50 biz, 100 junction), paginated count updates |
 | | | | |
