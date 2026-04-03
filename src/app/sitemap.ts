@@ -134,5 +134,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   });
 
+  // Chapter 62-705 full regulation page
+  entries.push({
+    url: `${BASE}/compliance/chapter-62-705`,
+    lastModified: now,
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  });
+
   return entries;
 }

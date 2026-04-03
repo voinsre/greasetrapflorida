@@ -410,4 +410,6 @@
 | 2026-04-04 | Audit 3 | Final pass: removed 582 borderline businesses with zero grease evidence. Fixed compare tool (window.location). Emergency badge cleanup (377→374). | 750 → 168 biz, 36 cities, 27 counties |
 | 2026-04-04 | 7C-5/6/7 | All 15 missing page routes built: guides, compliance, blog, cost, about, contact, privacy, claim-listing, advertise, get-quotes, sitemap.xml, robots.txt | 292 static pages, zero build errors |
 | 2026-04-04 | Mobile | Full mobile responsiveness pass: floating filter FAB + bottom sheet, stacked compare cards, overflow-x fix, responsive fonts, tap targets, table wrapping | No horizontal scroll at any width |
+| 2026-04-04 | 62-705 | Chapter 62-705 full regulation page at /compliance/chapter-62-705 with actual FL rule text from flrules.org | Sections 62-705.200, .300, .400 with plain-English summaries |
+| 2026-04-04 | Links | Full link audit: 13 broken targets found and fixed. 9 redirects added. DB content updated (5 pages). County nearby query fixed (>1 not >0). | 0 broken links on re-audit |
 | | | | |

@@ -134,7 +134,7 @@ export default async function CountyPage({ params }: Props) {
   const { data: allCounties } = await supabase
     .from('counties')
     .select('slug, name, business_count')
-    .gt('business_count', 0)
+    .gt('business_count', 1)
     .order('name');
 
   const countyIndex = (allCounties || []).findIndex((c) => c.slug === slug);
