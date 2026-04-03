@@ -21,8 +21,9 @@ const COLUMNS = [
     title: 'Compliance',
     links: [
       { href: '/compliance', label: 'Compliance Hub' },
-      { href: '/compliance/chapter-62-705-guide', label: 'Chapter 62-705 Guide' },
+      { href: '/compliance/chapter-62-705-guide', label: 'Chapter 62-705' },
       { href: '/compliance/grease-waste-manifest', label: 'Grease Waste Manifest' },
+      { href: '/compliance/fines-and-penalties', label: 'Fines & Penalties' },
     ],
   },
   {

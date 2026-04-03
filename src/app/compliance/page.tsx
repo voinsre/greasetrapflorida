@@ -24,13 +24,14 @@ export default async function CompliancePage() {
     supabase
       .from('content_pages')
       .select('slug, title, excerpt')
-      .eq('category', 'guide')
-      .or('slug.ilike.%compliance%,slug.ilike.%manifest%,slug.ilike.%penalties%,slug.ilike.%fines%')
+      .eq('category', 'compliance')
+      .in('slug', ['chapter-62-705-guide', 'grease-waste-manifest', 'fines-and-penalties'])
       .order('published_at', { ascending: false }),
     supabase
       .from('content_pages')
       .select('slug, title, excerpt')
       .eq('category', 'compliance')
+      .not('slug', 'in', '("chapter-62-705-guide","grease-waste-manifest","fines-and-penalties")')
       .order('title'),
   ]);
 
@@ -82,7 +83,7 @@ export default async function CompliancePage() {
             {(stateGuides || []).map((guide) => (
               <Link
                 key={guide.slug}
-                href={`/guides/${guide.slug}`}
+                href={`/compliance/${guide.slug}`}
                 className="block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-amber-200 transition-all p-5"
               >
                 <FileText className="w-5 h-5 text-amber-500 mb-2" />
@@ -94,7 +95,7 @@ export default async function CompliancePage() {
             ))}
             {(stateGuides || []).length === 0 && (
               <Link
-                href="/guides/chapter-62-705-compliance-guide"
+                href="/compliance/chapter-62-705-guide"
                 className="block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-amber-200 transition-all p-5"
               >
                 <Shield className="w-5 h-5 text-amber-500 mb-2" />
