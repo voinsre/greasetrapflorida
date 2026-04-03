@@ -1,7 +1,7 @@
 # Grease Trap Florida — Phase Status
 
 **Last updated:** 2026-04-03
-**Updated by:** Phase 3 (data collection complete)
+**Updated by:** Phase 4 (data cleaning complete)
 
 ---
 
@@ -10,8 +10,8 @@
 | Metric | Count | Date |
 |---|---|---|
 | Raw Apify records | 5,515 (4,019 unique place_ids) | April 3, 2026 |
-| After hard filters | [pending] | — |
-| After dedup | [pending] | — |
+| After hard filters | 3,494 (-2,021 removed) | April 3, 2026 |
+| After dedup | 2,710 (-784 duplicates) | April 3, 2026 |
 | After website verification | [pending] | — |
 | After enrichment | [pending] | — |
 | Final DB count | [pending] | — |
@@ -70,17 +70,35 @@
 - **Deviations:** No Apify MCP tools available in environment; used Apify REST API directly via Node.js scripts. Runs were aborted before full completion to control costs (~$27.58 vs $15-25 budget estimate). Data is partial but sufficient — 4,019 unique places across Florida is a strong starting dataset.
 
 ### Phase 4: Data Cleaning & Dedup
-- **Status:** ⬜ NOT STARTED
+- **Status:** ✅ COMPLETE
+- **Date completed:** April 3, 2026
 - **Checklist:**
-  - [ ] Create `scripts/clean-data.mjs`
-  - [ ] Run hard exclude filters
-  - [ ] Run three-tier dedup
-  - [ ] Normalize fields (county assignment, slug generation)
-  - [ ] Output `data/cleaned.json`
-  - [ ] Commit: "Phase 4: cleaned [X] → [Y] businesses"
-- **Filter results:** Raw [X] → Filtered [Y] → Deduped [Z]
-- **Notes:** —
-- **Deviations:** —
+  - [x] Create `scripts/clean-data.mjs`
+  - [x] Run hard exclude filters
+  - [x] Run three-tier dedup
+  - [x] Normalize fields (county assignment, slug generation)
+  - [x] Output `data/cleaned.json`
+  - [x] Commit: "Phase 4: cleaned 5515 raw → 2710 businesses"
+- **Filter results:** Raw 5,515 → Filtered 3,494 (-2,021) → Deduped 2,710 (-784)
+- **Filter breakdown:**
+  - isAdvertisement: -5
+  - noPhoneNoWebsite: -19
+  - outsideFlorida: -380
+  - hardBlacklist (HVAC, carpet, etc.): -393
+  - conditionalBlacklist (septic/drain/sewer without grease): -1,224
+  - permanentlyClosed: 0, temporarilyClosed: 0
+- **Dedup breakdown:**
+  - Tier 1 (place_id): -686
+  - Tier 2 (phone): -41
+  - Tier 3 (name+zip): -57
+- **Final stats:**
+  - 2,710 unique businesses across 46 counties
+  - 88.9% have websites (2,410), 99.3% have phone (2,692)
+  - Average rating: 4.53, average reviews: 763
+  - 0 unknown counties (city-to-county mapping covered all)
+  - Top counties: Broward (258), Lee (228), Orange (192), Miami-Dade (182), Volusia (168)
+- **Notes:** No manual review needed — all businesses mapped to known counties. Conditional blacklist was the largest filter (1,224) — removed septic/drain/sewer businesses that had no grease-related terms, while keeping those that do both (e.g., septic + grease trap companies).
+- **Deviations:** None. Pipeline matched blueprint spec exactly.
 
 ### Phase 5: Website Verification & Enrichment
 - **Status:** 🟡 IN PROGRESS
@@ -250,5 +268,6 @@
 | 2026-04-03 | 1 | Blueprint created | — |
 | 2026-04-03 | 2 | Project scaffolded, schema + seed data generated | Next.js 16 + Tailwind v4 (deviation from v3) |
 | 2026-04-03 | 3 | Data collection: 5,515 raw records (4,019 unique) from 6 Apify runs | REST API, runs aborted early (~$27.58) |
+| 2026-04-03 | 4 | Cleaned 5,515 → 2,710 businesses across 46 counties | Filters + 3-tier dedup, 0 unknown counties |
 | 2026-04-03 | 5 | Created scripts/scrape-websites.mjs (async scraper ready) | Awaiting data/cleaned.json from Phase 4 |
 | | | | |
