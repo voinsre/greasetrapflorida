@@ -1,7 +1,7 @@
 # Grease Trap Florida — Phase Status
 
-**Last updated:** [DATE]
-**Updated by:** [PHASE/SESSION]
+**Last updated:** 2026-04-03
+**Updated by:** Phase 5 (scraper script ready)
 
 ---
 
@@ -35,17 +35,24 @@
 - **Deviations from playbook:** Single-state (FL only) changes URL structure from /states/[state] to /county/[county]. Counties replace states as geographic parent. Compliance section added as primary nav pillar.
 
 ### Phase 2: Project Setup
-- **Status:** ⬜ NOT STARTED
+- **Status:** ✅ COMPLETE
+- **Date completed:** April 3, 2026
 - **Checklist:**
-  - [ ] `npx create-next-app@latest greasetrapflorida --typescript --tailwind --app --src-dir`
-  - [ ] Create Supabase project (NEW project, free tier)
-  - [ ] Apply schema from blueprint
-  - [ ] Insert seed data (service types, establishment types, 67 counties)
-  - [ ] Create `.env.local` with all variable slots
-  - [ ] Initialize git
-  - [ ] Commit: "Phase 2: scaffold + Supabase schema + seed data"
-- **Notes:** —
-- **Deviations:** —
+  - [x] `npx create-next-app@latest . --typescript --tailwind --app --src-dir`
+  - [x] Create Supabase project (free tier) — project ref: hwiyjimmrsfjhkbdjfzq
+  - [x] Apply schema from blueprint — executed via scripts/apply-schema.mjs
+  - [x] SQL schema generated: supabase/schema.sql (12 tables, 11 indexes, all seed data)
+  - [x] Seed data: 10 service types, 10 establishment types, 67 counties
+  - [x] Create `.env.local` with all variable slots (13 variables)
+  - [x] Create `.env.local.example` with documentation
+  - [x] Supabase client files: client.ts (browser), server.ts (server), static.ts (generateStaticParams)
+  - [x] Project directory structure (13 directories)
+  - [x] Initialize git + .gitignore (data/, .env.local excluded)
+  - [x] next.config.ts: www→non-www 308 redirect
+  - [x] `npm run build` — zero errors
+  - [x] Commit: "Phase 2: scaffold + schema + seed data"
+- **Notes:** Supabase project created, schema applied, .env.local populated. All Phase 2 items complete.
+- **Deviations:** Tailwind v4.2.2 installed (create-next-app default) instead of v3.x specified in blueprint. Typography plugin concern from blueprint has been resolved in v4. Next.js 16.2.2 installed (latest).
 
 ### Phase 3: Data Collection (Apify via MCP)
 - **Status:** ⬜ NOT STARTED
@@ -75,9 +82,9 @@
 - **Deviations:** —
 
 ### Phase 5: Website Verification & Enrichment
-- **Status:** ⬜ NOT STARTED
+- **Status:** 🟡 IN PROGRESS
 - **Checklist:**
-  - [ ] Create `scripts/scrape-websites.mjs` (async multi-page scraper)
+  - [x] Create `scripts/scrape-websites.mjs` (async multi-page scraper)
   - [ ] Run scraper on all businesses with website URLs
   - [ ] Create `scripts/enrich-data.mjs` (Claude API enrichment)
   - [ ] Run enrichment pass
@@ -240,4 +247,6 @@
 |---|---|---|---|
 | 2026-04-03 | 0 | Niche selected: grease trap FL | Research pipeline complete |
 | 2026-04-03 | 1 | Blueprint created | — |
+| 2026-04-03 | 2 | Project scaffolded, schema + seed data generated | Next.js 16 + Tailwind v4 (deviation from v3) |
+| 2026-04-03 | 5 | Created scripts/scrape-websites.mjs (async scraper ready) | Awaiting data/cleaned.json from Phase 4 |
 | | | | |
