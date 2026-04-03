@@ -12,8 +12,8 @@
 | Raw Apify records | 5,515 (4,019 unique place_ids) | April 3, 2026 |
 | After hard filters | 3,494 (-2,021 removed) | April 3, 2026 |
 | After dedup | 2,710 (-784 duplicates) | April 3, 2026 |
-| After website verification | 1,741 live / 553 blocked / 300 no-website / 116 dead+err+timeout | April 3, 2026 |
-| After enrichment | 2,710 enriched (64.1% with scraped text) | April 3, 2026 |
+| After website verification | 1,817 live / 477 blocked / 300 no-website / 116 dead+err+timeout | April 3, 2026 |
+| After enrichment | 2,710 enriched (66.9% with scraped text, +76 from retry) | April 3, 2026 |
 | Final DB count | [pending] | — |
 | Counties with 2+ listings | [pending] | — |
 | Cities with 2+ listings | [pending] | — |
@@ -110,8 +110,8 @@
   - [x] Run enrichment pass
   - [x] Output `data/enriched.json`
   - [x] Commit: "Phase 5: enriched 2710 businesses, 64.1% enrichment rate"
-- **Website status breakdown:** Live 1,741 / Blocked 553 / Dead 26 / Timeout 43 / Error 47 / No website 300
-- **Enrichment rate:** 64.1% of businesses with scraped text (1,737 enrichment-ready)
+- **Website status breakdown:** Live 1,817 / Blocked 477 / Dead 26 / Timeout 43 / Error 47 / No website 300
+- **Enrichment rate:** 64.1% initial + 76 recovered in retry = ~66.9% with scraped text
 - **Avg pages per live site:** 2.0
 - **Enrichment fields extracted:**
   - Grease trap confirmed: 150 (explicit website evidence)
@@ -123,7 +123,8 @@
   - Manifest mentioned: 4
 - **Confidence breakdown:** High 162 (6.0%) / Medium 559 (20.6%) / Low 1,989 (73.4%)
 - **Claude API cost:** $0 (used rule-based extraction instead)
-- **Notes:** Used rule-based keyword/pattern extraction instead of Claude API — instant, deterministic, zero cost. Low "grease confirmed" rate (5.5%) is expected: most businesses are general plumbing/septic companies whose Google Maps categories had grease terms (validated in Phase 4) but whose websites emphasize broader services. 553 blocked sites (403) is typical for scraping — these businesses retain all Google Maps data.
+- **Phase 5b retry:** Retried 553 blocked sites with aggressive browser mimicry (full headers, UA rotation, Google referer, 12s timeout). Recovered 76 (13.7%), 477 still blocked. All 76 re-enriched.
+- **Notes:** Used rule-based keyword/pattern extraction instead of Claude API — instant, deterministic, zero cost. Low "grease confirmed" rate (5.5%) is expected: most businesses are general plumbing/septic companies whose Google Maps categories had grease terms (validated in Phase 4) but whose websites emphasize broader services.
 - **Deviations:** Used rule-based enrichment instead of Claude API enrichment. This is more cost-effective and sufficient for the extracted fields. Claude API can be used later for higher-quality descriptions if needed.
 
 ### Phase 6: Database Population
@@ -316,6 +317,7 @@
 | 2026-04-03 | 3 | Data collection: 5,515 raw records (4,019 unique) from 6 Apify runs | REST API, runs aborted early (~$27.58) |
 | 2026-04-03 | 4 | Cleaned 5,515 → 2,710 businesses across 46 counties | Filters + 3-tier dedup, 0 unknown counties |
 | 2026-04-03 | 5 | Scraped 2,710 sites (1,741 live), enriched all 2,710 businesses | Rule-based enrichment, $0 API cost, 64.1% enrichment rate |
+| 2026-04-03 | 5b | Retry blocked: recovered 76 of 553 (13.7%), re-enriched | Aggressive headers, UA rotation, Google referer, 12s timeout |
 | 2026-04-03 | 7C-3 | 10 county compliance pages inserted into Supabase content_pages | Miami-Dade, Hillsborough, Pinellas, Orange, Duval, Sarasota, Palm Beach, Broward, Lee, Volusia |
 | 2026-04-03 | 7C-1 | 4 cornerstone guides (1,500+ words each) inserted into Supabase content_pages | Ch. 62-705, Cost, Choosing a Service, Frequency — all with 5 FAQs, internal links, AEO openings |
 | 2026-04-03 | 7C-4 | 6 blog posts (800+ words each) inserted into Supabase content_pages | Staggered published_at Mar 21 – Apr 2; warning signs, pro cleaning, health inspection, food trucks, new restaurant checklist, myths |
