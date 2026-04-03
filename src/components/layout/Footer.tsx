@@ -42,18 +42,18 @@ export default function Footer() {
   return (
     <footer className="bg-[#1A1A1A] text-gray-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {COLUMNS.map((col) => (
             <div key={col.title}>
               <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-4">
                 {col.title}
               </h3>
-              <ul className="space-y-3">
+              <ul className="space-y-1">
                 {col.links.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-gray-400 hover:text-amber-500 transition-colors"
+                      className="text-sm text-gray-400 hover:text-amber-500 transition-colors inline-block py-1.5"
                     >
                       {link.label}
                     </Link>

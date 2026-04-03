@@ -15,21 +15,22 @@ export default function CompareBar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
             <span className="text-white text-sm font-medium whitespace-nowrap">
-              {selectedIds.length} of 4 selected
+              <span className="hidden sm:inline">{selectedIds.length} of 4 selected</span>
+              <span className="sm:hidden">{selectedIds.length} selected</span>
             </span>
             <button
               onClick={clearCompare}
-              className="text-gray-400 hover:text-white text-sm flex items-center gap-1 transition-colors"
+              className="text-gray-400 hover:text-white text-sm flex items-center gap-1 transition-colors min-h-[44px] px-2"
             >
               <X className="w-3.5 h-3.5" />
-              Clear all
+              <span className="hidden sm:inline">Clear all</span>
             </button>
           </div>
           <Link
             href={`/compare?ids=${selectedIds.join(',')}`}
-            className="bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2.5 px-6 rounded-lg transition-colors text-sm whitespace-nowrap"
+            className="bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2.5 px-5 sm:px-6 rounded-lg transition-colors text-sm whitespace-nowrap min-h-[44px] flex items-center"
           >
-            Compare Now
+            Compare ({selectedIds.length})
           </Link>
         </div>
       </div>

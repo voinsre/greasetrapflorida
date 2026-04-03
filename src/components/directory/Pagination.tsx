@@ -23,7 +23,7 @@ export default function Pagination({
   for (let i = start; i <= end; i++) pages.push(i);
 
   const btnBase =
-    'inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors h-10 min-w-10 px-3';
+    'inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors h-11 min-w-11 px-3';
   const btnActive = 'bg-amber-500 text-white';
   const btnInactive = 'text-gray-600 hover:bg-gray-100';
   const btnDisabled = 'text-gray-300 cursor-not-allowed';

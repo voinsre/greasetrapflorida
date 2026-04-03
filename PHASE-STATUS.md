@@ -409,4 +409,5 @@
 | 2026-04-04 | Audit 2 | Data quality audit pass 2: flipped logic, only kept confirmed grease providers (185 verified + 565 relevant trade in grease search) | 1,837 → 750 biz, 72 cities, 39 counties |
 | 2026-04-04 | Audit 3 | Final pass: removed 582 borderline businesses with zero grease evidence. Fixed compare tool (window.location). Emergency badge cleanup (377→374). | 750 → 168 biz, 36 cities, 27 counties |
 | 2026-04-04 | 7C-5/6/7 | All 15 missing page routes built: guides, compliance, blog, cost, about, contact, privacy, claim-listing, advertise, get-quotes, sitemap.xml, robots.txt | 292 static pages, zero build errors |
+| 2026-04-04 | Mobile | Full mobile responsiveness pass: floating filter FAB + bottom sheet, stacked compare cards, overflow-x fix, responsive fonts, tap targets, table wrapping | No horizontal scroll at any width |
 | | | | |

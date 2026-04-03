@@ -223,7 +223,7 @@ export default async function HomePage() {
       {/* SECTION 3 — BROWSE BY COUNTY */}
       <section className="bg-[#FAFAFA] py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-900 tracking-tight">
+          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 tracking-tight">
             Browse by County
           </h2>
           <p className="mt-3 text-center text-gray-500 max-w-xl mx-auto">
@@ -263,7 +263,7 @@ export default async function HomePage() {
       {/* SECTION 4 — POPULAR CITIES */}
       <section className="bg-white py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-900 tracking-tight">
+          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 tracking-tight">
             Popular Cities
           </h2>
           <p className="mt-3 text-center text-gray-500 max-w-xl mx-auto">
@@ -301,7 +301,7 @@ export default async function HomePage() {
       {/* SECTION 5 — WHY USE OUR DIRECTORY */}
       <section className="bg-[#FAFAFA] py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-900 tracking-tight">
+          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 tracking-tight">
             Why Use Grease Trap Florida
           </h2>
           <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -341,7 +341,7 @@ export default async function HomePage() {
       {/* SECTION 6 — CTA BANNER */}
       <section className="bg-[#1A1A1A] py-16 lg:py-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white tracking-tight">
+          <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
             Own a Grease Trap Service Company?
           </h2>
           <p className="mt-4 text-gray-400 text-lg max-w-xl mx-auto">

@@ -65,7 +65,7 @@ export default function BusinessMap({
   return (
     <div
       ref={mapRef}
-      className="w-full h-[300px] rounded-xl overflow-hidden border border-gray-200"
+      className="relative z-0 w-full h-[250px] md:h-[300px] rounded-xl overflow-hidden border border-gray-200"
     />
   );
 }

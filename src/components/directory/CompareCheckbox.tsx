@@ -22,7 +22,7 @@ export default function CompareCheckbox({ businessId }: { businessId: string }) 
     <button
       onClick={handleClick}
       disabled={disabled}
-      className={`inline-flex items-center gap-1.5 text-xs font-medium rounded-md px-2 py-1 transition-colors ${
+      className={`inline-flex items-center gap-1.5 text-xs font-medium rounded-md px-2 py-1 min-h-[44px] transition-colors ${
         selected
           ? 'bg-amber-100 text-amber-700 border border-amber-300'
           : disabled

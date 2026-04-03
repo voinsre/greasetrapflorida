@@ -55,7 +55,7 @@ export default function Header() {
                 }`}
               />
               <span
-                className={`text-lg font-bold tracking-wider uppercase transition-colors duration-300 ${
+                className={`text-sm md:text-lg font-bold tracking-wider uppercase transition-colors duration-300 ${
                   solid ? 'text-gray-900' : 'text-white'
                 }`}
               >
@@ -118,13 +118,13 @@ export default function Header() {
               <X className="w-6 h-6" />
             </button>
           </div>
-          <nav className="flex flex-col px-6 pt-8 gap-6">
+          <nav className="flex flex-col px-6 pt-8 gap-1">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="text-xl font-medium text-gray-900 hover:text-amber-600"
+                className="text-lg font-medium text-gray-900 hover:text-amber-600 py-3"
               >
                 {link.label}
               </Link>

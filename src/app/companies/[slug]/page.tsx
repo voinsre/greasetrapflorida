@@ -276,7 +276,7 @@ export default async function CompanyPage({ params }: Props) {
           <div className="lg:col-span-2 space-y-8">
             {/* Header */}
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-start">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 flex items-start">
                 <span>{business.name}</span>
                 {verified && <VerifiedBadge />}
               </h1>
@@ -415,7 +415,7 @@ export default async function CompanyPage({ params }: Props) {
                   href={`https://www.google.com/maps/dir/?api=1&destination=${Number(business.lat)},${Number(business.lng)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-amber-600 hover:text-amber-700 font-medium text-sm mt-3"
+                  className="inline-flex items-center justify-center gap-1.5 text-amber-600 hover:text-amber-700 font-medium text-sm mt-3 w-full md:w-auto bg-amber-50 md:bg-transparent rounded-lg py-2.5 md:py-0"
                 >
                   <Navigation className="w-4 h-4" />
                   Get Directions

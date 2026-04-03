@@ -209,7 +209,7 @@ export default function ClaimForm() {
       <button
         type="submit"
         disabled={loading}
-        className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg px-6 py-3 transition-colors disabled:opacity-50"
+        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg px-6 py-3 transition-colors disabled:opacity-50 min-h-[44px]"
       >
         {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
         Submit Claim

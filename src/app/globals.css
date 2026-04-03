@@ -41,10 +41,19 @@
   --font-sans: var(--font-inter);
 }
 
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+body.no-scroll {
+  overflow: hidden;
 }
 
 /* Smooth scroll indicator animation */
@@ -77,9 +86,25 @@ body {
   animation: slide-up 0.3s ease-out;
 }
 
+/* Bottom sheet transition */
+.bottom-sheet-overlay {
+  transition: opacity 0.3s ease;
+}
+
+.bottom-sheet-panel {
+  transition: transform 0.3s ease;
+}
+
 /* Prose-like content styling for markdown rendered pages */
+/* Responsive table wrapper for markdown content */
+.prose-content .table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1.5rem;
+}
+
 .prose-content h2 {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
@@ -87,13 +112,21 @@ body {
   line-height: 1.3;
 }
 
+@media (min-width: 768px) {
+  .prose-content h2 { font-size: 1.5rem; }
+}
+
 .prose-content h3 {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 600;
   margin-top: 2rem;
   margin-bottom: 0.75rem;
   color: #1A1A1A;
   line-height: 1.4;
+}
+
+@media (min-width: 768px) {
+  .prose-content h3 { font-size: 1.25rem; }
 }
 
 .prose-content h4 {
