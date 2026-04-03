@@ -170,7 +170,7 @@
   - [x] 7C-1: 4 cornerstone guides written and inserted into Supabase content_pages
   - [ ] 7C-2: 10 supporting guides (800-1,200 words each)
   - [x] 7C-3: County compliance pages (10 pages, 400-600 words each)
-  - [ ] 7C-4: Blog system + 6 seed posts
+  - [x] 7C-4: Blog system + 6 seed posts
   - [ ] 7C-5: Cost guide hub
   - [ ] 7C-6: Utility pages (about, contact, privacy, claim, advertise, get-quotes)
   - [ ] 7C-7: Email templates (8 templates)
@@ -195,8 +195,16 @@
   - Each guide includes: AEO opening (2-3 sentence direct answer), specific numbers/regulation references, internal links to /companies, /county, other guides, 5 FAQs at the end
   - Script: scripts/insert-cornerstone-guides.mjs
   - Verified: 4/4 guides confirmed in content_pages table
-- **Notes:** 7C-3 completed before 7C-1 and 7C-2. 7C-1 now complete. Guides index page not yet built (will be part of Next.js page build).
-- **Deviations:** Compliance hub page not yet created — will be part of Next.js page build. County compliance pages and cornerstone guides inserted into DB; page rendering pending.
+- **7C-4 Details:**
+  - 6 blog posts (800+ words each) written and inserted into content_pages table (category: "blog")
+  - Posts: warning-signs-grease-trap-needs-cleaning, what-professional-grease-trap-cleaning-looks-like, grease-trap-maintenance-health-inspection, food-truck-grease-trap-requirements-florida, opening-restaurant-florida-grease-checklist, grease-trap-myths-florida
+  - Published dates staggered March 21 – April 2, 2026 (2-week spread)
+  - Each post includes: hook opening, Florida-specific regulation references, internal links to /companies, /compliance, /county, relevant guides, 3 FAQs
+  - All meta_titles under 60 chars, all meta_descriptions under 160 chars
+  - Script: scripts/insert-blog-posts.mjs
+  - Verified: 6/6 posts confirmed in content_pages table
+- **Notes:** 7C-1, 7C-3, 7C-4 complete. Guides index and blog index pages not yet built (will be part of Next.js page build).
+- **Deviations:** Compliance hub page not yet created — will be part of Next.js page build. All content inserted into DB; page rendering pending.
 
 ### Phase 7D: Images & Visual Assets
 - **Status:** ⬜ NOT STARTED
@@ -291,4 +299,5 @@
 | 2026-04-03 | 5 | Created scripts/scrape-websites.mjs (async scraper ready) | Awaiting data/cleaned.json from Phase 4 |
 | 2026-04-03 | 7C-3 | 10 county compliance pages inserted into Supabase content_pages | Miami-Dade, Hillsborough, Pinellas, Orange, Duval, Sarasota, Palm Beach, Broward, Lee, Volusia |
 | 2026-04-03 | 7C-1 | 4 cornerstone guides (1,500+ words each) inserted into Supabase content_pages | Ch. 62-705, Cost, Choosing a Service, Frequency — all with 5 FAQs, internal links, AEO openings |
+| 2026-04-03 | 7C-4 | 6 blog posts (800+ words each) inserted into Supabase content_pages | Staggered published_at Mar 21 – Apr 2; warning signs, pro cleaning, health inspection, food trucks, new restaurant checklist, myths |
 | | | | |
