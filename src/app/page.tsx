@@ -42,12 +42,12 @@ async function getHomeData() {
     { data: allCities },
   ] = await Promise.all([
     supabase.from('businesses').select('*', { count: 'exact', head: true }),
-    supabase.from('counties').select('*', { count: 'exact', head: true }).gt('business_count', 0),
+    supabase.from('counties').select('*', { count: 'exact', head: true }).gt('business_count', 1),
     supabase.from('cities').select('*', { count: 'exact', head: true }),
     supabase
       .from('counties')
       .select('name, slug, business_count')
-      .gt('business_count', 0)
+      .gt('business_count', 1)
       .order('business_count', { ascending: false })
       .limit(12),
     supabase
@@ -58,7 +58,7 @@ async function getHomeData() {
     supabase
       .from('counties')
       .select('name, slug')
-      .gt('business_count', 0)
+      .gt('business_count', 1)
       .order('name'),
     supabase
       .from('cities')

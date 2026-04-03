@@ -22,7 +22,7 @@ export default async function CountiesPage() {
   const { data: counties } = await supabase
     .from('counties')
     .select('slug, name, business_count')
-    .gt('business_count', 0)
+    .gt('business_count', 1)
     .order('name');
 
   const jsonLd = [

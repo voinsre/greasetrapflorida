@@ -61,11 +61,11 @@ export default async function CompaniesPage() {
     .select('id, slug, name')
     .order('name');
 
-  // Fetch counties with businesses
+  // Fetch counties with businesses (2+ for county pages)
   const { data: counties } = await supabase
     .from('counties')
     .select('slug, name')
-    .gt('business_count', 0)
+    .gt('business_count', 1)
     .order('name');
 
   // Fetch cities with county_slug for cascading filter

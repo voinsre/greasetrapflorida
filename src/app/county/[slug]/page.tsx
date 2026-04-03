@@ -12,7 +12,7 @@ export async function generateStaticParams() {
   const { data } = await supabase
     .from('counties')
     .select('slug')
-    .gt('business_count', 0);
+    .gt('business_count', 1);
   return (data || []).map((c) => ({ slug: c.slug }));
 }
 

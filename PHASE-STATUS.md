@@ -20,9 +20,10 @@
 | Data quality audit pass 3 | -582 zero grease evidence (borderline plumbing/septic kept in pass 2) | April 4, 2026 |
 | Emergency badge cleanup | 377 → 374 (3 false positives corrected) | April 4, 2026 |
 | Final DB count | 168 confirmed grease trap businesses (all verified) | April 4, 2026 |
-| Counties with businesses | 27 counties | April 4, 2026 |
+| Counties with 2+ businesses | 22 counties (pages generated) | April 4, 2026 |
+| Counties with 1 business | 5 (no page, business still in /companies) | April 4, 2026 |
 | Cities with 2+ listings | 36 cities | April 4, 2026 |
-| Total pages generated | ~237 (after final rebuild) | April 4, 2026 |
+| Total pages generated | ~232 (168 biz + 22 county + 36 city + 10 service + index pages) | April 4, 2026 |
 
 ---
 
