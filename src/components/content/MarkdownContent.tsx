@@ -10,6 +10,7 @@ interface MarkdownContentProps {
 }
 
 const components: Components = {
+  h1: () => null,
   table: ({ children, ...props }) => (
     <div className="table-wrapper">
       <table {...props}>{children}</table>

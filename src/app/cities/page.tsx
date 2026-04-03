@@ -11,7 +11,11 @@ export const metadata: Metadata = {
     description: 'Browse all Florida cities with grease trap cleaning companies grouped by county.',
     url: 'https://greasetrapflorida.com/cities',
     siteName: 'Grease Trap Florida',
+    images: [{ url: '/images/og-image.webp', width: 1200, height: 630 }],
     type: 'website',
+  },
+  alternates: {
+    canonical: 'https://greasetrapflorida.com/cities',
   },
 };
 

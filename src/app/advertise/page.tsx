@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     images: [{ url: '/images/og-image.webp', width: 1200, height: 630 }],
     type: 'website',
   },
+  alternates: {
+    canonical: 'https://greasetrapflorida.com/advertise',
+  },
 };
 
 const FAQS = [
@@ -61,17 +64,17 @@ export default function AdvertisePage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 text-center">
             <Award className="w-8 h-8 text-amber-500 mx-auto mb-3" />
-            <h3 className="font-semibold text-gray-900">Featured Badge</h3>
+            <h2 className="font-semibold text-gray-900">Featured Badge</h2>
             <p className="text-sm text-gray-500 mt-1">Amber badge and highlighted card that stands out</p>
           </div>
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 text-center">
             <TrendingUp className="w-8 h-8 text-amber-500 mx-auto mb-3" />
-            <h3 className="font-semibold text-gray-900">Priority Placement</h3>
+            <h2 className="font-semibold text-gray-900">Priority Placement</h2>
             <p className="text-sm text-gray-500 mt-1">Appear first in county, city, and service searches</p>
           </div>
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 text-center">
             <Star className="w-8 h-8 text-amber-500 mx-auto mb-3" />
-            <h3 className="font-semibold text-gray-900">Verified Status</h3>
+            <h2 className="font-semibold text-gray-900">Verified Status</h2>
             <p className="text-sm text-gray-500 mt-1">Verified badge builds trust with potential customers</p>
           </div>
         </div>

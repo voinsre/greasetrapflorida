@@ -303,17 +303,17 @@
 - **Deviations:** Email templates not included in this phase (not blocking). Cost guide rendered at /cost/grease-trap-cleaning-cost using DB slug 'grease-trap-cleaning-cost-florida'.
 
 ### Phase 7D: Images & Visual Assets
-- **Status:** ✅ COMPLETE (per PROJECT-STATUS-REPORT.md — all 15 images present)
+- **Status:** ✅ COMPLETE
 - **Checklist:**
-  - [ ] Generate images per IMAGE-SPEC.md
-  - [ ] Optimize all to WebP, check size targets
-  - [ ] Place in /public/images/
-  - [ ] Verify no path nesting issues (gotcha #21)
-  - [ ] Add to guide/blog pages + OG tags
-  - [ ] Default OG image for site-wide fallback
-  - [ ] `npm run build` — zero errors
+  - [x] Generate images per IMAGE-SPEC.md
+  - [x] Optimize all to WebP, check size targets
+  - [x] Place in /public/images/
+  - [x] Verify no path nesting issues (gotcha #21)
+  - [x] Add to guide/blog pages + OG tags
+  - [x] Default OG image for site-wide fallback
+  - [x] `npm run build` — zero errors
   - [ ] Commit: "Phase 7D: images placed"
-- **Notes:** —
+- **Notes:** All 15 images present in /public/images/ (flat, no subdirectories). Sizes verified: hero 113KB (<120KB), OG 56KB (<80KB), all guide/blog images <60KB. Hero image uses `priority={true}`. Default OG image set in root layout. 6 content_pages rows in Supabase updated from null image_url to correct paths (fines-and-penalties, grease-trap-maintenance-tips, grease-trap-sizing-guide-florida, grease-trap-vs-grease-interceptor, used-cooking-oil-vs-grease-trap-waste, verify-grease-hauler-dep-licensed). All 30 content_pages now have image_url set. Markdown frontmatter in data/guides/ synced to match DB.
 - **Deviations:** —
 
 ### Phase 8: SEO Hardening

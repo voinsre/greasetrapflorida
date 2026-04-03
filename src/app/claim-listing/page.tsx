@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     images: [{ url: '/images/og-image.webp', width: 1200, height: 630 }],
     type: 'website',
   },
+  alternates: {
+    canonical: 'https://greasetrapflorida.com/claim-listing',
+  },
 };
 
 export default function ClaimListingPage() {
@@ -32,17 +35,17 @@ export default function ClaimListingPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
           <Shield className="w-6 h-6 text-amber-500 mb-2" />
-          <h3 className="font-semibold text-gray-900">Verify Ownership</h3>
+          <h2 className="font-semibold text-gray-900">Verify Ownership</h2>
           <p className="text-sm text-gray-500 mt-1">Confirm you are the owner or authorized representative of the business.</p>
         </div>
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
           <Edit className="w-6 h-6 text-amber-500 mb-2" />
-          <h3 className="font-semibold text-gray-900">Update Information</h3>
+          <h2 className="font-semibold text-gray-900">Update Information</h2>
           <p className="text-sm text-gray-500 mt-1">Correct phone, email, services, hours, and description on your listing.</p>
         </div>
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
           <Star className="w-6 h-6 text-amber-500 mb-2" />
-          <h3 className="font-semibold text-gray-900">Get Verified Badge</h3>
+          <h2 className="font-semibold text-gray-900">Get Verified Badge</h2>
           <p className="text-sm text-gray-500 mt-1">Earn the verified checkmark that signals trust to customers.</p>
         </div>
       </div>

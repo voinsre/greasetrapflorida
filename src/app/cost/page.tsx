@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     images: [{ url: '/images/og-image.webp', width: 1200, height: 630 }],
     type: 'website',
   },
+  alternates: {
+    canonical: 'https://greasetrapflorida.com/cost',
+  },
 };
 
 export default function CostPage() {
@@ -58,19 +61,19 @@ export default function CostPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 text-center">
             <DollarSign className="w-8 h-8 text-amber-500 mx-auto mb-3" />
-            <h3 className="text-2xl font-bold text-gray-900">$200 - $500</h3>
+            <h2 className="text-2xl font-bold text-gray-900">$200 - $500</h2>
             <p className="text-sm text-gray-500 mt-1">Interior Grease Trap</p>
             <p className="text-xs text-gray-400 mt-1">Per pump-out</p>
           </div>
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 text-center">
             <DollarSign className="w-8 h-8 text-amber-500 mx-auto mb-3" />
-            <h3 className="text-2xl font-bold text-gray-900">$300 - $800+</h3>
+            <h2 className="text-2xl font-bold text-gray-900">$300 - $800+</h2>
             <p className="text-sm text-gray-500 mt-1">Underground Interceptor</p>
             <p className="text-xs text-gray-400 mt-1">Per pump-out</p>
           </div>
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 text-center">
             <DollarSign className="w-8 h-8 text-amber-500 mx-auto mb-3" />
-            <h3 className="text-2xl font-bold text-gray-900">$2,000 - $10,000</h3>
+            <h2 className="text-2xl font-bold text-gray-900">$2,000 - $10,000</h2>
             <p className="text-sm text-gray-500 mt-1">Annual Service Contract</p>
             <p className="text-xs text-gray-400 mt-1">Monthly to quarterly</p>
           </div>

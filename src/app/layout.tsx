@@ -17,6 +17,9 @@ export const metadata: Metadata = {
   },
   description:
     'Compare licensed grease trap cleaning companies across Florida counties. DEP license verified, Chapter 62-705 compliant directory with free quotes.',
+  alternates: {
+    canonical: 'https://greasetrapflorida.com',
+  },
   openGraph: {
     title: 'Find Grease Trap Services in Florida | GreaseTrapFlorida.com',
     description:

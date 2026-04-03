@@ -23,7 +23,11 @@ export const metadata: Metadata = {
     description: 'Explore all types of grease trap services available in Florida.',
     url: 'https://greasetrapflorida.com/services',
     siteName: 'Grease Trap Florida',
+    images: [{ url: '/images/og-image.webp', width: 1200, height: 630 }],
     type: 'website',
+  },
+  alternates: {
+    canonical: 'https://greasetrapflorida.com/services',
   },
 };
 

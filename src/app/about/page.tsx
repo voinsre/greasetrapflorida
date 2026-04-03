@@ -6,7 +6,7 @@ import { Shield, Users, BookOpen, CheckCircle } from 'lucide-react';
 export const metadata: Metadata = {
   title: { absolute: 'About Grease Trap Florida' },
   description:
-    'Grease Trap Florida is the most comprehensive grease trap service directory in Florida. 168 verified companies across 22 counties, built for Chapter 62-705 compliance.',
+    'Grease Trap Florida is Florida\'s most comprehensive grease trap service directory. 168 verified companies across 22 counties for Chapter 62-705 compliance.',
   openGraph: {
     title: 'About Grease Trap Florida',
     description: 'Florida\'s most comprehensive grease trap service directory.',
@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     siteName: 'Grease Trap Florida',
     images: [{ url: '/images/og-image.webp', width: 1200, height: 630 }],
     type: 'website',
+  },
+  alternates: {
+    canonical: 'https://greasetrapflorida.com/about',
   },
 };
 
@@ -76,7 +79,7 @@ export default function AboutPage() {
             Every listing in our directory has been individually confirmed as a grease trap service provider.
             We started with over 5,500 raw business records from across Florida, then applied rigorous filtering,
             deduplication, website verification, and manual review to arrive at our current database of 168
-            verified companies across 22 counties and 36 cities.
+            verified companies across 22 counties and 36 cities. Our content methodology is based on primary sources including the Florida Administrative Code Chapter 62-705 and county-specific FOG ordinances.
           </p>
           <div className="bg-gray-50 rounded-xl p-5 grid grid-cols-3 gap-4 text-center">
             <div>
@@ -105,6 +108,20 @@ export default function AboutPage() {
             <li>Verified website (live and accessible) or established Google Maps presence</li>
             <li>Positive customer ratings and reviews</li>
             <li>Located in and serving Florida communities</li>
+          </ul>
+        </section>
+
+        <section className="mb-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-3">Why Trust Us</h2>
+          <p className="text-gray-700 leading-relaxed mb-3">
+            We built Grease Trap Florida to be the most reliable source of grease trap service information in the state.
+          </p>
+          <ul className="list-disc ml-6 space-y-2 text-gray-700">
+            <li>We verified 168 businesses across 22 Florida counties using Google Maps data, website analysis, and service confirmation</li>
+            <li>Our compliance guides are based on Florida Administrative Code Chapter 62-705 and county-specific FOG ordinances</li>
+            <li>Our directory only lists confirmed grease trap service providers — not general plumbing or septic companies</li>
+            <li>Every guide references specific Florida regulations and county codes</li>
+            <li>We update our data regularly as the DEP licensing registry develops</li>
           </ul>
         </section>
 
