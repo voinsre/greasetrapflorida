@@ -4,6 +4,7 @@ import Stars from './Stars';
 import ServicePills from './ServicePills';
 import TrustBadges from './TrustBadges';
 import VerifiedBadge from './VerifiedBadge';
+import CompareCheckbox from './CompareCheckbox';
 
 export interface BusinessListing {
   id: string;
@@ -64,9 +65,12 @@ export default function ListingCard({
           verified={business.verified}
         />
 
-        <button className="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm mt-2">
-          Get a Free Quote
-        </button>
+        <div className="flex items-center gap-2 mt-2">
+          <button className="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm">
+            Get a Free Quote
+          </button>
+          <CompareCheckbox businessId={business.id} />
+        </div>
       </div>
     </Link>
   );

@@ -17,7 +17,7 @@
 | Final DB count | 2,710 businesses | April 3, 2026 |
 | Counties with 2+ listings | 46 counties | April 3, 2026 |
 | Cities with 2+ listings | 131 cities | April 3, 2026 |
-| Total pages generated | 2,716 (after 7B-1) | April 3, 2026 |
+| Total pages generated | 2,907 (after 7B-2) | April 4, 2026 |
 
 ---
 
@@ -181,8 +181,7 @@
 - **Status:** 🟡 IN PROGRESS
 - **Sub-phases:**
   - [x] 7B-1: Directory components + listing pages + fixes (ListingCard, ListingGrid, TrustBadges, ServicePills, Stars, Pagination, FilterBar, DirectoryShell, LeadForm, MobileQuoteCTA, VerifiedBadge, BusinessMap, MapWrapper, /companies with dark hero, /companies/[slug] with map + interlinking, /api/leads)
-  - [ ] 7B-2: County/city/service pages (/county, /county/[slug], /city/[slug], /services, /services/[slug])
-  - [ ] 7B-3: Compare tool (/compare)
+  - [x] 7B-2: County/city/service pages + compare tool (/county, /county/[slug], /city/[slug], /cities, /services, /services/[slug], /compare, CompareContext, CompareBar, CompareCheckbox)
 - **7B-1 Details:**
   - Components created (9): Stars, ServicePills, TrustBadges, ListingCard, ListingGrid, Pagination, FilterBar, DirectoryShell, MobileQuoteCTA
   - Form components (1): LeadForm (src/components/forms/LeadForm.tsx)
@@ -210,9 +209,24 @@
   - [x] TrustBadges, FilterBar, Pagination components
   - [x] FAQ sections with FAQPage JSON-LD
   - [x] `npm run build` — zero errors
-  - [ ] Commit: "Phase 7B: directory pages complete"
-- **Notes:** Phase 7B split into sub-phases (7B-1, 7B-2, 7B-3) due to scope. opening_hours JSONB is array of {day, hours} objects from Google Maps — formatter handles both array and object formats.
-- **Deviations:** FilterBar + Pagination use client-side state (not URL search params) since filtering is also client-side. DirectoryShell wraps both FilterBar, ListingGrid, and Pagination as a single client component to coordinate filter + page state.
+  - [x] Commit: "Phase 7B-2: county, city, service pages + compare tool"
+- **7B-2 Details:**
+  - Pages created (6 routes): /county (index), /county/[slug] (46 pages), /city/[slug] (131 pages), /cities (index), /services (index), /services/[slug] (10 pages)
+  - Compare tool: CompareContext (provider + useCompare hook), CompareBar (fixed bottom bar), CompareCheckbox (per-card button), /compare (side-by-side table via CompareTable client component)
+  - CompareProvider wraps root layout; CompareBar renders globally (visible when 1+ selected); CompareCheckbox added to ListingCard
+  - County pages: dark hero, DirectoryShell with service+emergency filters, templated content (6 rotating templates, hash-based), 5 FAQs, city links, nearby counties, compliance page pull if available
+  - City pages: dark hero, DirectoryShell, templated content (6 templates), top rated section (3+ with rating >= 4.0), 4 FAQs, sibling cities, back-to-county link
+  - Service pages: dark hero with description + provider count, DirectoryShell with all filters, 3 FAQs
+  - Cities index: grouped alphabetically by county, linked to /city/[slug] and /county/[slug]
+  - Services index: 10 service type cards with Lucide icons, descriptions, business counts
+  - Compare page: reads IDs from URL search params (client component wrapped in Suspense per gotcha #15), queries Supabase client-side, side-by-side table with services checkmarks
+  - All pages have: JSON-LD (ItemList + BreadcrumbList + FAQPage where applicable), meta titles under 60 chars, correct breadcrumbs
+  - Junction table queries use 100-ID chunks (gotcha #13), paginated fetches (gotcha #5)
+  - Total static pages: 2,907 (was 2,716)
+  - slide-up animation added to globals.css for CompareBar
+  - `npm run build` — zero errors, 47s generation
+- **Notes:** Phase 7B split into sub-phases (7B-1, 7B-2) due to scope. 7B-3 merged into 7B-2. opening_hours JSONB is array of {day, hours} objects from Google Maps — formatter handles both array and object formats.
+- **Deviations:** FilterBar + Pagination use client-side state (not URL search params) since filtering is also client-side. DirectoryShell wraps both FilterBar, ListingGrid, and Pagination as a single client component to coordinate filter + page state. Compare tool uses client-side Supabase queries (anon key) on /compare instead of static generation since business IDs come from URL search params. 7B-3 merged into 7B-2 since compare tool was small enough to include.
 
 ### Phase 7C: Content Pages
 - **Status:** 🟡 IN PROGRESS
@@ -366,4 +380,5 @@
 | 2026-04-03 | 7B-1 | Directory components + listing pages: 9 components, /companies, /companies/[slug], /api/leads, 2,716 static pages | FilterBar/Pagination use client-side state; resend added |
 | 2026-04-03 | 7B-1 fix | Navbar in layout, sticky filter, dark hero, Leaflet map, about fallback, verified badge, cascading filter, interlinking, removed years+DEP filter | leaflet+react-leaflet added; Header auto-detects hero via pathname |
 | 2026-04-03 | 7B-1 | Logo SVG component, custom amber map marker, Get Directions link, favicon.svg | Logo adapts white/amber via currentColor |
+| 2026-04-04 | 7B-2 | County, city, service pages + compare tool: 6 new routes, 191 new static pages, compare context/bar/checkbox/table | 2,907 total pages, 47s build |
 | | | | |

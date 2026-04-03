@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { CompareProvider } from '@/components/directory/CompareContext';
+import CompareBar from '@/components/directory/CompareBar';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -38,9 +40,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${inter.className} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-        <Header />
-        <main className="flex-1 pt-16">{children}</main>
-        <Footer />
+        <CompareProvider>
+          <Header />
+          <main className="flex-1 pt-16">{children}</main>
+          <Footer />
+          <CompareBar />
+        </CompareProvider>
       </body>
     </html>
   );
