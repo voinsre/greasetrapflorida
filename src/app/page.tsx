@@ -116,6 +116,37 @@ export default async function HomePage() {
     ],
   };
 
+  const orgLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Grease Trap Florida',
+    url: 'https://greasetrapflorida.com',
+    description: 'Florida\'s comprehensive directory of verified grease trap cleaning and pumping service companies. Chapter 62-705 compliance resources for restaurant owners.',
+    areaServed: {
+      '@type': 'State',
+      name: 'Florida',
+    },
+    knowsAbout: [
+      'Grease trap cleaning',
+      'Grease interceptor pumping',
+      'FOG compliance',
+      'Florida Chapter 62-705',
+      'Grease waste disposal',
+      'Restaurant grease management',
+    ],
+  };
+
+  const speakableLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Find Grease Trap Services in Florida',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['.page-intro', '.faq-section'],
+    },
+    url: 'https://greasetrapflorida.com',
+  };
+
   return (
     <div className="-mt-16">
       {/* JSON-LD */}
@@ -126,6 +157,14 @@ export default async function HomePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableLd) }}
       />
 
       {/* SECTION 1 — HERO */}

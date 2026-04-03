@@ -31,6 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: { absolute: title },
     description: data.meta_description || '',
+    alternates: { canonical: `https://greasetrapflorida.com/blog/${slug}` },
     openGraph: {
       title,
       description: data.meta_description || '',

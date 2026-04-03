@@ -30,6 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: { absolute: title },
     description: data.meta_description || '',
+    alternates: { canonical: `https://greasetrapflorida.com/guides/${slug}` },
     openGraph: {
       title,
       description: data.meta_description || '',
@@ -121,6 +122,20 @@ export default async function GuidePage({ params }: Props) {
         name: f.q,
         acceptedAnswer: { '@type': 'Answer', text: f.a },
       })),
+    });
+  }
+
+  const speakableSlugs = ['how-to-choose-grease-trap-service', 'grease-trap-cleaning-frequency-florida'];
+  if (speakableSlugs.includes(slug)) {
+    jsonLd.push({
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: guide.title,
+      speakable: {
+        '@type': 'SpeakableSpecification',
+        cssSelector: ['.prose-content', '.faq-section'],
+      },
+      url: `https://greasetrapflorida.com/guides/${slug}`,
     });
   }
 

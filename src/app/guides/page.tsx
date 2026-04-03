@@ -7,7 +7,8 @@ import { BookOpen } from 'lucide-react';
 export const metadata: Metadata = {
   title: { absolute: 'Grease Trap Guides for Florida' },
   description:
-    'Expert guides on grease trap compliance, costs, maintenance, and choosing service providers in Florida. Everything restaurant owners and food service managers need to know about Chapter 62-705 and FOG regulations.',
+    'Expert guides on grease trap compliance, costs, maintenance, and choosing service providers in Florida. Chapter 62-705 and FOG resources.',
+  alternates: { canonical: 'https://greasetrapflorida.com/guides' },
   openGraph: {
     title: 'Grease Trap Guides for Florida',
     description:

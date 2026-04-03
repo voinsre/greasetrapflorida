@@ -129,11 +129,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: { absolute: title },
     description: `${business.name} provides grease trap services in ${business.city}, ${business.county || 'Florida'}. ${business.rating ? `Rated ${Number(business.rating).toFixed(1)} stars.` : ''} Get a free quote today.`.slice(0, 160),
+    alternates: { canonical: `https://greasetrapflorida.com/companies/${slug}` },
     openGraph: {
       title,
       description: `Grease trap services by ${business.name} in ${business.city}, FL.`,
       url: `https://greasetrapflorida.com/companies/${slug}`,
       siteName: 'Grease Trap Florida',
+      images: [{ url: '/images/og-image.webp', width: 1200, height: 630 }],
       type: 'website',
     },
   };

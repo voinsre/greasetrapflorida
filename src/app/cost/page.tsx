@@ -5,7 +5,7 @@ import { DollarSign, ArrowRight } from 'lucide-react';
 export const metadata: Metadata = {
   title: { absolute: 'Grease Trap Cleaning Cost Florida' },
   description:
-    'How much does grease trap cleaning cost in Florida? Interior traps $200-$500, underground interceptors $300-$800+. Compare pricing by size, frequency, and region.',
+    'Grease trap cleaning costs in Florida: interior traps $200-$500, underground interceptors $300-$800+. Compare pricing by size, frequency, and region.',
   openGraph: {
     title: 'Grease Trap Cleaning Cost Florida',
     description: 'How much does grease trap cleaning cost in Florida? Pricing by trap size, frequency, and region.',
@@ -104,14 +104,14 @@ export default function CostPage() {
             href="/companies"
             className="block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-amber-200 transition-all p-5"
           >
-            <h3 className="font-semibold text-gray-900">Compare Providers</h3>
+            <h2 className="font-semibold text-gray-900">Compare Providers</h2>
             <p className="text-sm text-gray-500 mt-1">Browse verified companies and request free quotes</p>
           </Link>
           <Link
             href="/guides/grease-trap-cleaning-frequency-florida"
             className="block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-amber-200 transition-all p-5"
           >
-            <h3 className="font-semibold text-gray-900">Cleaning Frequency Guide</h3>
+            <h2 className="font-semibold text-gray-900">Cleaning Frequency Guide</h2>
             <p className="text-sm text-gray-500 mt-1">How often you need service affects your annual cost</p>
           </Link>
         </div>

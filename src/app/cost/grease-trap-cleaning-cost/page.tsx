@@ -12,12 +12,14 @@ export async function generateMetadata(): Promise<Metadata> {
     .select('meta_title, meta_description, image_url')
     .eq('slug', 'grease-trap-cleaning-cost-florida')
     .single();
-  if (!data) return { title: { absolute: 'Grease Trap Cleaning Cost Florida' } };
+  if (!data) return { title: { absolute: 'Grease Trap Cleaning Cost in Florida' } };
+  const costTitle = 'Grease Trap Cleaning Cost in Florida (2026)';
   return {
-    title: { absolute: data.meta_title || 'Grease Trap Cleaning Cost Florida' },
+    title: { absolute: costTitle },
     description: data.meta_description || '',
+    alternates: { canonical: 'https://greasetrapflorida.com/cost/grease-trap-cleaning-cost' },
     openGraph: {
-      title: data.meta_title || 'Grease Trap Cleaning Cost Florida',
+      title: costTitle,
       description: data.meta_description || '',
       url: 'https://greasetrapflorida.com/cost/grease-trap-cleaning-cost',
       siteName: 'Grease Trap Florida',
@@ -107,6 +109,17 @@ export default async function CostGuidePage() {
       })),
     });
   }
+
+  jsonLd.push({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: page.title,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['.prose-content', '.faq-section'],
+    },
+    url: 'https://greasetrapflorida.com/cost/grease-trap-cleaning-cost',
+  });
 
   return (
     <>

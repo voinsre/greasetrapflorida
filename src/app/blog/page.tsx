@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: { absolute: 'Grease Trap Florida Blog' },
   description:
     'Tips, insights, and industry updates for Florida restaurant owners and food service professionals managing grease trap compliance and maintenance.',
+  alternates: { canonical: 'https://greasetrapflorida.com/blog' },
   openGraph: {
     title: 'Grease Trap Florida Blog',
     description: 'Tips and insights for Florida restaurant owners managing grease trap compliance.',

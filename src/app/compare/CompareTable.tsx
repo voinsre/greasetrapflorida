@@ -118,10 +118,10 @@ export default function CompareTable() {
           <div key={b.id} className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
             <div className="bg-gray-50 p-4 border-b border-gray-100">
               <Link href={`/companies/${b.slug}`} className="hover:text-amber-600 transition-colors">
-                <h3 className="font-semibold text-gray-900 flex items-center gap-1">
+                <h2 className="font-semibold text-gray-900 flex items-center gap-1">
                   {b.name}
                   {b.is_verified && <VerifiedBadge />}
-                </h3>
+                </h2>
               </Link>
               <p className="text-sm text-gray-500 mt-1">
                 {b.city}{b.county ? `, ${b.county} County` : ''}

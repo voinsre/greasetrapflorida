@@ -33,7 +33,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: `Find companies offering ${service.name.toLowerCase()} in Florida.`,
       url: `https://greasetrapflorida.com/services/${slug}`,
       siteName: 'Grease Trap Florida',
+      images: [{ url: '/images/og-image.webp', width: 1200, height: 630 }],
       type: 'website',
+    },
+    alternates: {
+      canonical: `https://greasetrapflorida.com/services/${slug}`,
     },
   };
 }

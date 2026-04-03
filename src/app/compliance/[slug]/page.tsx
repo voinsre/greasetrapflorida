@@ -31,6 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: { absolute: title },
     description: data.meta_description || '',
+    alternates: { canonical: `https://greasetrapflorida.com/compliance/${slug}` },
     openGraph: {
       title,
       description: data.meta_description || '',
@@ -117,6 +118,19 @@ export default async function ComplianceSlugPage({ params }: Props) {
         name: f.q,
         acceptedAnswer: { '@type': 'Answer', text: f.a },
       })),
+    });
+  }
+
+  if (slug === 'chapter-62-705-guide') {
+    jsonLd.push({
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: page.title,
+      speakable: {
+        '@type': 'SpeakableSpecification',
+        cssSelector: ['.prose-content', '.faq-section'],
+      },
+      url: `https://greasetrapflorida.com/compliance/${slug}`,
     });
   }
 

@@ -3,16 +3,19 @@ import type { Metadata } from 'next';
 import { ChevronRight, ExternalLink, BookOpen, Scale } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: { absolute: 'Chapter 62-705 F.A.C. \u2014 Florida Grease Waste Law' },
+  title: { absolute: 'Chapter 62-705 F.A.C. — Florida Grease Waste Law' },
   description:
     'Full text of Florida Chapter 62-705 governing grease waste removal, transport, and disposal. Requirements for restaurants, haulers, and processing facilities.',
   openGraph: {
-    title: 'Chapter 62-705 F.A.C. \u2014 Florida Grease Waste Law',
+    title: 'Chapter 62-705 F.A.C. — Florida Grease Waste Law',
     description: 'Full text of Florida Chapter 62-705 governing grease waste removal and disposal.',
     url: 'https://greasetrapflorida.com/compliance/chapter-62-705',
     siteName: 'Grease Trap Florida',
     images: [{ url: '/images/og-image.webp', width: 1200, height: 630 }],
     type: 'article',
+  },
+  alternates: {
+    canonical: 'https://greasetrapflorida.com/compliance/chapter-62-705',
   },
 };
 
@@ -30,7 +33,7 @@ export default function Chapter62705Page() {
     {
       '@context': 'https://schema.org',
       '@type': 'Legislation',
-      name: 'Chapter 62-705 F.A.C. \u2014 Grease Waste Removal and Disposal',
+      name: 'Chapter 62-705 F.A.C. — Grease Waste Removal and Disposal',
       legislationIdentifier: '62-705',
       legislationJurisdiction: 'Florida, United States',
       legislationType: 'Administrative Code',

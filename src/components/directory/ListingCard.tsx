@@ -40,10 +40,10 @@ export default function ListingCard({
       className={`block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-amber-200 transition-all p-4 sm:p-5 border-t-4 ${borderColor}`}
     >
       <div className="space-y-2.5 sm:space-y-3">
-        <h3 className="font-semibold text-base md:text-lg text-gray-900 line-clamp-2 flex items-start">
+        <h2 className="font-semibold text-base md:text-lg text-gray-900 line-clamp-2 flex items-start">
           <span className="line-clamp-2">{business.name}</span>
           {business.verified && <VerifiedBadge />}
-        </h3>
+        </h2>
 
         <div className="flex items-center gap-1.5 text-xs md:text-sm text-gray-500">
           <MapPin className="w-3.5 h-3.5 shrink-0" />

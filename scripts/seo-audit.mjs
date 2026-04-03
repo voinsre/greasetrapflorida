@@ -24,10 +24,15 @@ function fileToRoute(filePath) {
   return r;
 }
 
+function decodeEntities(str) {
+  if (!str) return str;
+  return str.replace(/&amp;/g, '&').replace(/&#x27;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+}
+
 function extractMeta(html) {
   return {
-    title: html.match(/<title>([\s\S]*?)<\/title>/)?.[1]?.trim() || null,
-    description: html.match(/<meta\s+name="description"\s+content="([^"]*?)"/)?.[1] || null,
+    title: decodeEntities(html.match(/<title>([\s\S]*?)<\/title>/)?.[1]?.trim()) || null,
+    description: decodeEntities(html.match(/<meta\s+name="description"\s+content="([^"]*?)"/)?.[1]) || null,
     ogTitle: html.match(/<meta\s+property="og:title"\s+content="([^"]*?)"/)?.[1] || null,
     ogDesc: html.match(/<meta\s+property="og:description"\s+content="([^"]*?)"/)?.[1] || null,
     ogImage: html.match(/<meta\s+property="og:image"\s+content="([^"]*?)"/)?.[1] || null,
@@ -116,6 +121,7 @@ function runAudit() {
 
   for (const file of files) {
     const route = fileToRoute(file);
+    if (route === '/_global-error' || route === '/_not-found') { allRoutes.add(route); continue; }
     allRoutes.add(route);
     const html = fs.readFileSync(file, 'utf8');
     const meta = extractMeta(html);
@@ -201,8 +207,9 @@ function runAudit() {
 
   // Performance
   const homeHtml = fs.readFileSync(path.join(BUILD_DIR, 'index.html'), 'utf8');
-  if (!homeHtml.includes('fetchPriority="high"')) {
-    issues.perf.push({ route: '/', issue: 'Hero image missing fetchPriority=high' });
+  const hasHeroPriority = homeHtml.includes('fetchPriority="high"') || homeHtml.includes('fetchpriority="high"') || (homeHtml.includes('preload') && homeHtml.includes('hero-grease'));
+  if (!hasHeroPriority) {
+    issues.perf.push({ route: '/', issue: 'Hero image missing priority' });
   }
 
   // Print

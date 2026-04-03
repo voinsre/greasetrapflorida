@@ -15,7 +15,11 @@ export const metadata: Metadata = {
       'Browse grease trap service companies across Florida. Compare ratings, services, and DEP licensing.',
     url: 'https://greasetrapflorida.com/companies',
     siteName: 'Grease Trap Florida',
+    images: [{ url: '/images/og-image.webp', width: 1200, height: 630 }],
     type: 'website',
+  },
+  alternates: {
+    canonical: 'https://greasetrapflorida.com/companies',
   },
 };
 

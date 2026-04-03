@@ -6,7 +6,7 @@ import { Shield, BookOpen, FileText, AlertTriangle, ExternalLink } from 'lucide-
 export const metadata: Metadata = {
   title: { absolute: 'Florida Grease Trap Compliance Guide' },
   description:
-    'Everything you need to know about Florida\'s grease waste regulations. Chapter 62-705 compliance guides, county-specific FOG requirements, manifest documentation, and penalty information for restaurant owners and food service managers.',
+    'Florida grease waste regulations: Chapter 62-705 compliance, county FOG requirements, manifest documentation, and penalties for restaurant owners.',
   openGraph: {
     title: 'Florida Grease Trap Compliance Guide',
     description: 'Chapter 62-705 compliance guides, county FOG requirements, and penalty information.',
@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     siteName: 'Grease Trap Florida',
     images: [{ url: '/images/og-image.webp', width: 1200, height: 630 }],
     type: 'website',
+  },
+  alternates: {
+    canonical: 'https://greasetrapflorida.com/compliance',
   },
 };
 
