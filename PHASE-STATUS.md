@@ -167,7 +167,7 @@
 ### Phase 7C: Content Pages
 - **Status:** 🟡 IN PROGRESS
 - **Sub-phases:**
-  - [ ] 7C-1: Guides index + 4 cornerstone guides (1,500+ words each)
+  - [x] 7C-1: 4 cornerstone guides written and inserted into Supabase content_pages
   - [ ] 7C-2: 10 supporting guides (800-1,200 words each)
   - [x] 7C-3: County compliance pages (10 pages, 400-600 words each)
   - [ ] 7C-4: Blog system + 6 seed posts
@@ -186,8 +186,17 @@
   - Internal links: Chapter 62-705 guide + county directory pages
   - Script: scripts/insert-county-compliance.mjs
   - Verified: 10/10 pages confirmed in content_pages table
-- **Notes:** 7C-3 completed before 7C-1 and 7C-2 (compliance hub + cornerstone guides still pending)
-- **Deviations:** Compliance hub page and Chapter 62-705 cornerstone guide not yet created — those are part of 7C-1. County compliance pages done first as standalone sub-task.
+- **7C-1 Details:**
+  - 4 cornerstone guides (1,500+ words each) written and inserted into content_pages table
+  - Guides: Chapter 62-705 Compliance, Grease Trap Cleaning Cost, How to Choose a Service, Cleaning Frequency
+  - Category: "guide", each with matching IMAGE-SPEC image
+  - All meta_titles under 60 chars (max 51 chars)
+  - All meta_descriptions under 160 chars
+  - Each guide includes: AEO opening (2-3 sentence direct answer), specific numbers/regulation references, internal links to /companies, /county, other guides, 5 FAQs at the end
+  - Script: scripts/insert-cornerstone-guides.mjs
+  - Verified: 4/4 guides confirmed in content_pages table
+- **Notes:** 7C-3 completed before 7C-1 and 7C-2. 7C-1 now complete. Guides index page not yet built (will be part of Next.js page build).
+- **Deviations:** Compliance hub page not yet created — will be part of Next.js page build. County compliance pages and cornerstone guides inserted into DB; page rendering pending.
 
 ### Phase 7D: Images & Visual Assets
 - **Status:** ⬜ NOT STARTED
@@ -281,4 +290,5 @@
 | 2026-04-03 | 4 | Cleaned 5,515 → 2,710 businesses across 46 counties | Filters + 3-tier dedup, 0 unknown counties |
 | 2026-04-03 | 5 | Created scripts/scrape-websites.mjs (async scraper ready) | Awaiting data/cleaned.json from Phase 4 |
 | 2026-04-03 | 7C-3 | 10 county compliance pages inserted into Supabase content_pages | Miami-Dade, Hillsborough, Pinellas, Orange, Duval, Sarasota, Palm Beach, Broward, Lee, Volusia |
+| 2026-04-03 | 7C-1 | 4 cornerstone guides (1,500+ words each) inserted into Supabase content_pages | Ch. 62-705, Cost, Choosing a Service, Frequency — all with 5 FAQs, internal links, AEO openings |
 | | | | |
