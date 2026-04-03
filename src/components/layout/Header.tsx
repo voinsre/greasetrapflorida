@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 
@@ -14,26 +14,18 @@ const NAV_LINKS = [
 export default function Header({ heroMode = false }: { heroMode?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const sentinelRef = useRef<HTMLDivElement | null>(null);
-
   useEffect(() => {
     if (!heroMode) {
       setScrolled(true);
       return;
     }
 
-    const sentinel = document.getElementById('hero-sentinel');
-    if (!sentinel) {
-      setScrolled(true);
-      return;
+    function onScroll() {
+      setScrolled(window.scrollY > 10);
     }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => setScrolled(!entry.isIntersecting),
-      { threshold: 0 }
-    );
-    observer.observe(sentinel);
-    return () => observer.disconnect();
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, [heroMode]);
 
   const solid = !heroMode || scrolled;
