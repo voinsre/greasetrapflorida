@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { createClient } from '@supabase/supabase-js';
 import { CheckCircle, XCircle, Phone, Globe, Star, Loader2 } from 'lucide-react';
 import VerifiedBadge from '@/components/directory/VerifiedBadge';
 
@@ -30,92 +29,30 @@ function BoolCell({ value }: { value: boolean }) {
   );
 }
 
-function getIdsFromUrl(): string[] {
-  if (typeof window === 'undefined') return [];
-  const params = new URLSearchParams(window.location.search);
-  const idsParam = params.get('ids') || '';
-  return idsParam.split(',').map((s) => s.trim()).filter(Boolean);
-}
-
 export default function CompareTable() {
   const [businesses, setBusinesses] = useState<CompareBusiness[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const ids = getIdsFromUrl();
+    const params = new URLSearchParams(window.location.search);
+    const idsParam = params.get('ids') || '';
 
-    if (ids.length === 0) {
+    if (!idsParam) {
       setLoading(false);
       return;
     }
 
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
-
-    async function load() {
-      try {
-        const { data: bizData, error: bizError } = await supabase
-          .from('businesses')
-          .select('id, slug, name, city, county, rating, review_count, emergency_24_7, manifest_provided, phone, website, is_verified')
-          .in('id', ids);
-
-        if (bizError) {
-          setError(`Query error: ${bizError.message}`);
-          setLoading(false);
-          return;
-        }
-
-        if (!bizData?.length) {
-          setLoading(false);
-          return;
-        }
-
-        // Get services
-        const { data: junctions } = await supabase
-          .from('business_services')
-          .select('business_id, service_id')
-          .in('business_id', bizData.map((b) => b.id));
-
-        const serviceIds = [...new Set((junctions || []).map((j) => j.service_id))];
-        const serviceMap = new Map<string, string>();
-        if (serviceIds.length) {
-          const { data: serviceData } = await supabase
-            .from('service_types')
-            .select('id, name')
-            .in('id', serviceIds);
-          for (const s of serviceData || []) {
-            serviceMap.set(s.id, s.name);
-          }
-        }
-
-        const bizServiceMap = new Map<string, string[]>();
-        for (const j of junctions || []) {
-          if (!bizServiceMap.has(j.business_id)) bizServiceMap.set(j.business_id, []);
-          const name = serviceMap.get(j.service_id);
-          if (name) bizServiceMap.get(j.business_id)!.push(name);
-        }
-
-        const result: CompareBusiness[] = bizData.map((b) => ({
-          ...b,
-          services: bizServiceMap.get(b.id) || [],
-        }));
-
-        // Maintain order from URL
-        const ordered = ids
-          .map((id) => result.find((b) => b.id === id))
-          .filter(Boolean) as CompareBusiness[];
-
-        setBusinesses(ordered);
-      } catch (e) {
-        setError(`Unexpected error: ${e}`);
-      }
-      setLoading(false);
-    }
-
-    load();
+    fetch(`/api/compare?ids=${encodeURIComponent(idsParam)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setBusinesses(data.businesses || []);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(`Failed to load: ${err.message}`);
+        setLoading(false);
+      });
   }, []);
 
   if (loading) {
