@@ -5,11 +5,11 @@ import CountyGrid from './CountyGrid';
 export const metadata: Metadata = {
   title: { absolute: 'Grease Trap Services by Florida County' },
   description:
-    'Find licensed grease trap cleaning companies in all 46 Florida counties. Each county page shows verified local providers, county-specific FOG compliance requirements, and average service details.',
+    'Find licensed grease trap cleaning companies in all Florida counties. Each county page shows verified local providers, county-specific FOG compliance requirements, and average service details.',
   openGraph: {
     title: 'Grease Trap Services by Florida County',
     description:
-      'Find licensed grease trap cleaning companies in all 46 Florida counties with verified local providers.',
+      'Find licensed grease trap cleaning companies in all Florida counties with verified local providers.',
     url: 'https://greasetrapflorida.com/county',
     siteName: 'Grease Trap Florida',
     type: 'website',

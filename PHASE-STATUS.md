@@ -15,11 +15,12 @@
 | After website verification | 1,817 live / 477 blocked / 300 no-website / 116 dead+err+timeout | April 3, 2026 |
 | After enrichment | 2,710 enriched (66.9% with scraped text, +76 from retry) | April 3, 2026 |
 | Final DB count (pre-audit) | 2,710 businesses | April 3, 2026 |
-| Data quality audit | -873 removed (non-grease-trap businesses) | April 4, 2026 |
-| Final DB count (post-audit) | 1,837 businesses | April 4, 2026 |
-| Counties with 2+ listings | 45 counties (was 46, -5 dropped to 0) | April 4, 2026 |
-| Cities with 2+ listings | 104 cities (was 131, -27 removed) | April 4, 2026 |
-| Total pages generated | 2,002 (after audit rebuild) | April 4, 2026 |
+| Data quality audit pass 1 | -873 clearly wrong niche (Home Depot, pest control, etc.) | April 4, 2026 |
+| Data quality audit pass 2 | -1,087 no confirmed grease evidence | April 4, 2026 |
+| Final DB count (post-audit) | 750 businesses (185 verified, 565 regular) | April 4, 2026 |
+| Counties with businesses | 39 counties (was 46) | April 4, 2026 |
+| Cities with 2+ listings | 72 cities (was 131) | April 4, 2026 |
+| Total pages generated | ~882 (after final audit rebuild) | April 4, 2026 |
 
 ---
 
@@ -386,5 +387,6 @@
 | 2026-04-03 | 7B-1 | Logo SVG component, custom amber map marker, Get Directions link, favicon.svg | Logo adapts white/amber via currentColor |
 | 2026-04-04 | 7B-2 | County, city, service pages + compare tool: 6 new routes, 191 new static pages, compare context/bar/checkbox/table | 2,907 total pages, 47s build |
 | 2026-04-04 | 7B-2 fix | SEO content, FAQs, compare fix, multi-select filters, interlinking, dropdowns, navbar link, filter pills, service lock | FilterBar rewritten, 10 unique service SEO paragraphs, 40 service FAQs |
-| 2026-04-04 | Audit | Data quality audit: removed 873 non-grease-trap businesses (Home Depot, Walmart, pest control, restaurants, hardware stores, etc.) | 2,710 → 1,837 biz, 131 → 104 cities, 46 → 45 counties |
+| 2026-04-04 | Audit 1 | Data quality audit pass 1: removed 873 clearly wrong niche businesses | 2,710 → 1,837 |
+| 2026-04-04 | Audit 2 | Data quality audit pass 2: flipped logic, only kept confirmed grease providers (185 verified + 565 relevant trade in grease search) | 1,837 → 750 biz, 72 cities, 39 counties |
 | | | | |

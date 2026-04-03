@@ -85,7 +85,7 @@ export default async function CityPage({ params }: Props) {
   while (hasMore) {
     const { data } = await supabase
       .from('businesses')
-      .select('id, slug, name, city, county, county_slug, rating, review_count, is_featured, dep_licensed, emergency_24_7, manifest_provided, insured, website_status, phone, place_id')
+      .select('id, slug, name, city, county, county_slug, rating, review_count, is_featured, dep_licensed, emergency_24_7, manifest_provided, insured, website_status, phone, place_id, is_verified')
       .eq('county_slug', city.county_slug)
       .ilike('city', city.name)
       .order('is_featured', { ascending: false })
@@ -168,6 +168,7 @@ export default async function CityPage({ params }: Props) {
     services: bizServices.get(b.id as string)?.names || [],
     service_slugs: bizServices.get(b.id as string)?.slugs || [],
     verified: isVerified({
+      is_verified: b.is_verified as boolean | null,
       website_status: b.website_status as string | null,
       phone: b.phone as string | null,
       review_count: b.review_count as number | null,

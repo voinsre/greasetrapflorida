@@ -16,11 +16,11 @@ export const metadata: Metadata = {
     absolute: 'Find Grease Trap Services in Florida | GreaseTrapFlorida.com',
   },
   description:
-    'Compare licensed grease trap cleaning companies across 46 Florida counties. DEP license verified, Chapter 62-705 compliant directory with free quotes.',
+    'Compare licensed grease trap cleaning companies across Florida counties. DEP license verified, Chapter 62-705 compliant directory with free quotes.',
   openGraph: {
     title: 'Find Grease Trap Services in Florida | GreaseTrapFlorida.com',
     description:
-      'Compare licensed grease trap cleaning companies across 46 Florida counties. DEP license verified, Chapter 62-705 compliant directory with free quotes.',
+      'Compare licensed grease trap cleaning companies across Florida counties. DEP license verified, Chapter 62-705 compliant directory with free quotes.',
     url: 'https://greasetrapflorida.com',
     siteName: 'Grease Trap Florida',
     images: [{ url: '/images/og-image.webp', width: 1200, height: 630 }],

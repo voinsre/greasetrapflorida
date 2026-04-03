@@ -78,7 +78,7 @@ async function getBusiness(slug: string) {
   // Get nearby businesses in same county
   const { data: nearby } = await supabase
     .from('businesses')
-    .select('id, slug, name, city, county, rating, review_count, is_featured, dep_licensed, emergency_24_7, manifest_provided, insured, website_status, phone, place_id')
+    .select('id, slug, name, city, county, rating, review_count, is_featured, dep_licensed, emergency_24_7, manifest_provided, insured, website_status, phone, place_id, is_verified')
     .eq('county_slug', business.county_slug)
     .neq('id', business.id)
     .order('rating', { ascending: false, nullsFirst: false })
@@ -244,6 +244,7 @@ export default async function CompanyPage({ params }: Props) {
     insured: n.insured as boolean,
     services: [] as string[],
     verified: isVerified({
+      is_verified: n.is_verified as boolean | null,
       website_status: n.website_status as string | null,
       phone: n.phone as string | null,
       review_count: n.review_count as number | null,
