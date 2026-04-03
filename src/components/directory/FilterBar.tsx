@@ -137,9 +137,9 @@ export default function FilterBar({
   }
 
   return (
-    <div className="mb-6 space-y-3">
+    <div className="mb-6 space-y-3 sticky top-[72px] z-30">
       {/* Filter controls */}
-      <div className="bg-white/95 backdrop-blur-sm border border-gray-200 rounded-xl p-4 sticky top-[72px] z-30 shadow-sm">
+      <div className="bg-white/95 backdrop-blur-sm border border-gray-200 rounded-xl p-4 shadow-sm">
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-1.5 text-sm font-medium text-gray-700 mr-1">
             <SlidersHorizontal className="w-4 h-4" />

@@ -14,10 +14,12 @@
 | After dedup | 2,710 (-784 duplicates) | April 3, 2026 |
 | After website verification | 1,817 live / 477 blocked / 300 no-website / 116 dead+err+timeout | April 3, 2026 |
 | After enrichment | 2,710 enriched (66.9% with scraped text, +76 from retry) | April 3, 2026 |
-| Final DB count | 2,710 businesses | April 3, 2026 |
-| Counties with 2+ listings | 46 counties | April 3, 2026 |
-| Cities with 2+ listings | 131 cities | April 3, 2026 |
-| Total pages generated | 2,907 (after 7B-2) | April 4, 2026 |
+| Final DB count (pre-audit) | 2,710 businesses | April 3, 2026 |
+| Data quality audit | -873 removed (non-grease-trap businesses) | April 4, 2026 |
+| Final DB count (post-audit) | 1,837 businesses | April 4, 2026 |
+| Counties with 2+ listings | 45 counties (was 46, -5 dropped to 0) | April 4, 2026 |
+| Cities with 2+ listings | 104 cities (was 131, -27 removed) | April 4, 2026 |
+| Total pages generated | 2,002 (after audit rebuild) | April 4, 2026 |
 
 ---
 
@@ -384,4 +386,5 @@
 | 2026-04-03 | 7B-1 | Logo SVG component, custom amber map marker, Get Directions link, favicon.svg | Logo adapts white/amber via currentColor |
 | 2026-04-04 | 7B-2 | County, city, service pages + compare tool: 6 new routes, 191 new static pages, compare context/bar/checkbox/table | 2,907 total pages, 47s build |
 | 2026-04-04 | 7B-2 fix | SEO content, FAQs, compare fix, multi-select filters, interlinking, dropdowns, navbar link, filter pills, service lock | FilterBar rewritten, 10 unique service SEO paragraphs, 40 service FAQs |
+| 2026-04-04 | Audit | Data quality audit: removed 873 non-grease-trap businesses (Home Depot, Walmart, pest control, restaurants, hardware stores, etc.) | 2,710 → 1,837 biz, 131 → 104 cities, 46 → 45 counties |
 | | | | |
