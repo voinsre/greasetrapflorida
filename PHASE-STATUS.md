@@ -1,7 +1,7 @@
 # Grease Trap Florida — Phase Status
 
 **Last updated:** 2026-04-03
-**Updated by:** Phase 5 (website scraping + enrichment complete)
+**Updated by:** Phase 7C-2 (10 supporting guides inserted)
 
 ---
 
@@ -178,7 +178,7 @@
 - **Status:** 🟡 IN PROGRESS
 - **Sub-phases:**
   - [x] 7C-1: 4 cornerstone guides written and inserted into Supabase content_pages
-  - [ ] 7C-2: 10 supporting guides (800-1,200 words each)
+  - [x] 7C-2: 10 supporting guides (800-1,200 words each)
   - [x] 7C-3: County compliance pages (10 pages, 400-600 words each)
   - [x] 7C-4: Blog system + 6 seed posts
   - [ ] 7C-5: Cost guide hub
@@ -213,7 +213,16 @@
   - All meta_titles under 60 chars, all meta_descriptions under 160 chars
   - Script: scripts/insert-blog-posts.mjs
   - Verified: 6/6 posts confirmed in content_pages table
-- **Notes:** 7C-1, 7C-3, 7C-4 complete. Guides index and blog index pages not yet built (will be part of Next.js page build).
+- **7C-2 Details:**
+  - 10 supporting guides (800-1,200 words each) written as markdown files in data/guides/ and inserted into content_pages table
+  - Guides: grease-trap-vs-grease-interceptor, what-happens-fail-fog-inspection, florida-grease-waste-service-manifest, verify-grease-hauler-dep-licensed, grease-trap-sizing-guide-florida, emergency-grease-trap-overflow, starting-restaurant-florida-grease-compliance, grease-trap-maintenance-tips, florida-fog-fines-penalties, used-cooking-oil-vs-grease-trap-waste
+  - 4 guides with images (inspection, manifest, emergency, restaurant-checklist), 6 with null image_url
+  - Category: "guide", all published_at set to now
+  - All meta_titles under 60 chars, all meta_descriptions under 160 chars (2 fixed post-insert)
+  - Each guide includes: AEO opening, specific regulation references, internal links, 3-4 FAQs
+  - Script: scripts/insert-guides-7c2.mjs (reads .env.local, parses frontmatter from data/guides/*.md)
+  - Verified: 14/14 total guides confirmed in content_pages table (4 cornerstone + 10 supporting)
+- **Notes:** 7C-1, 7C-2, 7C-3, 7C-4 complete. Guides index and blog index pages not yet built (will be part of Next.js page build).
 - **Deviations:** Compliance hub page not yet created — will be part of Next.js page build. All content inserted into DB; page rendering pending.
 
 ### Phase 7D: Images & Visual Assets
@@ -310,4 +319,5 @@
 | 2026-04-03 | 7C-3 | 10 county compliance pages inserted into Supabase content_pages | Miami-Dade, Hillsborough, Pinellas, Orange, Duval, Sarasota, Palm Beach, Broward, Lee, Volusia |
 | 2026-04-03 | 7C-1 | 4 cornerstone guides (1,500+ words each) inserted into Supabase content_pages | Ch. 62-705, Cost, Choosing a Service, Frequency — all with 5 FAQs, internal links, AEO openings |
 | 2026-04-03 | 7C-4 | 6 blog posts (800+ words each) inserted into Supabase content_pages | Staggered published_at Mar 21 – Apr 2; warning signs, pro cleaning, health inspection, food trucks, new restaurant checklist, myths |
+| 2026-04-03 | 7C-2 | 10 supporting guides (800-1,200 words each) inserted into content_pages | 14 total guides; data/guides/ markdown source files + insert script |
 | | | | |
