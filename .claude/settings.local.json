@@ -3,7 +3,14 @@
     "allow": [
       "Bash(npx create-next-app@latest . --typescript --tailwind --app --src-dir --eslint --no-turbopack --import-alias \"@/*\" --use-npm)",
       "Bash(mkdir -p /tmp/gtf-backup)",
-      "Bash(mv DIRECTORY-BUILDER-PLAYBOOK.md greasetrapflorida-blueprint.md IMAGE-SPEC.md PHASE-STATUS.md /tmp/gtf-backup/)"
+      "Bash(mv DIRECTORY-BUILDER-PLAYBOOK.md greasetrapflorida-blueprint.md IMAGE-SPEC.md PHASE-STATUS.md /tmp/gtf-backup/)",
+      "Bash(mv /tmp/gtf-backup/* /c/Users/altas/Projects/greasetrapflorida/)",
+      "Bash(rmdir /tmp/gtf-backup)",
+      "Bash(npm ls:*)",
+      "Bash(npm install:*)",
+      "Bash(git -C /c/Users/altas/Projects/greasetrapflorida status --short)",
+      "Bash(npm run:*)",
+      "Bash(git add:*)"
     ]
   }
 }
