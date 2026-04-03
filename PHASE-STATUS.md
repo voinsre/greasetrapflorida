@@ -165,19 +165,29 @@
 - **Deviations:** —
 
 ### Phase 7C: Content Pages
-- **Status:** ⬜ NOT STARTED
+- **Status:** 🟡 IN PROGRESS
 - **Sub-phases:**
   - [ ] 7C-1: Guides index + 4 cornerstone guides (1,500+ words each)
   - [ ] 7C-2: 10 supporting guides (800-1,200 words each)
-  - [ ] 7C-3: Compliance hub + Chapter 62-705 + county compliance pages
+  - [x] 7C-3: County compliance pages (10 pages, 400-600 words each)
   - [ ] 7C-4: Blog system + 6 seed posts
   - [ ] 7C-5: Cost guide hub
   - [ ] 7C-6: Utility pages (about, contact, privacy, claim, advertise, get-quotes)
   - [ ] 7C-7: Email templates (8 templates)
   - [ ] `npm run build` — zero errors
   - [ ] Commit after each sub-phase
-- **Notes:** —
-- **Deviations:** —
+- **7C-3 Details:**
+  - 10 county compliance pages written and inserted into Supabase content_pages table
+  - Counties: Miami-Dade, Hillsborough, Pinellas, Orange, Duval, Sarasota, Palm Beach, Broward, Lee, Volusia
+  - Category: "compliance", image: /images/guide-compliance.webp
+  - All meta_titles under 60 chars (max 44 chars)
+  - All meta_descriptions under 160 chars
+  - Each page includes: local ordinance details, pump-out frequency, documentation required, penalties, compliance steps, county directory link, 3 FAQs
+  - Internal links: Chapter 62-705 guide + county directory pages
+  - Script: scripts/insert-county-compliance.mjs
+  - Verified: 10/10 pages confirmed in content_pages table
+- **Notes:** 7C-3 completed before 7C-1 and 7C-2 (compliance hub + cornerstone guides still pending)
+- **Deviations:** Compliance hub page and Chapter 62-705 cornerstone guide not yet created — those are part of 7C-1. County compliance pages done first as standalone sub-task.
 
 ### Phase 7D: Images & Visual Assets
 - **Status:** ⬜ NOT STARTED
@@ -270,4 +280,5 @@
 | 2026-04-03 | 3 | Data collection: 5,515 raw records (4,019 unique) from 6 Apify runs | REST API, runs aborted early (~$27.58) |
 | 2026-04-03 | 4 | Cleaned 5,515 → 2,710 businesses across 46 counties | Filters + 3-tier dedup, 0 unknown counties |
 | 2026-04-03 | 5 | Created scripts/scrape-websites.mjs (async scraper ready) | Awaiting data/cleaned.json from Phase 4 |
+| 2026-04-03 | 7C-3 | 10 county compliance pages inserted into Supabase content_pages | Miami-Dade, Hillsborough, Pinellas, Orange, Duval, Sarasota, Palm Beach, Broward, Lee, Volusia |
 | | | | |
