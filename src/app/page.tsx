@@ -133,9 +133,7 @@ export default async function HomePage() {
       />
 
       {/* SECTION 1 — HERO */}
-      <section className="relative min-h-screen flex items-center justify-center">
-        {/* Sentinel for IntersectionObserver */}
-        <div id="hero-sentinel" className="absolute top-0 left-0 w-full h-1" />
+      <section id="hero-sentinel" className="relative min-h-screen flex items-center justify-center">
 
         {/* Background image */}
         <Image
@@ -291,6 +289,15 @@ export default async function HomePage() {
                 </p>
               </Link>
             ))}
+          </div>
+          <div className="mt-8 text-center">
+            <Link
+              href="/cities"
+              className="text-amber-600 hover:text-amber-700 font-semibold text-sm inline-flex items-center gap-1 transition-colors"
+            >
+              View All {cityCount} Cities
+              <ChevronRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
