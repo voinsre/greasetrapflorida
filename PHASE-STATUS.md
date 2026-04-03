@@ -312,7 +312,7 @@
   - [x] Add to guide/blog pages + OG tags
   - [x] Default OG image for site-wide fallback
   - [x] `npm run build` — zero errors
-  - [ ] Commit: "Phase 7D: images placed"
+  - [x] Commit: "Phase 7D: images placed"
 - **Notes:** All 15 images present in /public/images/ (flat, no subdirectories). Sizes verified: hero 113KB (<120KB), OG 56KB (<80KB), all guide/blog images <60KB. Hero image uses `priority={true}`. Default OG image set in root layout. 6 content_pages rows in Supabase updated from null image_url to correct paths (fines-and-penalties, grease-trap-maintenance-tips, grease-trap-sizing-guide-florida, grease-trap-vs-grease-interceptor, used-cooking-oil-vs-grease-trap-waste, verify-grease-hauler-dep-licensed). All 30 content_pages now have image_url set. Markdown frontmatter in data/guides/ synced to match DB.
 - **Deviations:** —
 
