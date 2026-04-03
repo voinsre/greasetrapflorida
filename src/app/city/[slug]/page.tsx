@@ -6,8 +6,7 @@ import { createStaticClient } from '@/lib/supabase/static';
 import { isVerified } from '@/components/directory/VerifiedBadge';
 import DirectoryShell from '@/components/directory/DirectoryShell';
 import ListingCard from '@/components/directory/ListingCard';
-import Stars from '@/components/directory/Stars';
-import { MapPin, ChevronRight, Star } from 'lucide-react';
+import { MapPin, ChevronRight, Star, BookOpen, Shield, DollarSign, Wrench } from 'lucide-react';
 
 export async function generateStaticParams() {
   const supabase = createStaticClient();
@@ -45,17 +44,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 const CITY_TEMPLATES = [
   (city: string, county: string, count: number) =>
-    `${city} is a key market for grease trap services in ${county} County, with ${count} licensed providers competing for your business. Whether you operate a restaurant, hotel kitchen, or catering facility, regular grease trap cleaning is required under Florida Chapter 62-705. Most ${city} establishments schedule pump-outs every 30 to 90 days. Compare providers below to find the best combination of price, reliability, and compliance expertise.`,
+    `${city} is a key market for grease trap services in ${county} County, with ${count} licensed providers competing for your business. Whether you operate a restaurant, hotel kitchen, or catering facility, regular grease trap cleaning is required under Florida Chapter 62-705. Most ${city} establishments schedule pump-outs every 30 to 90 days depending on trap size and food volume. The local restaurant scene in ${city} includes everything from independent eateries to chain restaurants, all requiring compliant grease waste management. Compare providers below to find the best combination of price, reliability, and compliance expertise for your ${city} business.`,
   (city: string, county: string, count: number) =>
-    `Need grease trap cleaning in ${city}? Our directory features ${count} service companies ready to help. Located in ${county} County, ${city} businesses must follow both state Chapter 62-705 regulations and any local FOG ordinances. Finding a reliable, DEP-licensed hauler ensures your grease waste manifests are properly documented and your establishment stays inspection-ready.`,
+    `Need grease trap cleaning in ${city}? Our directory features ${count} service companies ready to help. Located in ${county} County, ${city} businesses must follow both state Chapter 62-705 regulations and any local FOG ordinances. Finding a reliable, DEP-licensed hauler ensures your grease waste manifests are properly documented and your establishment stays inspection-ready. When choosing a provider in ${city}, look for verified companies with strong reviews, proper licensing, and competitive pricing.`,
   (city: string, county: string, count: number) =>
-    `${city}, Florida has ${count} grease trap service providers listed in our directory. As part of ${county} County, local food service operators must use DEP-licensed haulers for all grease waste removal. From routine cleaning to emergency overflow response, the companies below serve restaurants, hotels, schools, and commercial kitchens throughout the ${city} area.`,
+    `${city}, Florida has ${count} grease trap service providers listed in our directory. As part of ${county} County, local food service operators must use DEP-licensed haulers for all grease waste removal. From routine cleaning to emergency overflow response, the companies below serve restaurants, hotels, schools, and commercial kitchens throughout the ${city} area. Costs typically range from $200 to $500 per pump-out depending on trap size and condition.`,
   (city: string, county: string, count: number) =>
-    `Searching for grease trap services in ${city}? With ${count} providers operating in the area, ${county} County offers solid coverage for food service businesses. Under Chapter 62-705, every pump-out requires a signed manifest from a licensed hauler. Use our directory to compare verified companies, check ratings, and request free quotes from trusted ${city} providers.`,
+    `Searching for grease trap services in ${city}? With ${count} providers operating in the ${county} County area, you have options when it comes to finding the right company. Under Chapter 62-705, every pump-out requires a signed manifest from a licensed hauler. Use our directory to compare verified companies, check ratings, and request free quotes. ${city}'s food service industry deserves reliable, compliant grease trap maintenance at competitive prices.`,
   (city: string, county: string, count: number) =>
-    `Food service establishments in ${city} rely on professional grease trap maintenance to stay compliant and avoid costly plumbing emergencies. With ${count} service companies covering the ${county} County area, finding the right provider means comparing licensing, response times, and customer reviews. Our directory makes it easy to identify the best fit for your business.`,
+    `Food service establishments in ${city} rely on professional grease trap maintenance to stay compliant with ${county} County and Florida DEP regulations. With ${count} service companies covering the area, finding the right provider means comparing licensing, response times, and customer reviews. Our directory makes it easy to identify verified, DEP-licensed providers that offer the best value for ${city} restaurants and commercial kitchens.`,
   (city: string, county: string, count: number) =>
-    `${city} restaurants and commercial kitchens need regular grease trap cleaning to comply with Florida DEP regulations. Our directory lists ${count} providers in the ${county} County area, from full-service pumping companies to specialists in FOG compliance consulting. Compare services, verify licensing, and get quotes from the companies below.`,
+    `${city} restaurants and commercial kitchens need regular grease trap cleaning to comply with Florida DEP regulations. Our directory lists ${count} providers in the ${county} County area, from full-service pumping companies to specialists in FOG compliance consulting. Whether you're a new restaurant owner or managing multiple locations, having a trusted grease trap service provider in ${city} is essential for daily operations and health department compliance.`,
 ];
 
 function hashString(s: string): number {
@@ -123,6 +122,15 @@ export default async function CityPage({ params }: Props) {
     .neq('slug', slug)
     .order('name');
 
+  // Check for county compliance page
+  const { data: compliancePage } = await supabase
+    .from('content_pages')
+    .select('title, slug')
+    .eq('category', 'compliance')
+    .like('slug', `${city.county_slug}%`)
+    .limit(1)
+    .maybeSingle();
+
   // Build service maps
   const serviceIdToSlug = new Map<string, string>();
   const serviceIdToName = new Map<string, string>();
@@ -184,20 +192,20 @@ export default async function CityPage({ params }: Props) {
 
   const faqs = [
     {
-      q: `How many grease trap companies are in ${city.name}?`,
-      a: `There are ${businesses.length} grease trap service companies listed in our ${city.name} directory. These providers offer cleaning, pumping, installation, and emergency services for restaurants and food service establishments.`,
+      q: `How many grease trap companies are in ${city.name}, Florida?`,
+      a: `There are ${businesses.length} grease trap service companies listed in our ${city.name} directory. These providers offer cleaning, pumping, installation, and emergency services for restaurants and food service establishments in the ${city.county_name} County area.`,
     },
     {
       q: `What is the average cost of grease trap cleaning in ${city.name}?`,
-      a: `Grease trap cleaning in ${city.name} typically costs $200 to $500 per pump-out, depending on trap size, grease volume, and accessibility. Annual contracts with regular service can reduce per-visit costs. Request quotes from multiple providers to compare pricing.`,
+      a: `Grease trap cleaning in ${city.name} typically costs $200 to $500 per pump-out, depending on trap size, grease volume, and accessibility. Larger grease interceptors may cost $300 to $800+. Annual contracts with regular service can reduce per-visit costs. Request quotes from multiple providers to compare pricing.`,
     },
     {
-      q: `Do I need a DEP-licensed hauler in ${city.name}?`,
-      a: `Yes. Under Florida Chapter 62-705, all grease waste in ${city.name} and throughout Florida must be removed by DEP-licensed haulers. Using an unlicensed hauler can result in fines from $100 to $5,000 per violation.`,
+      q: `How do I find a verified grease trap service in ${city.name}?`,
+      a: `Our ${city.name} directory shows verification status for each provider. Verified companies have a confirmed business website, phone number, customer reviews, and Google Maps listing. Look for the amber verification badge on listings. You can also filter by specific services and 24/7 emergency availability to narrow your search.`,
     },
     {
-      q: `How do I get emergency grease trap service in ${city.name}?`,
-      a: `Several grease trap companies in ${city.name} offer 24/7 emergency overflow service. Use the "24/7 Emergency" filter in our directory to find providers with same-day or after-hours availability.`,
+      q: `What are the grease trap requirements for restaurants in ${city.name}?`,
+      a: `Restaurants in ${city.name} (${city.county_name} County) must comply with Florida Chapter 62-705 F.A.C. This requires using DEP-licensed haulers for all grease waste removal, maintaining pump-out manifests, and scheduling cleaning every 30 to 90 days depending on trap size and volume.${compliancePage ? ` See our ${city.county_name} County compliance guide for specific local requirements.` : ''}`,
     },
   ];
 
@@ -234,6 +242,9 @@ export default async function CityPage({ params }: Props) {
       })),
     },
   ];
+
+  // Top service types for linking
+  const topServices = (serviceTypes || []).slice(0, 5);
 
   return (
     <>
@@ -273,6 +284,16 @@ export default async function CityPage({ params }: Props) {
         </div>
       </section>
 
+      {/* SEO content before listings */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <section className="bg-gray-50 rounded-xl p-6 mb-2">
+          <h2 className="text-xl font-bold text-gray-900 mb-3">
+            Grease Trap Services in {city.name}
+          </h2>
+          <p className="text-gray-600 leading-relaxed">{templateContent}</p>
+        </section>
+      </div>
+
       {/* Directory */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <Suspense fallback={<div className="h-12 bg-gray-100 rounded-xl animate-pulse mb-6" />}>
@@ -286,14 +307,6 @@ export default async function CityPage({ params }: Props) {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
-        {/* City Content */}
-        <section className="bg-gray-50 rounded-xl p-6 mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-3">
-            Grease Trap Services in {city.name}
-          </h2>
-          <p className="text-gray-600 leading-relaxed">{templateContent}</p>
-        </section>
-
         {/* Top Rated */}
         {showTopRated && (
           <section className="mb-10">
@@ -330,6 +343,22 @@ export default async function CityPage({ params }: Props) {
           </div>
         </section>
 
+        {/* Back to county */}
+        <section className="mb-10">
+          <Link
+            href={`/county/${city.county_slug}`}
+            className="block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-amber-200 transition-all p-5"
+          >
+            <div className="flex items-center gap-3">
+              <MapPin className="w-5 h-5 text-amber-500 shrink-0" />
+              <div>
+                <h3 className="font-semibold text-gray-900">Back to {city.county_name} County</h3>
+                <p className="text-sm text-gray-500">View all grease trap companies in {city.county_name} County</p>
+              </div>
+            </div>
+          </Link>
+        </section>
+
         {/* Sibling cities */}
         {(siblingCities || []).length > 0 && (
           <section className="mb-10">
@@ -352,15 +381,76 @@ export default async function CityPage({ params }: Props) {
           </section>
         )}
 
-        {/* Back to county */}
-        <div>
+        {/* County compliance */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">County Compliance Info</h2>
           <Link
-            href={`/county/${city.county_slug}`}
-            className="inline-flex items-center gap-2 text-amber-600 hover:text-amber-700 font-medium"
+            href={compliancePage ? `/compliance/${compliancePage.slug}` : '/compliance/chapter-62-705-guide'}
+            className="block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-amber-200 transition-all p-5"
           >
-            &larr; Back to {city.county_name} County
+            <div className="flex items-start gap-3">
+              <Shield className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-gray-900">
+                  {compliancePage ? compliancePage.title : 'Chapter 62-705 Compliance Guide'}
+                </h3>
+                <p className="text-sm text-gray-500 mt-1">
+                  {compliancePage
+                    ? `Local FOG requirements for ${city.county_name} County businesses`
+                    : `Florida grease waste regulations for ${city.name} restaurants`}
+                </p>
+              </div>
+            </div>
           </Link>
-        </div>
+        </section>
+
+        {/* Helpful Guides */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Helpful Guides</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <Link
+              href="/guides/how-to-choose-grease-trap-service"
+              className="block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-amber-200 transition-all p-5"
+            >
+              <BookOpen className="w-5 h-5 text-amber-500 mb-2" />
+              <h3 className="font-semibold text-gray-900 text-sm">How to Choose a Service</h3>
+              <p className="text-xs text-gray-500 mt-1">What to look for when hiring a grease trap company</p>
+            </Link>
+            <Link
+              href="/cost/grease-trap-cleaning-cost"
+              className="block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-amber-200 transition-all p-5"
+            >
+              <DollarSign className="w-5 h-5 text-amber-500 mb-2" />
+              <h3 className="font-semibold text-gray-900 text-sm">Grease Trap Cleaning Cost</h3>
+              <p className="text-xs text-gray-500 mt-1">What to expect for pricing in Florida</p>
+            </Link>
+            <Link
+              href="/compliance/chapter-62-705-guide"
+              className="block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-amber-200 transition-all p-5"
+            >
+              <Shield className="w-5 h-5 text-amber-500 mb-2" />
+              <h3 className="font-semibold text-gray-900 text-sm">Chapter 62-705 Guide</h3>
+              <p className="text-xs text-gray-500 mt-1">Florida&apos;s grease waste removal regulation</p>
+            </Link>
+          </div>
+        </section>
+
+        {/* Browse by Service */}
+        <section className="mb-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Browse by Service</h2>
+          <div className="flex flex-wrap gap-3">
+            {topServices.map((st) => (
+              <Link
+                key={st.slug}
+                href={`/services/${st.slug}`}
+                className="inline-flex items-center gap-1.5 bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 hover:border-amber-300 hover:text-amber-700 transition-colors"
+              >
+                <Wrench className="w-3 h-3" />
+                {st.name}
+              </Link>
+            ))}
+          </div>
+        </section>
       </div>
     </>
   );

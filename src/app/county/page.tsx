@@ -1,7 +1,6 @@
-import Link from 'next/link';
 import type { Metadata } from 'next';
 import { createStaticClient } from '@/lib/supabase/static';
-import { MapPin } from 'lucide-react';
+import CountyGrid from './CountyGrid';
 
 export const metadata: Metadata = {
   title: { absolute: 'Grease Trap Services by Florida County' },
@@ -79,27 +78,9 @@ export default async function CountiesPage() {
         </div>
       </section>
 
-      {/* County Grid */}
+      {/* County Grid with search */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {(counties || []).map((county) => (
-            <Link
-              key={county.slug}
-              href={`/county/${county.slug}`}
-              className="block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-amber-200 transition-all p-5"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-amber-500 shrink-0" />
-                  <h2 className="font-semibold text-gray-900">{county.name} County</h2>
-                </div>
-                <span className="inline-flex items-center bg-amber-50 text-amber-700 text-xs font-medium px-2.5 py-1 rounded-full">
-                  {county.business_count} {county.business_count === 1 ? 'company' : 'companies'}
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <CountyGrid counties={counties || []} />
       </div>
     </>
   );

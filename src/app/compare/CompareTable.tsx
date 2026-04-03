@@ -3,7 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { createClient } from '@supabase/supabase-js';
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
 import { CheckCircle, XCircle, Phone, Globe, Star } from 'lucide-react';
 import VerifiedBadge, { isVerified } from '@/components/directory/VerifiedBadge';
 
@@ -50,10 +50,7 @@ export default function CompareTable() {
       return;
     }
 
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
+    const supabase = createBrowserSupabaseClient();
 
     async function load() {
       const { data: bizData } = await supabase

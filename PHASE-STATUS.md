@@ -200,23 +200,25 @@
   - [x] ListingGrid component
   - [x] /companies — master directory (paginated)
   - [x] /companies/[slug] — individual listing + LeadForm + JSON-LD
-  - [ ] /county — counties index
-  - [ ] /county/[slug] — county directory
-  - [ ] /city/[slug] — city directory
-  - [ ] /services — services index
-  - [ ] /services/[slug] — service filter page
-  - [ ] /compare — comparison tool
+  - [x] /county — counties index (with search filter)
+  - [x] /county/[slug] — county directory (SEO + compliance + guides)
+  - [x] /city/[slug] — city directory (SEO + compliance + guides + services)
+  - [x] /cities — all cities index (county dropdown + text search)
+  - [x] /services — services index
+  - [x] /services/[slug] — service filter page (locked service filter)
+  - [x] /compare — comparison tool (fixed)
   - [x] TrustBadges, FilterBar, Pagination components
   - [x] FAQ sections with FAQPage JSON-LD
   - [x] `npm run build` — zero errors
   - [x] Commit: "Phase 7B-2: county, city, service pages + compare tool"
+  - [x] 7B-2 fixes: SEO content, FAQs, compare fix, multi-select filters, interlinking, dropdowns, navbar link, filter pills, service lock
 - **7B-2 Details:**
   - Pages created (6 routes): /county (index), /county/[slug] (46 pages), /city/[slug] (131 pages), /cities (index), /services (index), /services/[slug] (10 pages)
   - Compare tool: CompareContext (provider + useCompare hook), CompareBar (fixed bottom bar), CompareCheckbox (per-card button), /compare (side-by-side table via CompareTable client component)
   - CompareProvider wraps root layout; CompareBar renders globally (visible when 1+ selected); CompareCheckbox added to ListingCard
-  - County pages: dark hero, DirectoryShell with service+emergency filters, templated content (6 rotating templates, hash-based), 5 FAQs, city links, nearby counties, compliance page pull if available
-  - City pages: dark hero, DirectoryShell, templated content (6 templates), top rated section (3+ with rating >= 4.0), 4 FAQs, sibling cities, back-to-county link
-  - Service pages: dark hero with description + provider count, DirectoryShell with all filters, 3 FAQs
+  - County pages: dark hero, SEO paragraph before listings (6 rotating templates with top cities), DirectoryShell with service+emergency filters, 5 FAQs (cost FAQ added), city links, nearby counties, compliance card, helpful guides section
+  - City pages: dark hero, SEO paragraph before listings (6 templates), DirectoryShell, top rated section (3+ with rating >= 4.0), 4 FAQs (verified service + requirements FAQs), sibling cities, back-to-county card, county compliance link, guides, browse-by-service links
+  - Service pages: dark hero, unique SEO paragraph per service (10 handwritten), DirectoryShell with locked service filter, 4 FAQs per service (40 total handwritten)
   - Cities index: grouped alphabetically by county, linked to /city/[slug] and /county/[slug]
   - Services index: 10 service type cards with Lucide icons, descriptions, business counts
   - Compare page: reads IDs from URL search params (client component wrapped in Suspense per gotcha #15), queries Supabase client-side, side-by-side table with services checkmarks
@@ -381,4 +383,5 @@
 | 2026-04-03 | 7B-1 fix | Navbar in layout, sticky filter, dark hero, Leaflet map, about fallback, verified badge, cascading filter, interlinking, removed years+DEP filter | leaflet+react-leaflet added; Header auto-detects hero via pathname |
 | 2026-04-03 | 7B-1 | Logo SVG component, custom amber map marker, Get Directions link, favicon.svg | Logo adapts white/amber via currentColor |
 | 2026-04-04 | 7B-2 | County, city, service pages + compare tool: 6 new routes, 191 new static pages, compare context/bar/checkbox/table | 2,907 total pages, 47s build |
+| 2026-04-04 | 7B-2 fix | SEO content, FAQs, compare fix, multi-select filters, interlinking, dropdowns, navbar link, filter pills, service lock | FilterBar rewritten, 10 unique service SEO paragraphs, 40 service FAQs |
 | | | | |

@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import type { Metadata } from 'next';
 import { createStaticClient } from '@/lib/supabase/static';
+import CitiesFilter from './CitiesFilter';
 
 export const metadata: Metadata = {
   title: { absolute: 'All Florida Cities - Grease Trap Services' },
@@ -25,15 +25,11 @@ export default async function AllCitiesPage() {
     .order('county_name')
     .order('name');
 
-  // Group by county
-  const grouped = new Map<string, { countyName: string; countySlug: string; cities: typeof cities }>();
-  for (const city of cities || []) {
-    const key = city.county_slug || 'unknown';
-    if (!grouped.has(key)) {
-      grouped.set(key, { countyName: city.county_name || key, countySlug: key, cities: [] });
-    }
-    grouped.get(key)!.cities!.push(city);
-  }
+  const { data: counties } = await supabase
+    .from('counties')
+    .select('slug, name')
+    .gt('business_count', 0)
+    .order('name');
 
   const totalCities = (cities || []).length;
 
@@ -61,34 +57,18 @@ export default async function AllCitiesPage() {
         </div>
       </section>
 
-      {/* Cities grouped by county */}
+      {/* Cities with filter */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="space-y-10">
-          {Array.from(grouped.entries()).map(([key, group]) => (
-            <section key={key}>
-              <h2 className="text-xl font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">
-                <Link
-                  href={`/county/${group.countySlug}`}
-                  className="hover:text-amber-600 transition-colors"
-                >
-                  {group.countyName} County
-                </Link>
-              </h2>
-              <div className="flex flex-wrap gap-3">
-                {group.cities!.map((city) => (
-                  <Link
-                    key={city.slug}
-                    href={`/city/${city.slug}`}
-                    className="inline-flex items-center gap-1.5 bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 hover:border-amber-300 hover:text-amber-700 transition-colors"
-                  >
-                    {city.name}
-                    <span className="text-xs text-gray-400">({city.business_count})</span>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
+        <CitiesFilter
+          cities={(cities || []).map((c) => ({
+            slug: c.slug,
+            name: c.name,
+            county_slug: c.county_slug,
+            county_name: c.county_name || '',
+            business_count: c.business_count,
+          }))}
+          counties={(counties || []).map((c) => ({ slug: c.slug, name: c.name }))}
+        />
       </div>
     </>
   );

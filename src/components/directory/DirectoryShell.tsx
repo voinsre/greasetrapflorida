@@ -16,6 +16,7 @@ interface DirectoryShellProps {
   serviceTypes: { slug: string; name: string }[];
   counties: { slug: string; name: string }[];
   cities: CityOption[];
+  lockedServices?: string[];
 }
 
 export default function DirectoryShell({
@@ -23,9 +24,10 @@ export default function DirectoryShell({
   serviceTypes,
   counties,
   cities,
+  lockedServices = [],
 }: DirectoryShellProps) {
   const [filters, setFilters] = useState<Filters>({
-    service: '',
+    services: [...lockedServices],
     county: '',
     city: '',
     emergencyOnly: false,
@@ -34,11 +36,12 @@ export default function DirectoryShell({
 
   const filtered = useMemo(() => {
     return businesses.filter((b) => {
-      if (filters.service && !b.service_slugs.includes(filters.service))
-        return false;
+      if (filters.services.length > 0) {
+        const hasAny = filters.services.some((s) => b.service_slugs.includes(s));
+        if (!hasAny) return false;
+      }
       if (filters.county && b.county_slug !== filters.county) return false;
       if (filters.city) {
-        // Match city by converting business city to slug-like format
         const bizCitySlug = b.city.toLowerCase().replace(/\s+/g, '-');
         const cityObj = cities.find((c) => c.slug === filters.city);
         if (cityObj) {
@@ -71,6 +74,7 @@ export default function DirectoryShell({
         counties={counties}
         cities={cities}
         onFilter={handleFilter}
+        lockedServices={lockedServices}
       />
       <ListingGrid businesses={paginated} />
       <Pagination

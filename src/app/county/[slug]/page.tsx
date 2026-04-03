@@ -5,7 +5,7 @@ import { Suspense } from 'react';
 import { createStaticClient } from '@/lib/supabase/static';
 import { isVerified } from '@/components/directory/VerifiedBadge';
 import DirectoryShell from '@/components/directory/DirectoryShell';
-import { MapPin, ChevronRight } from 'lucide-react';
+import { MapPin, ChevronRight, BookOpen, Shield, DollarSign } from 'lucide-react';
 
 export async function generateStaticParams() {
   const supabase = createStaticClient();
@@ -43,18 +43,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 // 6 rotating content templates selected by hash
 const COUNTY_TEMPLATES = [
-  (name: string, bizCount: number, cityCount: number) =>
-    `${name} County is home to ${bizCount} grease trap service providers serving ${cityCount} cities. Florida's Chapter 62-705 regulation requires all food service establishments in ${name} County to use DEP-licensed haulers for grease waste removal. Most establishments need pump-outs every 30 to 90 days depending on trap size and volume. Browse our verified directory below to find a compliant provider near you and request a free quote.`,
-  (name: string, bizCount: number, cityCount: number) =>
-    `Looking for grease trap cleaning in ${name} County? Our directory lists ${bizCount} licensed service companies across ${cityCount} cities. Under Chapter 62-705 F.A.C., all grease waste must be transported by licensed haulers with proper manifests. Whether you run a restaurant, hotel kitchen, or food truck, finding a reliable local provider is essential for staying compliant and avoiding fines.`,
-  (name: string, bizCount: number, cityCount: number) =>
-    `${name} County restaurants and food service operators have ${bizCount} grease trap companies to choose from. With ${cityCount} cities in the service area, competition keeps pricing fair and service quality high. Florida DEP requires documented grease waste manifests for every pump-out — our directory helps you find providers who handle compliance paperwork so you can focus on running your business.`,
-  (name: string, bizCount: number, cityCount: number) =>
-    `Grease trap maintenance is mandatory for food service businesses in ${name} County. With ${bizCount} service providers covering ${cityCount} cities, finding the right company comes down to reliability, licensing, and price. Chapter 62-705 sets strict requirements for grease waste removal — use our directory to compare verified companies that meet all DEP standards.`,
-  (name: string, bizCount: number, cityCount: number) =>
-    `From routine pump-outs to emergency overflow response, ${name} County's ${bizCount} grease trap service companies cover all aspects of FOG management. Serving ${cityCount} cities across the county, these providers handle everything from cleaning and inspection to full installation. Compare ratings, check verification status, and request quotes from licensed providers below.`,
-  (name: string, bizCount: number, cityCount: number) =>
-    `Food service establishments in ${name} County must comply with Florida's grease waste regulations under Chapter 62-705. Our directory features ${bizCount} licensed providers operating across ${cityCount} cities in the county. Regular grease trap cleaning — typically every 30 to 90 days — prevents costly backups and keeps your facility inspection-ready. Browse providers below to find the best fit for your business.`,
+  (name: string, bizCount: number, cityCount: number, topCities: string) =>
+    `${name} County is home to ${bizCount} grease trap service providers serving ${cityCount} cities including ${topCities}. Florida's Chapter 62-705 regulation requires all food service establishments — restaurants, hotels, hospitals, schools, and food trucks — in ${name} County to use DEP-licensed haulers for grease waste removal. Most establishments need pump-outs every 30 to 90 days depending on trap size and volume. With a thriving food service industry, ${name} County businesses benefit from competitive pricing among local providers. Browse our verified directory below to find a compliant provider near you and request a free quote.`,
+  (name: string, bizCount: number, cityCount: number, topCities: string) =>
+    `Looking for grease trap cleaning in ${name} County? Our directory lists ${bizCount} licensed service companies across ${cityCount} cities, with coverage in ${topCities} and surrounding areas. Under Chapter 62-705 F.A.C., all grease waste must be transported by licensed haulers with proper manifests. Whether you run a restaurant, hotel kitchen, catering operation, or food truck, finding a reliable local provider is essential for staying compliant and avoiding fines of $100 to $5,000 per violation. Regular maintenance also prevents costly backups and plumbing emergencies that can shut down your kitchen.`,
+  (name: string, bizCount: number, cityCount: number, topCities: string) =>
+    `${name} County restaurants and food service operators have ${bizCount} grease trap companies to choose from across ${cityCount} cities. Major service areas include ${topCities}. Competition among providers keeps pricing fair and service quality high. Florida DEP requires documented grease waste manifests for every pump-out — our directory helps you find providers who handle all compliance paperwork so you can focus on running your business. From small cafes to large hotel kitchens, every establishment with a grease trap needs regular professional cleaning to meet state requirements.`,
+  (name: string, bizCount: number, cityCount: number, topCities: string) =>
+    `Grease trap maintenance is mandatory for food service businesses in ${name} County, covering ${cityCount} cities including ${topCities}. With ${bizCount} service providers in the area, finding the right company comes down to reliability, DEP licensing, and competitive pricing. Chapter 62-705 sets strict requirements for grease waste removal across all Florida counties. Regular pump-outs — typically every 30 to 90 days — prevent grease buildup that leads to sewer blockages, health code violations, and expensive emergency repairs. Use our directory to compare verified companies that meet all DEP standards.`,
+  (name: string, bizCount: number, cityCount: number, topCities: string) =>
+    `From routine pump-outs to emergency overflow response, ${name} County's ${bizCount} grease trap service companies cover all aspects of FOG management across ${cityCount} cities. Providers serve restaurants, hotels, schools, and commercial kitchens in ${topCities} and beyond. The local food service industry relies on these companies for everything from cleaning and inspection to full trap installation and repair. Compare ratings, check verification status, and request quotes from licensed providers who understand ${name} County's specific compliance requirements.`,
+  (name: string, bizCount: number, cityCount: number, topCities: string) =>
+    `Food service establishments in ${name} County must comply with Florida's grease waste regulations under Chapter 62-705. Our directory features ${bizCount} licensed providers operating across ${cityCount} cities, with strong coverage in ${topCities}. Regular grease trap cleaning — typically every 30 to 90 days — prevents costly backups, keeps your facility inspection-ready, and protects local sewer infrastructure. Whether you need routine maintenance or emergency overflow service, the providers below offer competitive rates and full compliance documentation for ${name} County businesses.`,
 ];
 
 function hashString(s: string): number {
@@ -98,7 +98,6 @@ export default async function CountyPage({ params }: Props) {
   // Fetch service junctions for these businesses
   const bizIds = allBusinesses.map((b) => b.id as string);
   let allServiceJunctions: { business_id: string; service_id: string }[] = [];
-  // Batch in 100-ID chunks (gotcha #13)
   for (let i = 0; i < bizIds.length; i += 100) {
     const chunk = bizIds.slice(i, i + 100);
     const { data } = await supabase
@@ -194,8 +193,13 @@ export default async function CountyPage({ params }: Props) {
   }));
 
   const cityCount = (citiesInCounty || []).length;
+  const topCities = (citiesInCounty || [])
+    .sort((a, b) => b.business_count - a.business_count)
+    .slice(0, 3)
+    .map((c) => c.name)
+    .join(', ') || 'the surrounding area';
   const templateIndex = hashString(slug) % COUNTY_TEMPLATES.length;
-  const templateContent = COUNTY_TEMPLATES[templateIndex](county.name, businesses.length, cityCount);
+  const templateContent = COUNTY_TEMPLATES[templateIndex](county.name, businesses.length, cityCount, topCities);
 
   // FAQ
   const faqs = [
@@ -204,20 +208,20 @@ export default async function CountyPage({ params }: Props) {
       a: `There are currently ${businesses.length} grease trap service companies listed in our ${county.name} County directory. These providers offer cleaning, pumping, installation, and emergency services across ${cityCount} cities in the county.`,
     },
     {
-      q: `What are the FOG requirements in ${county.name} County?`,
-      a: `${county.name} County food service establishments must comply with Florida Chapter 62-705 F.A.C. for grease waste removal. All grease waste must be transported by DEP-licensed haulers, and manifests are required for every pump-out. Some municipalities may have additional local ordinances.`,
+      q: `What are the FOG requirements in ${county.name} County, Florida?`,
+      a: `${county.name} County food service establishments must comply with Florida Chapter 62-705 F.A.C. for grease waste removal. All grease waste must be transported by DEP-licensed haulers, and manifests are required for every pump-out. Some municipalities within ${county.name} County may have additional local ordinances with stricter requirements.`,
     },
     {
-      q: `How often should grease traps be cleaned in ${county.name} County?`,
-      a: `Most grease traps in ${county.name} County should be cleaned every 30 to 90 days, depending on trap size, establishment volume, and any local requirements. High-volume restaurants may need monthly service, while smaller operations can often go 60-90 days between pump-outs.`,
+      q: `How often should grease traps be cleaned in ${county.name}?`,
+      a: `Most grease traps in ${county.name} County should be cleaned every 30 to 90 days, depending on trap size, establishment volume, and any local requirements. High-volume restaurants may need monthly service, while smaller operations can often go 60-90 days between pump-outs. Check with your local health department for specific frequency requirements.`,
     },
     {
-      q: `How do I find an emergency grease trap service in ${county.name} County?`,
-      a: `Use the "24/7 Emergency" filter on our ${county.name} County directory to find providers that offer emergency overflow and after-hours service. Many companies provide same-day response for grease trap emergencies.`,
+      q: `How do I find emergency grease trap service in ${county.name} County?`,
+      a: `Use the "24/7 Emergency" filter on our ${county.name} County directory to find providers that offer emergency overflow and after-hours service. Many of the ${businesses.length} companies in the area provide same-day response for grease trap emergencies including overflows, backups, and blockages.`,
     },
     {
-      q: `Is DEP licensing required for grease haulers in ${county.name} County?`,
-      a: `Yes. Under Chapter 62-705, all grease waste haulers operating in ${county.name} County and throughout Florida must hold a valid DEP license. Using an unlicensed hauler can result in fines of $100 to $5,000 per violation.`,
+      q: `What does grease trap cleaning cost in ${county.name} County?`,
+      a: `Grease trap cleaning in ${county.name} County typically costs $200 to $500 per pump-out for standard-size traps. Larger grease interceptors may cost $300 to $800+. Prices vary by trap size, grease volume, accessibility, and service frequency. Annual contracts with regular service can reduce per-visit costs significantly. Request quotes from multiple providers to compare.`,
     },
   ];
 
@@ -286,6 +290,26 @@ export default async function CountyPage({ params }: Props) {
         </div>
       </section>
 
+      {/* SEO Content before listings */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <section className="bg-gray-50 rounded-xl p-6 mb-2">
+          <h2 className="text-xl font-bold text-gray-900 mb-3">
+            Grease Trap Services in {county.name} County
+          </h2>
+          <p className="text-gray-600 leading-relaxed">{templateContent}</p>
+          {compliancePage && (
+            <p className="mt-3 text-sm">
+              <Link
+                href={`/compliance/${compliancePage.slug}`}
+                className="text-amber-600 hover:text-amber-700 font-medium"
+              >
+                View {county.name} County compliance requirements &rarr;
+              </Link>
+            </p>
+          )}
+        </section>
+      </div>
+
       {/* Directory */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <Suspense fallback={<div className="h-12 bg-gray-100 rounded-xl animate-pulse mb-6" />}>
@@ -298,33 +322,8 @@ export default async function CountyPage({ params }: Props) {
         </Suspense>
       </div>
 
-      {/* County Content */}
+      {/* Below listings */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
-        {compliancePage ? (
-          <section className="bg-white rounded-xl border border-gray-100 p-6 mb-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-3">
-              {county.name} County Compliance Requirements
-            </h2>
-            <div
-              className="prose prose-gray max-w-none text-gray-600"
-              dangerouslySetInnerHTML={{ __html: compliancePage.content || '' }}
-            />
-            <Link
-              href={`/compliance/${compliancePage.slug}`}
-              className="inline-flex items-center gap-1 text-amber-600 hover:text-amber-700 font-medium mt-4 text-sm"
-            >
-              Read full compliance guide <ChevronRight className="w-4 h-4" />
-            </Link>
-          </section>
-        ) : (
-          <section className="bg-gray-50 rounded-xl p-6 mb-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-3">
-              Grease Trap Services in {county.name} County
-            </h2>
-            <p className="text-gray-600 leading-relaxed">{templateContent}</p>
-          </section>
-        )}
-
         {/* FAQ */}
         <section className="mb-10">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
@@ -381,13 +380,82 @@ export default async function CountyPage({ params }: Props) {
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-medium text-gray-900">{c.name} County</span>
-                    <span className="text-xs text-gray-400">{c.business_count}</span>
+                    <span className="text-xs text-gray-400">{c.business_count} companies</span>
                   </div>
                 </Link>
               ))}
             </div>
           </section>
         )}
+
+        {/* Compliance */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            {county.name} County Compliance
+          </h2>
+          {compliancePage ? (
+            <Link
+              href={`/compliance/${compliancePage.slug}`}
+              className="block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-amber-200 transition-all p-5"
+            >
+              <div className="flex items-start gap-3">
+                <Shield className="w-6 h-6 text-amber-500 shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-semibold text-gray-900">{compliancePage.title}</h3>
+                  <p className="text-sm text-gray-500 mt-1">
+                    View local FOG ordinances, pump-out frequency requirements, and compliance steps specific to {county.name} County.
+                  </p>
+                </div>
+              </div>
+            </Link>
+          ) : (
+            <Link
+              href="/compliance/chapter-62-705-guide"
+              className="block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-amber-200 transition-all p-5"
+            >
+              <div className="flex items-start gap-3">
+                <Shield className="w-6 h-6 text-amber-500 shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-semibold text-gray-900">Chapter 62-705 Compliance Guide</h3>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Learn about Florida&apos;s grease waste removal requirements, DEP licensing, and how they apply to {county.name} County businesses.
+                  </p>
+                </div>
+              </div>
+            </Link>
+          )}
+        </section>
+
+        {/* Helpful Guides */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Helpful Guides</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <Link
+              href="/guides/how-to-choose-grease-trap-service"
+              className="block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-amber-200 transition-all p-5"
+            >
+              <BookOpen className="w-5 h-5 text-amber-500 mb-2" />
+              <h3 className="font-semibold text-gray-900 text-sm">How to Choose a Service</h3>
+              <p className="text-xs text-gray-500 mt-1">What to look for when hiring a grease trap company</p>
+            </Link>
+            <Link
+              href="/cost/grease-trap-cleaning-cost"
+              className="block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-amber-200 transition-all p-5"
+            >
+              <DollarSign className="w-5 h-5 text-amber-500 mb-2" />
+              <h3 className="font-semibold text-gray-900 text-sm">Grease Trap Cleaning Cost</h3>
+              <p className="text-xs text-gray-500 mt-1">What to expect for pricing in Florida</p>
+            </Link>
+            <Link
+              href="/compliance/chapter-62-705-guide"
+              className="block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-amber-200 transition-all p-5"
+            >
+              <Shield className="w-5 h-5 text-amber-500 mb-2" />
+              <h3 className="font-semibold text-gray-900 text-sm">Chapter 62-705 Guide</h3>
+              <p className="text-xs text-gray-500 mt-1">Florida&apos;s grease waste removal regulation</p>
+            </Link>
+          </div>
+        </section>
       </div>
     </>
   );

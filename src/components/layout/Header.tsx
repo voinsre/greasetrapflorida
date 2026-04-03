@@ -7,6 +7,7 @@ import { Menu, X } from 'lucide-react';
 import Logo from './Logo';
 
 const NAV_LINKS = [
+  { href: '/companies', label: 'All Companies' },
   { href: '/county', label: 'Browse Counties' },
   { href: '/services', label: 'Services' },
   { href: '/compliance', label: 'Compliance' },
