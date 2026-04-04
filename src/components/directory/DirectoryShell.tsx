@@ -31,11 +31,14 @@ export default function DirectoryShell({
     county: '',
     city: '',
     emergencyOnly: false,
+    search: '',
   });
   const [page, setPage] = useState(1);
 
   const filtered = useMemo(() => {
+    const searchLower = filters.search.toLowerCase();
     return businesses.filter((b) => {
+      if (searchLower && !b.name.toLowerCase().includes(searchLower)) return false;
       if (filters.services.length > 0) {
         const hasAny = filters.services.some((s) => b.service_slugs.includes(s));
         if (!hasAny) return false;
