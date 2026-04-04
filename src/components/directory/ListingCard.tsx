@@ -5,6 +5,7 @@ import ServicePills from './ServicePills';
 import TrustBadges from './TrustBadges';
 import VerifiedBadge from './VerifiedBadge';
 import CompareCheckbox from './CompareCheckbox';
+import QuoteButton from './QuoteButton';
 
 export interface BusinessListing {
   id: string;
@@ -66,13 +67,7 @@ export default function ListingCard({
         />
 
         <div className="flex items-center gap-2 mt-2">
-          <Link
-            href={`/get-quotes?company=${business.slug}`}
-            onClick={(e) => e.stopPropagation()}
-            className="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm min-h-[44px] text-center"
-          >
-            Get a Free Quote
-          </Link>
+          <QuoteButton slug={business.slug} />
           <CompareCheckbox businessId={business.id} />
         </div>
       </div>
