@@ -131,6 +131,14 @@ export async function loadResults(
     (slugRows ?? []).map((r) => r.slug as string),
   );
 
+  // Load service type slug → UUID mapping
+  const { data: serviceTypeRows } = await supabase
+    .from("service_types")
+    .select("id, slug");
+  const serviceSlugToId = new Map<string, string>(
+    (serviceTypeRows ?? []).map((r) => [r.slug as string, r.id as string]),
+  );
+
   // ── DEDUP new businesses before inserting ────────────────────────────────
 
   // Load existing phones and names for cross-check
@@ -223,17 +231,23 @@ export async function loadResults(
     report.inserted++;
     report.insertedNames.push(`${biz.name} (${biz.city})`);
 
-    // Insert service tags
+    // Insert service tags (look up UUID from service_types table)
     if (biz.services.length > 0 && inserted?.id) {
-      const serviceTags = biz.services.map((s) => ({
-        business_id: inserted.id,
-        service_type_slug: s,
-      }));
-      const { error: svcErr } = await supabase
-        .from("business_services")
-        .insert(serviceTags);
-      if (svcErr) {
-        report.errors.push(`Service tags for "${biz.name}": ${svcErr.message}`);
+      const serviceTags = biz.services
+        .map((slug) => {
+          const serviceId = serviceSlugToId.get(slug);
+          if (!serviceId) return null;
+          return { business_id: inserted.id, service_id: serviceId };
+        })
+        .filter((t): t is { business_id: string; service_id: string } => t !== null);
+
+      if (serviceTags.length > 0) {
+        const { error: svcErr } = await supabase
+          .from("business_services")
+          .insert(serviceTags);
+        if (svcErr) {
+          report.errors.push(`Service tags for "${biz.name}": ${svcErr.message}`);
+        }
       }
     }
 
@@ -336,13 +350,14 @@ export async function loadResults(
         .eq("slug", county.slug);
     }
 
-    // Update city counts
-    const { data: cities } = await supabase.from("cities").select("slug");
+    // Update city counts (businesses.city stores name, not slug)
+    const { data: cities } = await supabase.from("cities").select("slug, name, county_slug");
     for (const city of cities ?? []) {
       const { count } = await supabase
         .from("businesses")
         .select("id", { count: "exact", head: true })
-        .eq("city", city.slug); // Note: city matching may need slug-to-name mapping
+        .eq("county_slug", city.county_slug)
+        .ilike("city", city.name);
 
       await supabase
         .from("cities")

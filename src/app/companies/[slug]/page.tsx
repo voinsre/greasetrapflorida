@@ -140,19 +140,76 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+function formatTime(h: number, m: number): string {
+  const suffix = h >= 12 ? 'PM' : 'AM';
+  const hour12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+  return m === 0 ? `${hour12}${suffix}` : `${hour12}:${String(m).padStart(2, '0')}${suffix}`;
+}
+
 function formatHours(hours: unknown): [string, string][] | null {
-  if (!hours) return null;
-  if (Array.isArray(hours)) {
-    const entries = hours
-      .filter((h) => h && typeof h === 'object' && 'day' in h && 'hours' in h)
-      .map((h) => [String(h.day), String(h.hours)] as [string, string]);
-    return entries.length ? entries : null;
+  try {
+    if (!hours || typeof hours !== 'object') return null;
+
+    // Format A: weekdayDescriptions from Google Places API (New)
+    // { weekdayDescriptions: ["Monday: 8:00 AM – 5:00 PM", ...] }
+    if ('weekdayDescriptions' in (hours as Record<string, unknown>)) {
+      const descs = (hours as { weekdayDescriptions: unknown }).weekdayDescriptions;
+      if (Array.isArray(descs) && descs.length > 0) {
+        const entries = descs
+          .filter((d): d is string => typeof d === 'string' && d.includes(':'))
+          .map((d) => {
+            const idx = d.indexOf(':');
+            return [d.slice(0, idx).trim(), d.slice(idx + 1).trim()] as [string, string];
+          });
+        return entries.length > 0 ? entries : null;
+      }
+    }
+
+    // Format B: periods from Google Places API (New)
+    // { periods: [{ open: { day, hour, minute }, close: { day, hour, minute } }] }
+    if ('periods' in (hours as Record<string, unknown>)) {
+      const periods = (hours as { periods: unknown }).periods;
+      if (Array.isArray(periods) && periods.length > 0) {
+        const dayMap = new Map<number, string>();
+        for (const p of periods) {
+          if (!p || typeof p !== 'object') continue;
+          const open = (p as { open?: { day?: number; hour?: number; minute?: number } }).open;
+          const close = (p as { close?: { day?: number; hour?: number; minute?: number } }).close;
+          if (!open || typeof open.day !== 'number' || typeof open.hour !== 'number') continue;
+          const openStr = formatTime(open.hour, open.minute ?? 0);
+          const closeStr = close && typeof close.hour === 'number'
+            ? formatTime(close.hour, close.minute ?? 0)
+            : 'Close';
+          dayMap.set(open.day, `${openStr} - ${closeStr}`);
+        }
+        if (dayMap.size > 0) {
+          const entries: [string, string][] = [];
+          for (let d = 1; d <= 6; d++) entries.push([DAY_NAMES[d], dayMap.get(d) ?? 'Closed']);
+          entries.push([DAY_NAMES[0], dayMap.get(0) ?? 'Closed']);
+          return entries;
+        }
+      }
+    }
+
+    // Format C: array of { day, hours } objects (old Apify format)
+    if (Array.isArray(hours)) {
+      const entries = (hours as unknown[])
+        .filter((h): h is { day: string; hours: string } =>
+          h != null && typeof h === 'object' && 'day' in h && 'hours' in h)
+        .map((h) => [String(h.day), String(h.hours)] as [string, string]);
+      return entries.length > 0 ? entries : null;
+    }
+
+    // Format D: plain object { Monday: "8am-5pm", ... }
+    const entries = Object.entries(hours as Record<string, unknown>)
+      .filter(([, v]) => typeof v === 'string')
+      .map(([k, v]) => [k, v] as [string, string]);
+    return entries.length > 0 ? entries : null;
+  } catch {
+    return null;
   }
-  if (typeof hours === 'object') {
-    const entries = Object.entries(hours as Record<string, string>);
-    return entries.length ? entries : null;
-  }
-  return null;
 }
 
 export default async function CompanyPage({ params }: Props) {
