@@ -1,7 +1,7 @@
 # Grease Trap Florida — Phase Status
 
 **Last updated:** 2026-04-04
-**Updated by:** Phase 8 complete (SEO + AEO + GEO hardening)
+**Updated by:** Phase 9 pre-deploy checklist complete
 
 ---
 
@@ -356,9 +356,25 @@
 - **Deviations:** Renamed from "SEO Hardening" to "SEO + AEO + GEO Hardening" per expanded scope. Chapter 62-705 regulation page uses Legislation JSON-LD type instead of Article (semantically correct). SEO audit report saved as JSON (data/seo-audit-results.json) instead of markdown.
 
 ### Phase 9: Deploy
-- **Status:** ⬜ NOT STARTED
-- **Checklist:**
-  - [ ] Pre-deploy checklist from blueprint (all items)
+- **Status:** 🟡 PRE-DEPLOY CHECKLIST COMPLETE
+- **Pre-deploy checklist:**
+  - [x] Custom 404 page (src/app/not-found.tsx — centered design, amber CTA, helpful links)
+  - [x] Error boundary (src/app/error.tsx — client component, Try Again + Go Home)
+  - [x] Loading state (src/app/loading.tsx — amber spinner)
+  - [x] Favicon: favicon.svg in /public/, referenced in root layout
+  - [x] Apple touch icon: referenced as SVG in layout icons.apple
+  - [x] Web manifest: /public/site.webmanifest (name, theme_color amber, display standalone)
+  - [x] Social sharing: og:title, og:description, og:image (absolute URL), twitter:card summary_large_image
+  - [x] Company pages: unique OG tags per listing (dynamic generateMetadata)
+  - [x] Environment variables: 10/13 set (GA_ID, ADSENSE_PUB_ID, ANTHROPIC_API_KEY intentionally empty)
+  - [x] Security headers: X-Frame-Options DENY, X-Content-Type-Options nosniff, Referrer-Policy, HSTS
+  - [x] API route protection: field validation on all 3 routes + honeypot spam prevention
+  - [x] Supabase RLS: enabled on all tables, anon key restricted (no public read on sensitive tables)
+  - [x] Raw HTML test: content visible in source on homepage, listing, and guide pages (SSG)
+  - [x] Performance: hero image priority, Leaflet dynamic import (ssr:false), all images WebP
+  - [x] Redirects: www→non-www 308, 14 slug redirects, no loops
+  - [x] `npm run build` — zero errors, 286 static pages
+- **Remaining deploy steps:**
   - [ ] Set Vercel env vars
   - [ ] Add domain + DNS
   - [ ] Push to main
@@ -367,7 +383,7 @@
   - [ ] GSC: verify domain, submit sitemap
   - [ ] Ahrefs: create project, run audit
   - [ ] Commit: "Phase 9: live at greasetrapflorida.com"
-- **Notes:** —
+- **Notes:** favicon.ico not generated (SVG favicon works in all modern browsers). apple-touch-icon.png not generated (SVG used as fallback). RLS policies are restrictive by default since all data access goes through service role key at build time or API routes.
 - **Deviations:** —
 
 ### Phase 10: Monetization
@@ -378,8 +394,8 @@
   - [x] AdUnit component ready (returns null until pub ID set)
   - [x] Lead form tested end-to-end
   - [x] Claim form tested end-to-end
-  - [ ] Commit: "Phase 10: monetization active"
-- **Notes:** AdUnit at src/components/ads/AdUnit.tsx; Lead/Claim API routes at /api/leads and /api/claims with Resend email notifications
+  - [x] Commit: "Phase 10: monetization active"
+- **Notes:** AdUnit at src/components/ads/AdUnit.tsx. All 3 API routes (/api/leads, /api/claims, /api/contact) send branded HTML emails (admin notification + user confirmation) via Resend using shared template at src/lib/email-template.ts. Branded layout: dark gray-900 header with amber wordmark, styled data tables, amber CTA buttons, branded footer.
 - **Deviations:** —
 
 ### Phase 11: DEP License Enrichment
@@ -434,4 +450,5 @@
 | 2026-04-04 | Links | Full link audit: 13 broken targets found and fixed. 9 redirects added. DB content updated (5 pages). County nearby query fixed (>1 not >0). | 0 broken links on re-audit |
 | 2026-04-04 | Audit | Final link audit: 279 internal targets, 221 DB links, 117 external links checked across 286 pages. Zero broken internal/content/component links. 14 redirects verified. 7 dead external links (business sites). | CLEAN |
 | 2026-04-04 | 8 | Phase 8: SEO + AEO + GEO hardening. 590 issues found, 585 fixed (99.2%). Canonical URLs on all 286 pages, og:image on all pages, heading hierarchy fixed, Organization JSON-LD, Speakable schema on 5 pages, E-E-A-T about page, 5 Supabase descriptions shortened. | 5 remaining: 3 titles 61-63 chars (long city names), 2 Legislation schema (intentional) |
+| 2026-04-04 | 9 | Pre-deploy hardening: 404 page, error boundary, loading state, web manifest, twitter card, security headers (HSTS, X-Frame-Options, nosniff, Referrer-Policy), honeypot spam prevention on all API routes + forms, RLS verified | 286 pages, zero build errors |
 | | | | |

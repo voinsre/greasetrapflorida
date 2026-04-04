@@ -1,0 +1,16 @@
+{
+  "name": "Grease Trap Florida",
+  "short_name": "GreaseTrapFL",
+  "description": "Florida's comprehensive directory of verified grease trap cleaning and pumping service companies.",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#F59E0B",
+  "background_color": "#FFFFFF",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -18,6 +18,7 @@ export default function ContactForm() {
     subject: 'General Inquiry',
     message: '',
   });
+  const [hp, setHp] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -31,7 +32,7 @@ export default function ContactForm() {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, website: hp }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to send message.');
@@ -55,6 +56,7 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
+      <input type="text" name="website" value={hp} onChange={(e) => setHp(e.target.value)} className="absolute opacity-0 h-0 w-0 overflow-hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" />
       <div>
         <label htmlFor="contact-name" className="block text-sm font-medium text-gray-700 mb-1">Name</label>
         <input

@@ -31,6 +31,7 @@ export default function LeadForm({
     establishment_type: '',
     message: '',
   });
+  const [hp, setHp] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
@@ -48,6 +49,7 @@ export default function LeadForm({
           business_id: businessId,
           business_name: businessName,
           ...form,
+          website: hp,
         }),
       });
 
@@ -85,6 +87,7 @@ export default function LeadForm({
       </h3>
 
       <form onSubmit={handleSubmit} className="space-y-3">
+        <input type="text" name="website" value={hp} onChange={(e) => setHp(e.target.value)} className="absolute opacity-0 h-0 w-0 overflow-hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" />
         <input
           type="text"
           required

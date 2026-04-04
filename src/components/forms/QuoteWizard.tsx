@@ -64,6 +64,7 @@ export default function QuoteWizard() {
   const [contactPhone, setContactPhone] = useState('');
   const [details, setDetails] = useState('');
 
+  const [hp, setHp] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -120,6 +121,7 @@ export default function QuoteWizard() {
           email: contactEmail,
           phone: contactPhone,
           establishment_type: establishmentType,
+          website: hp,
           message: [
             `County: ${selectedCountyName}`,
             selectedCity ? `City: ${cities.find((c) => c.slug === selectedCity)?.name}` : '',
@@ -300,6 +302,7 @@ export default function QuoteWizard() {
       {step === 3 && (
         <div className="space-y-5">
           <h2 className="text-xl font-bold text-gray-900">Step 3: Your Contact Info</h2>
+          <input type="text" name="website" value={hp} onChange={(e) => setHp(e.target.value)} className="absolute opacity-0 h-0 w-0 overflow-hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" />
           <div>
             <label htmlFor="quote-name" className="block text-sm font-medium text-gray-700 mb-1">Name</label>
             <input

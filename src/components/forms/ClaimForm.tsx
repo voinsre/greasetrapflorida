@@ -25,6 +25,7 @@ export default function ClaimForm() {
     phone: '',
     role: 'Owner',
   });
+  const [hp, setHp] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -87,6 +88,7 @@ export default function ClaimForm() {
           business_id: selectedBusiness.id,
           business_name: selectedBusiness.name,
           ...form,
+          website: hp,
         }),
       });
       const data = await res.json();
@@ -111,6 +113,7 @@ export default function ClaimForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
+      <input type="text" name="website" value={hp} onChange={(e) => setHp(e.target.value)} className="absolute opacity-0 h-0 w-0 overflow-hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" />
       {/* Business Name Autocomplete */}
       <div ref={dropdownRef} className="relative">
         <label htmlFor="claim-business" className="block text-sm font-medium text-gray-700 mb-1">Business Name</label>

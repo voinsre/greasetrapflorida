@@ -1,10 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { contactAdminEmail, contactUserConfirmation } from '@/lib/email-template';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, subject, message } = body;
+    const { name, email, subject, message, website: honeypot } = body;
+
+    if (honeypot) {
+      return NextResponse.json({ success: true });
+    }
 
     if (!name || !email || !message) {
       return NextResponse.json(
@@ -33,25 +38,31 @@ export async function POST(request: Request) {
       );
     }
 
-    // Send email notification (lazy-init Resend)
-    if (process.env.RESEND_API_KEY && process.env.ADMIN_EMAIL) {
+    // Send emails (lazy-init Resend)
+    if (process.env.RESEND_API_KEY) {
       try {
         const { Resend } = await import('resend');
         const resend = new Resend(process.env.RESEND_API_KEY);
+        const from = process.env.RESEND_FROM_EMAIL || 'contact@greasetrapflorida.com';
 
-        await resend.emails.send({
-          from: process.env.RESEND_FROM_EMAIL || 'contact@greasetrapflorida.com',
-          to: process.env.ADMIN_EMAIL,
-          subject: `Contact Form: ${subject || 'General Inquiry'}`,
-          html: `
-            <h2>New Contact Message</h2>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Subject:</strong> ${subject || 'N/A'}</p>
-            <p><strong>Message:</strong></p>
-            <p>${message}</p>
-          `,
-        });
+        await Promise.all([
+          // Admin notification
+          process.env.ADMIN_EMAIL
+            ? resend.emails.send({
+                from,
+                to: process.env.ADMIN_EMAIL,
+                subject: `Contact Form: ${subject || 'General Inquiry'}`,
+                html: contactAdminEmail({ name, email, subject, message }),
+              })
+            : null,
+          // User confirmation
+          resend.emails.send({
+            from,
+            to: email,
+            subject: 'Message Received \u2014 Grease Trap Florida',
+            html: contactUserConfirmation({ name }),
+          }),
+        ]);
       } catch (emailErr) {
         console.error('Email notification failed:', emailErr);
       }

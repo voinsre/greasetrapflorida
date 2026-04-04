@@ -29,10 +29,18 @@ export const metadata: Metadata = {
     images: [{ url: '/images/og-image.webp', width: 1200, height: 630 }],
     type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Find Grease Trap Services in Florida | GreaseTrapFlorida.com',
+    description: 'Compare licensed grease trap cleaning companies across Florida counties.',
+    images: ['/images/og-image.webp'],
+  },
   metadataBase: new URL('https://greasetrapflorida.com'),
   icons: {
     icon: '/favicon.svg',
+    apple: '/favicon.svg',
   },
+  manifest: '/site.webmanifest',
 };
 
 export default function RootLayout({
