@@ -1,7 +1,7 @@
 # Grease Trap Florida — Phase Status
 
 **Last updated:** 2026-04-04
-**Updated by:** Re-enrichment v2 complete — 168 businesses re-scraped and re-enriched
+**Updated by:** Listing audit complete — 64 descriptions, 62 services, 65 badges fixed
 
 ---
 
@@ -20,7 +20,8 @@
 | Data quality audit pass 3 | -582 zero grease evidence (borderline plumbing/septic kept in pass 2) | April 4, 2026 |
 | Emergency badge cleanup | 377 → 374 (3 false positives corrected) | April 4, 2026 |
 | Re-enrichment v2 | 168 businesses re-scraped (6-10 pages each), re-enriched with strict rules | April 4, 2026 |
-| Final DB count | 168 confirmed grease trap businesses (all verified + re-enriched) | April 4, 2026 |
+| Listing audit | 64 descriptions rewritten, 62 service tags added, 65 verified badges corrected | April 4, 2026 |
+| Final DB count | 168 businesses (103 verified, 104 emergency 24/7, avg 2.5 services/biz) | April 4, 2026 |
 | Counties with 2+ businesses | 22 counties (pages generated) | April 4, 2026 |
 | Counties with 1 business | 5 (no page, business still in /companies) | April 4, 2026 |
 | Cities with 2+ listings | 36 cities | April 4, 2026 |
@@ -145,6 +146,13 @@
   - Confidence: HIGH 15 / MEDIUM 104 / LOW 49
   - Dedup: 8 flags — all legitimate multi-location chains (Roto-Rooter, DAR PRO, Zoom Drain, etc.)
   - Text cleaning: strips nav/header/footer/form/cookie elements, rejects short lines, removes review snippets, WordPress artifacts
+- **Phase 5d Listing Audit (post re-enrichment):** Full 6-check audit of all 168 businesses:
+  - Description quality: 104 clean, 24 junk, 40 template → **64 descriptions rewritten** with natural language using business data
+  - Service tags: 98 good (2+), 21 minimal (1), 49 none → **62 service tags added** (re-checked website text + minimum "Grease Trap Cleaning" for confirmed businesses)
+  - Legitimacy: 48 score-5 (grease in name) / 7 score-4 / 84 score-3 / 7 score-2 / 22 score-1 — score 1-2 flagged for manual review
+  - Emergency 24/7: 104 correct (0 changes needed — strict logic from re-enrichment was accurate)
+  - Verified badge: **65 badges removed** (168→103). Criteria: live website + phone + reviews + place_id + rating≥3.0 + grease keywords. Common fail reasons: website not live, no reviews/rating, no grease keywords
+  - Duplicates: 7 flags — all multi-location chains (Roto-Rooter 22+7 locations, DAR PRO 3, Zoom Drain 3, etc.)
 
 ### Phase 6: Database Population
 - **Status:** ✅ COMPLETE
