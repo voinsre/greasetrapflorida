@@ -130,14 +130,14 @@ export default function CompareTable() {
             <div className="p-4 space-y-1">
               <div className="flex items-center justify-between py-2">
                 <span className="text-sm text-gray-600">Rating</span>
-                {b.rating ? (
+                {b.rating && b.rating >= 2.0 ? (
                   <span className="inline-flex items-center gap-1 text-sm">
                     <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
                     {Number(b.rating).toFixed(1)}
                     <span className="text-gray-400">({b.review_count || 0})</span>
                   </span>
                 ) : (
-                  <span className="text-sm text-gray-400">No rating</span>
+                  <span className="text-sm text-gray-400">&mdash;</span>
                 )}
               </div>
               <BoolRow label="Emergency 24/7" value={b.emergency_24_7} />
@@ -209,14 +209,14 @@ export default function CompareTable() {
               <td className={headerCell}>Rating &amp; Reviews</td>
               {businesses.map((b) => (
                 <td key={b.id} className={dataCell}>
-                  {b.rating ? (
+                  {b.rating && b.rating >= 2.0 ? (
                     <span className="inline-flex items-center gap-1">
                       <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
                       {Number(b.rating).toFixed(1)}
                       <span className="text-gray-400">({b.review_count || 0})</span>
                     </span>
                   ) : (
-                    <span className="text-gray-400">No rating</span>
+                    <span className="text-gray-400">&mdash;</span>
                   )}
                 </td>
               ))}

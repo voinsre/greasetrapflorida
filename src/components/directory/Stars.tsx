@@ -7,7 +7,7 @@ export default function Stars({
   rating: number | null;
   reviewCount: number | null;
 }) {
-  if (!rating) return null;
+  if (!rating || rating < 2.0) return null;
 
   const full = Math.floor(rating);
   const hasHalf = rating - full >= 0.25 && rating - full < 0.75;

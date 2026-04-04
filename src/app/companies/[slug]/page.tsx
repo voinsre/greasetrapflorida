@@ -127,7 +127,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: { absolute: title },
-    description: `${business.name} provides grease trap services in ${business.city}, ${business.county || 'Florida'}. ${business.rating ? `Rated ${Number(business.rating).toFixed(1)} stars.` : ''} Get a free quote today.`.slice(0, 160),
+    description: `${business.name} provides grease trap services in ${business.city}, ${business.county || 'Florida'}. ${business.rating && Number(business.rating) >= 2.0 ? `Rated ${Number(business.rating).toFixed(1)} stars.` : ''} Get a free quote today.`.slice(0, 160),
     alternates: { canonical: `https://greasetrapflorida.com/companies/${slug}` },
     openGraph: {
       title,
@@ -257,7 +257,7 @@ export default async function CompanyPage({ params }: Props) {
       ...(business.address ? { address: { '@type': 'PostalAddress', streetAddress: business.address, addressLocality: business.city, addressRegion: 'FL', addressCountry: 'US' } } : {}),
       ...(business.phone ? { telephone: business.phone } : {}),
       ...(business.website ? { url: business.website } : {}),
-      ...(business.rating && business.review_count
+      ...(business.rating && Number(business.rating) >= 2.0 && business.review_count
         ? {
             aggregateRating: {
               '@type': 'AggregateRating',

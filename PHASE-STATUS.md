@@ -1,7 +1,7 @@
 # Grease Trap Florida — Phase Status
 
 **Last updated:** 2026-04-05
-**Updated by:** Added business name search to FilterBar — real-time client-side search across all directory pages
+**Updated by:** Removed 6 non-grease businesses, hide sub-2.0 ratings, 139 businesses remain
 
 ---
 
@@ -24,10 +24,10 @@
 | Manual review cleanup | -58 businesses (22 score-1 + 7 score-2 + 29 Roto-Rooter franchise) | April 4, 2026 |
 | Post-cleanup desc fixes | 42 remaining junk descriptions rewritten | April 4, 2026 |
 | Final DB count | 110 confirmed grease trap businesses (74 verified, 64 emergency 24/7) | April 4, 2026 |
-| Counties with 2+ businesses | 18 counties (pages generated) | April 4, 2026 |
-| Counties with 1 business | 5 (no page, business still in /companies) | April 4, 2026 |
-| Cities with 2+ listings | 21 cities (15 pruned after removals) | April 4, 2026 |
-| Total pages generated | 216 (110 biz + 18 county + 21 city + 10 service + 14 guide + 10 compliance + 6 blog + index/utility pages) | April 4, 2026 |
+| Expansion run | +35 new businesses from scraper (strict verification + pre-filter) | April 5, 2026 |
+| Verification audit | 145 businesses scored 0-10, 6 removed (non-grease) | April 5, 2026 |
+| Current DB count | 139 businesses, 24 counties, 21 cities | April 5, 2026 |
+| Total pages generated | 247 (139 biz + 20 county + 21 city + 10 service + 14 guide + 10 compliance + 6 blog + index/utility pages) | April 5, 2026 |
 
 ---
 
@@ -525,4 +525,7 @@
 | 2026-04-04 | 9 | Pre-deploy hardening: 404 page, error boundary, loading state, web manifest, twitter card, security headers (HSTS, X-Frame-Options, nosniff, Referrer-Policy), honeypot spam prevention on all API routes + forms, RLS verified | 286 pages, zero build errors |
 | 2026-04-04 | 10B | Scraper service: 2,416 lines TypeScript, 11 source files, 3 modes (expansion/weekly/monthly), Railway deploy pending login | Native fetch, Google Places API (New), Supabase, Resend, Vercel deploy hook |
 | 2026-04-04 | 10B | Scraper tightened: strict verify (3+ score, no plausible), pre-filter before scraping, 90+ blacklist keywords, hood/environmental/septic rules. Deployed to Railway. | Dry run found 1,391 garbage — too loose. Expected: ~300-500 scrape queue, 30-80 new businesses |
+| 2026-04-05 | 10B | Expansion run: +35 new businesses. Fixed batch dedup, service tags (slug→UUID), city counts. Retroactive fix script for missing data. | 145 total, 24 counties, 23 cities |
+| 2026-04-05 | Audit | Full 145-business verification (0-10 score). Removed 6 non-grease: Titan Dry Fogging, GreaseBusters Tampa, Engine & Accessory, Aetna Plumbing, 2x Florida Rooter. | 139 businesses, 24 counties, 21 cities |
+| 2026-04-05 | UI | Hide star ratings for businesses rated below 2.0 (Stars, CompareTable, JSON-LD, meta). Search input already in FilterBar. | Display only — no DB changes |
 | | | | |
