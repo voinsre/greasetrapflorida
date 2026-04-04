@@ -9,7 +9,6 @@ import ListingCard from '@/components/directory/ListingCard';
 import VerifiedBadge, { isVerified } from '@/components/directory/VerifiedBadge';
 import MapWrapper from '@/components/directory/MapWrapper';
 import LeadForm from '@/components/forms/LeadForm';
-import MobileQuoteCTA from './MobileQuoteCTA';
 import {
   MapPin,
   Phone,
@@ -265,7 +264,7 @@ export default async function CompanyPage({ params }: Props) {
         />
       ))}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 pb-20 lg:pb-4">
         <Breadcrumbs
           items={[
             { label: 'Companies', href: '/companies' },
@@ -399,6 +398,11 @@ export default async function CompanyPage({ params }: Props) {
                   </div>
                 </div>
               )}
+            </section>
+
+            {/* Mobile Quote Form — inline so it's always visible */}
+            <section className="lg:hidden">
+              <LeadForm businessId={business.id} businessName={business.name} />
             </section>
 
             {/* Map */}
@@ -592,11 +596,6 @@ export default async function CompanyPage({ params }: Props) {
         </div>
       </div>
 
-      {/* Mobile CTA */}
-      <MobileQuoteCTA
-        businessId={business.id}
-        businessName={business.name}
-      />
     </>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { CheckCircle, Loader2, ArrowRight, ArrowLeft, MapPin } from 'lucide-react';
 
 interface CountyOption {
@@ -17,6 +18,14 @@ interface CityOption {
 interface ServiceOption {
   slug: string;
   name: string;
+}
+
+interface LinkedBusiness {
+  id: string;
+  name: string;
+  city: string;
+  county: string | null;
+  county_slug: string | null;
 }
 
 const ESTABLISHMENT_TYPES = [
@@ -47,10 +56,14 @@ const URGENCY_OPTIONS = [
 ];
 
 export default function QuoteWizard() {
+  const searchParams = useSearchParams();
+  const companySlug = searchParams.get('company');
+
   const [step, setStep] = useState(1);
   const [counties, setCounties] = useState<CountyOption[]>([]);
   const [cities, setCities] = useState<CityOption[]>([]);
   const [serviceTypes, setServiceTypes] = useState<ServiceOption[]>([]);
+  const [linkedBusiness, setLinkedBusiness] = useState<LinkedBusiness | null>(null);
 
   const [selectedCounty, setSelectedCounty] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
@@ -77,6 +90,7 @@ export default function QuoteWizard() {
           process.env.NEXT_PUBLIC_SUPABASE_URL!,
           process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
         );
+
         const [{ data: c }, { data: ci }, { data: s }] = await Promise.all([
           supabase.from('counties').select('slug, name').gt('business_count', 0).order('name'),
           supabase.from('cities').select('slug, name, county_slug').gt('business_count', 0).order('name'),
@@ -85,12 +99,27 @@ export default function QuoteWizard() {
         setCounties(c || []);
         setCities(ci || []);
         setServiceTypes(s || []);
+
+        // If a company slug is in the URL, fetch that business
+        if (companySlug) {
+          const { data: biz } = await supabase
+            .from('businesses')
+            .select('id, name, city, county, county_slug')
+            .eq('slug', companySlug)
+            .single();
+          if (biz) {
+            setLinkedBusiness(biz);
+            if (biz.county_slug) {
+              setSelectedCounty(biz.county_slug);
+            }
+          }
+        }
       } catch {
         // Silent fail
       }
     }
     fetchData();
-  }, []);
+  }, [companySlug]);
 
   const filteredCities = selectedCounty
     ? cities.filter((c) => c.county_slug === selectedCounty)
@@ -117,6 +146,8 @@ export default function QuoteWizard() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          business_id: linkedBusiness?.id || null,
+          business_name: linkedBusiness?.name || null,
           name: contactName,
           email: contactEmail,
           phone: contactPhone,
@@ -148,7 +179,7 @@ export default function QuoteWizard() {
         <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
         <h3 className="text-lg font-bold text-gray-900 mb-2">Quote Request Sent!</h3>
         <p className="text-gray-600">
-          Your quote request has been sent to verified providers in {selectedCountyName || 'your area'}.
+          Your quote request has been sent to {linkedBusiness ? linkedBusiness.name : `verified providers in ${selectedCountyName || 'your area'}`}.
           Expect to hear back within 24 hours.
         </p>
       </div>
@@ -157,6 +188,17 @@ export default function QuoteWizard() {
 
   return (
     <div>
+      {/* Linked business banner */}
+      {linkedBusiness && (
+        <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 mb-6">
+          <MapPin className="w-4 h-4 text-amber-600 shrink-0" />
+          <p className="text-sm text-gray-900">
+            Requesting a quote from <span className="font-semibold">{linkedBusiness.name}</span>
+            {linkedBusiness.city && ` in ${linkedBusiness.city}`}
+          </p>
+        </div>
+      )}
+
       {/* Step Indicator */}
       <div className="flex items-center gap-2 mb-8">
         {[1, 2, 3, 4].map((s) => (
@@ -373,6 +415,15 @@ export default function QuoteWizard() {
         <div className="space-y-5">
           <h2 className="text-xl font-bold text-gray-900">Step 4: Review & Submit</h2>
           <div className="bg-gray-50 rounded-xl p-6 space-y-3">
+            {linkedBusiness && (
+              <div className="flex items-start gap-2">
+                <MapPin className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
+                <div>
+                  <span className="text-sm text-gray-500">Company:</span>
+                  <span className="ml-2 text-gray-900 font-medium">{linkedBusiness.name}</span>
+                </div>
+              </div>
+            )}
             <div className="flex items-start gap-2">
               <MapPin className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
               <div>

@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import QuoteWizard from '@/components/forms/QuoteWizard';
 
@@ -29,7 +30,9 @@ export default function GetQuotesPage() {
         Free, no obligation, and typically within 24 hours.
       </p>
 
-      <QuoteWizard />
+      <Suspense fallback={<div className="h-64 bg-gray-50 rounded-xl animate-pulse" />}>
+        <QuoteWizard />
+      </Suspense>
     </div>
   );
 }
