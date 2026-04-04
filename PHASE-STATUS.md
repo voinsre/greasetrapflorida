@@ -1,7 +1,7 @@
 # Grease Trap Florida — Phase Status
 
 **Last updated:** 2026-04-04
-**Updated by:** Data quality cleanup — removed 58 non-grease businesses, 110 confirmed listings remain
+**Updated by:** Scraper service built (Phase 10B) — 2,416 lines TypeScript, Railway deploy pending
 
 ---
 
@@ -428,6 +428,48 @@
 - **Notes:** AdUnit at src/components/ads/AdUnit.tsx. All 3 API routes (/api/leads, /api/claims, /api/contact) send branded HTML emails (admin notification + user confirmation) via Resend using shared template at src/lib/email-template.ts. Branded layout: dark gray-900 header with amber wordmark, styled data tables, amber CTA buttons, branded footer.
 - **Deviations:** —
 
+### Phase 10B: Scraper Service (Railway)
+- **Status:** 🟡 IN PROGRESS — code complete, pending Railway deploy
+- **Date started:** April 4, 2026
+- **Structure:** `scraper/` directory — standalone Node.js service (NO Docker)
+- **Files created (11):**
+  - scraper/package.json, tsconfig.json, .env.example
+  - scraper/src/config.ts (222 lines) — 40 cities, 8 search terms, 20 grease keywords, service type map, blacklist
+  - scraper/src/utils.ts (410 lines) — slug generation, county lookup (200+ FL cities), text cleaning, email/pricing/years extraction
+  - scraper/src/discover.ts (253 lines) — Google Places API (New) Text Search, pagination, dedup, FL filter, blacklist filter
+  - scraper/src/scrape-websites.ts (245 lines) — 6-8 page scraper, keyword link discovery, 5 concurrent, browser headers
+  - scraper/src/verify.ts (126 lines) — tiered scoring (confirmed/plausible/rejected), grease keyword verification
+  - scraper/src/enrich.ts (251 lines) — description extraction, service matching, emergency 24/7, email, service areas
+  - scraper/src/load.ts (262 lines) — Supabase insert/update/delete, slug uniqueness, count recalculation
+  - scraper/src/update-existing.ts (234 lines) — monthly Place Details refresh, re-scrape changed websites
+  - scraper/src/notify.ts (174 lines) — Resend email reports with HTML formatting
+  - scraper/src/rebuild.ts (25 lines) — Vercel deploy hook trigger
+  - scraper/src/index.ts (214 lines) — orchestrator for expansion/weekly/monthly modes
+- **Total lines:** 2,416 TypeScript
+- **Build:** `tsc` — zero errors
+- **Dependencies:** @supabase/supabase-js, resend, typescript, @types/node (native fetch, no axios/cheerio/puppeteer)
+- **Modes:**
+  - `expansion`: discover all cities × 8 terms → scrape → verify → enrich → load → notify → rebuild
+  - `weekly`: same as expansion but only new place_ids
+  - `monthly`: Place Details refresh on all existing listings, re-scrape changed websites
+- **Estimated API calls per mode:**
+  - Expansion: ~960 Google Places calls (40 cities × 8 terms × 3 pages max) + website scrapes
+  - Weekly: ~960 Google Places calls + scrapes for new businesses only
+  - Monthly: ~110 Place Details calls (1 per existing business)
+- **Deployment checklist:**
+  - [x] Railway CLI installed (v4.36.1)
+  - [ ] Railway login (interactive — must be done manually)
+  - [ ] `railway init` → create project "greasetrapflorida-scraper"
+  - [ ] Set environment variables (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, RESEND_API_KEY from .env.local + others)
+  - [ ] Set GOOGLE_PLACES_API_KEY in Railway dashboard
+  - [ ] Set root directory to /scraper in Railway dashboard
+  - [ ] Deploy with `railway up`
+  - [ ] First dry run (DRY_RUN=true)
+  - [ ] Flip DRY_RUN to false
+  - [ ] Configure cron schedule in Railway dashboard
+- **Notes:** Railway auto-detects Node.js from package.json. No Dockerfile or railway.json needed. DRY_RUN defaults to true for safety.
+- **Deviations:** Railway deployment deferred to manual step — CLI requires interactive browser login.
+
 ### Phase 11: DEP License Enrichment
 - **Status:** ⬜ NOT STARTED (Post-launch, Week 2)
 - **Notes:** DEP licensed hauler registry is still being populated. Monitor floridadep.gov/waste for published list. When available, cross-reference against directory listings and add DEP license badges.
@@ -481,4 +523,5 @@
 | 2026-04-04 | Audit | Final link audit: 279 internal targets, 221 DB links, 117 external links checked across 286 pages. Zero broken internal/content/component links. 14 redirects verified. 7 dead external links (business sites). | CLEAN |
 | 2026-04-04 | 8 | Phase 8: SEO + AEO + GEO hardening. 590 issues found, 585 fixed (99.2%). Canonical URLs on all 286 pages, og:image on all pages, heading hierarchy fixed, Organization JSON-LD, Speakable schema on 5 pages, E-E-A-T about page, 5 Supabase descriptions shortened. | 5 remaining: 3 titles 61-63 chars (long city names), 2 Legislation schema (intentional) |
 | 2026-04-04 | 9 | Pre-deploy hardening: 404 page, error boundary, loading state, web manifest, twitter card, security headers (HSTS, X-Frame-Options, nosniff, Referrer-Policy), honeypot spam prevention on all API routes + forms, RLS verified | 286 pages, zero build errors |
+| 2026-04-04 | 10B | Scraper service: 2,416 lines TypeScript, 11 source files, 3 modes (expansion/weekly/monthly), Railway deploy pending login | Native fetch, Google Places API (New), Supabase, Resend, Vercel deploy hook |
 | | | | |

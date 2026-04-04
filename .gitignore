@@ -33,9 +33,14 @@ yarn-error.log*
 # env files
 .env*
 !.env.local.example
+!scraper/.env.example
 
 # data pipeline output (raw scrape data, cleaned data)
 /data/
+
+# scraper build output + deps
+/scraper/dist/
+/scraper/node_modules/
 
 # vercel
 .vercel

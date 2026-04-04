@@ -1,0 +1,20 @@
+{
+  "name": "greasetrapflorida-scraper",
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2",
+    "resend": "^3"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20"
+  }
+}
