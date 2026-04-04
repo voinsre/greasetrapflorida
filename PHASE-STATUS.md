@@ -1,7 +1,7 @@
 # Grease Trap Florida — Phase Status
 
 **Last updated:** 2026-04-04
-**Updated by:** Phase 9 pre-deploy checklist complete
+**Updated by:** Re-enrichment v2 complete — 168 businesses re-scraped and re-enriched
 
 ---
 
@@ -19,7 +19,8 @@
 | Data quality audit pass 2 | -1,087 no confirmed grease evidence | April 4, 2026 |
 | Data quality audit pass 3 | -582 zero grease evidence (borderline plumbing/septic kept in pass 2) | April 4, 2026 |
 | Emergency badge cleanup | 377 → 374 (3 false positives corrected) | April 4, 2026 |
-| Final DB count | 168 confirmed grease trap businesses (all verified) | April 4, 2026 |
+| Re-enrichment v2 | 168 businesses re-scraped (6-10 pages each), re-enriched with strict rules | April 4, 2026 |
+| Final DB count | 168 confirmed grease trap businesses (all verified + re-enriched) | April 4, 2026 |
 | Counties with 2+ businesses | 22 counties (pages generated) | April 4, 2026 |
 | Counties with 1 business | 5 (no page, business still in /companies) | April 4, 2026 |
 | Cities with 2+ listings | 36 cities | April 4, 2026 |
@@ -132,6 +133,18 @@
 - **Phase 5b retry:** Retried 553 blocked sites with aggressive browser mimicry (full headers, UA rotation, Google referer, 12s timeout). Recovered 76 (13.7%), 477 still blocked. All 76 re-enriched.
 - **Notes:** Used rule-based keyword/pattern extraction instead of Claude API — instant, deterministic, zero cost. Low "grease confirmed" rate (5.5%) is expected: most businesses are general plumbing/septic companies whose Google Maps categories had grease terms (validated in Phase 4) but whose websites emphasize broader services.
 - **Deviations:** Used rule-based enrichment instead of Claude API enrichment. This is more cost-effective and sufficient for the extracted fields. Claude API can be used later for higher-quality descriptions if needed.
+- **Phase 5c Re-enrichment (post-audit):** Re-scraped all 168 confirmed businesses with improved v2 scraper (6-10 targeted pages vs 3). Results:
+  - Scraper: 145 live sites, avg 5.9 pages/site (up from 2.0), avg 9,324 chars/site (up from ~5,000)
+  - Descriptions from website: 128/168 (76%) — up from 110 (65%). Template fallbacks: 40
+  - Services: avg 2.1/business (360 total tags). Top: Emergency 99, Drain 78, Hydro Jetting 64, Grease Trap Cleaning 54
+  - Emergency 24/7: 104 (strict verification — down from 124 inflated count. Trusts opening_hours over vague claims)
+  - Emails: 40 (up from 27)
+  - Pricing signals: 102 businesses
+  - Years in business: 94 businesses
+  - Service areas: 109 businesses with coverage data (397 area tags)
+  - Confidence: HIGH 15 / MEDIUM 104 / LOW 49
+  - Dedup: 8 flags — all legitimate multi-location chains (Roto-Rooter, DAR PRO, Zoom Drain, etc.)
+  - Text cleaning: strips nav/header/footer/form/cookie elements, rejects short lines, removes review snippets, WordPress artifacts
 
 ### Phase 6: Database Population
 - **Status:** ✅ COMPLETE
@@ -375,12 +388,12 @@
   - [x] Redirects: www→non-www 308, 14 slug redirects, no loops
   - [x] `npm run build` — zero errors, 286 static pages
 - **Remaining deploy steps:**
-  - [ ] Set Vercel env vars
-  - [ ] Add domain + DNS
-  - [ ] Push to main
-  - [ ] Wait for build (DO NOT cancel)
-  - [ ] 14-point post-deploy verification
-  - [ ] GSC: verify domain, submit sitemap
+  - [x] Set Vercel env vars
+  - [x] Add domain + DNS
+  - [x] Push to main
+  - [x] Wait for build (DO NOT cancel)
+  - [x] 14-point post-deploy verification
+  - [x] GSC: verify domain, submit sitemap
   - [ ] Ahrefs: create project, run audit
   - [ ] Commit: "Phase 9: live at greasetrapflorida.com"
 - **Notes:** favicon.ico not generated (SVG favicon works in all modern browsers). apple-touch-icon.png not generated (SVG used as fallback). RLS policies are restrictive by default since all data access goes through service role key at build time or API routes.
