@@ -1,7 +1,7 @@
 # Grease Trap Florida — Phase Status
 
 **Last updated:** 2026-04-04
-**Updated by:** Listing audit complete — 64 descriptions, 62 services, 65 badges fixed
+**Updated by:** Data quality cleanup — removed 58 non-grease businesses, 110 confirmed listings remain
 
 ---
 
@@ -21,11 +21,13 @@
 | Emergency badge cleanup | 377 → 374 (3 false positives corrected) | April 4, 2026 |
 | Re-enrichment v2 | 168 businesses re-scraped (6-10 pages each), re-enriched with strict rules | April 4, 2026 |
 | Listing audit | 64 descriptions rewritten, 62 service tags added, 65 verified badges corrected | April 4, 2026 |
-| Final DB count | 168 businesses (103 verified, 104 emergency 24/7, avg 2.5 services/biz) | April 4, 2026 |
-| Counties with 2+ businesses | 22 counties (pages generated) | April 4, 2026 |
+| Manual review cleanup | -58 businesses (22 score-1 + 7 score-2 + 29 Roto-Rooter franchise) | April 4, 2026 |
+| Post-cleanup desc fixes | 42 remaining junk descriptions rewritten | April 4, 2026 |
+| Final DB count | 110 confirmed grease trap businesses (74 verified, 64 emergency 24/7) | April 4, 2026 |
+| Counties with 2+ businesses | 18 counties (pages generated) | April 4, 2026 |
 | Counties with 1 business | 5 (no page, business still in /companies) | April 4, 2026 |
-| Cities with 2+ listings | 36 cities | April 4, 2026 |
-| Total pages generated | 292 (168 biz + 22 county + 36 city + 10 service + 14 guide + 10 compliance + 6 blog + index/utility pages) | April 4, 2026 |
+| Cities with 2+ listings | 21 cities (15 pruned after removals) | April 4, 2026 |
+| Total pages generated | 216 (110 biz + 18 county + 21 city + 10 service + 14 guide + 10 compliance + 6 blog + index/utility pages) | April 4, 2026 |
 
 ---
 
@@ -153,6 +155,13 @@
   - Emergency 24/7: 104 correct (0 changes needed — strict logic from re-enrichment was accurate)
   - Verified badge: **65 badges removed** (168→103). Criteria: live website + phone + reviews + place_id + rating≥3.0 + grease keywords. Common fail reasons: website not live, no reviews/rating, no grease keywords
   - Duplicates: 7 flags — all multi-location chains (Roto-Rooter 22+7 locations, DAR PRO 3, Zoom Drain 3, etc.)
+- **Phase 5e Manual Review Cleanup:** Based on audit results, manually reviewed and removed 58 businesses:
+  - 22 score-1 businesses (no grease evidence found — general plumbers, pump services, demolition, restrooms)
+  - 7 score-2 businesses (only generic services, minimal grease evidence — general plumbers with no website confirmation)
+  - 29 Roto-Rooter listings (national franchise, general plumber, dilutes directory quality)
+  - 42 remaining junk descriptions rewritten after removals
+  - 15 cities pruned (dropped below 2-business threshold), 4 county pages dropped
+  - Final: 110 businesses, 74 verified, 64 emergency, 18 county pages, 21 city pages, 216 total pages
 
 ### Phase 6: Database Population
 - **Status:** ✅ COMPLETE
