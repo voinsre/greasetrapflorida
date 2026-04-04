@@ -51,9 +51,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${inter.className} h-full antialiased`}>
-      <head>
-        <Script src="https://analytics.ahrefs.com/analytics.js" data-key="HI3wTVrGkAWfez3iRmtonQ" strategy="afterInteractive" />
-      </head>
       <body className="min-h-full flex flex-col">
         <CompareProvider>
           <Header />
@@ -62,6 +59,7 @@ export default function RootLayout({
           <CompareBar />
         </CompareProvider>
       </body>
+      <Script src="https://analytics.ahrefs.com/analytics.js" data-key="HI3wTVrGkAWfez3iRmtonQ" strategy="afterInteractive" />
     </html>
   );
 }
