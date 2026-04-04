@@ -3,6 +3,91 @@ import type { EnrichedBusiness } from "./enrich.js";
 import type { DiscoveredBusiness } from "./discover.js";
 import { generateSlug, ensureUniqueSlug, lookupCounty, slugify } from "./utils.js";
 
+// ── Dedup helpers ───────────────────────────────────────────────────────────
+
+/** Normalize a business name for comparison: lowercase, strip Inc/LLC/Corp/etc. */
+function normalizeName(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/\b(inc|llc|corp|ltd|co|company|services|service)\b\.?/g, "")
+    .replace(/[^a-z0-9\s]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Get phone digits (last 10) for comparison */
+function normalizePhone(phone: string | null): string | null {
+  if (!phone) return null;
+  const digits = phone.replace(/\D/g, "");
+  return digits.length >= 10 ? digits.slice(-10) : null;
+}
+
+/**
+ * Remove duplicates within the new batch AND against existing DB records.
+ * Keeps the entry with the highest review count when duplicates are found.
+ */
+function deduplicateBatch(
+  businesses: EnrichedBusiness[],
+  existingPhones: Set<string>,
+  existingNameCounty: Set<string>,
+): EnrichedBusiness[] {
+  const result: EnrichedBusiness[] = [];
+  const seenPhones = new Set<string>();
+  const seenNameCity = new Set<string>();
+  const seenNameCounty = new Set<string>();
+
+  // Sort by reviewCount descending so we keep the best version
+  const sorted = [...businesses].sort(
+    (a, b) => (b.reviewCount ?? 0) - (a.reviewCount ?? 0),
+  );
+
+  for (const biz of sorted) {
+    const phone = normalizePhone(biz.phone);
+    const nameNorm = normalizeName(biz.name);
+    const countySlug = biz.countySlug ?? lookupCounty(biz.city);
+    const nameCityKey = `${nameNorm}|${biz.city.toLowerCase()}`;
+    const nameCountyKey = countySlug ? `${nameNorm}|${countySlug}` : null;
+
+    // Check against existing DB — same phone
+    if (phone && existingPhones.has(phone)) {
+      console.log(`  Dedup (existing phone): skipping "${biz.name}" — phone already in DB`);
+      continue;
+    }
+
+    // Check against existing DB — same normalized name + county
+    if (nameCountyKey && existingNameCounty.has(nameCountyKey)) {
+      console.log(`  Dedup (existing name+county): skipping "${biz.name}" in ${countySlug}`);
+      continue;
+    }
+
+    // Check within batch — same phone
+    if (phone && seenPhones.has(phone)) {
+      console.log(`  Dedup (batch phone): skipping "${biz.name}" — duplicate phone`);
+      continue;
+    }
+
+    // Check within batch — same name + same city
+    if (seenNameCity.has(nameCityKey)) {
+      console.log(`  Dedup (batch name+city): skipping "${biz.name}" in ${biz.city}`);
+      continue;
+    }
+
+    // Check within batch — same name + same county (nearby city)
+    if (nameCountyKey && seenNameCounty.has(nameCountyKey)) {
+      console.log(`  Dedup (batch name+county): skipping "${biz.name}" in ${countySlug}`);
+      continue;
+    }
+
+    // Not a duplicate — keep it
+    if (phone) seenPhones.add(phone);
+    seenNameCity.add(nameCityKey);
+    if (nameCountyKey) seenNameCounty.add(nameCountyKey);
+    result.push(biz);
+  }
+
+  return result;
+}
+
 // ── Types ────────────────────────────────────────────────────────────────────
 
 export interface LoadReport {
@@ -46,9 +131,40 @@ export async function loadResults(
     (slugRows ?? []).map((r) => r.slug as string),
   );
 
+  // ── DEDUP new businesses before inserting ────────────────────────────────
+
+  // Load existing phones and names for cross-check
+  const { data: existingRows } = await supabase
+    .from("businesses")
+    .select("phone_unformatted, name, county_slug");
+  const existingPhones = new Set<string>(
+    (existingRows ?? [])
+      .map((r) => r.phone_unformatted as string)
+      .filter(Boolean),
+  );
+  const existingNameCounty = new Set<string>(
+    (existingRows ?? [])
+      .filter((r) => r.name && r.county_slug)
+      .map((r) => `${normalizeName(r.name as string)}|${r.county_slug as string}`),
+  );
+
+  // Dedup within batch + against existing DB
+  const dedupedBusinesses = deduplicateBatch(
+    newBusinesses,
+    existingPhones,
+    existingNameCounty,
+  );
+
+  const dedupRemoved = newBusinesses.length - dedupedBusinesses.length;
+  if (dedupRemoved > 0) {
+    console.log(
+      `Dedup: removed ${dedupRemoved} duplicates from batch of ${newBusinesses.length} → ${dedupedBusinesses.length} unique`,
+    );
+  }
+
   // ── INSERT new businesses ────────────────────────────────────────────────
 
-  for (const biz of newBusinesses) {
+  for (const biz of dedupedBusinesses) {
     const baseSlug = generateSlug(biz.name, biz.city);
     const slug = await ensureUniqueSlug(baseSlug, existingSlugs);
     const countySlug = biz.countySlug ?? lookupCounty(biz.city);
