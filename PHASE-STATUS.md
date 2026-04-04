@@ -1,7 +1,7 @@
 # Grease Trap Florida — Phase Status
 
-**Last updated:** 2026-04-04
-**Updated by:** Scraper tightened — strict verification + pre-filter + expanded blacklist, deployed to Railway
+**Last updated:** 2026-04-05
+**Updated by:** Added business name search to FilterBar — real-time client-side search across all directory pages
 
 ---
 
