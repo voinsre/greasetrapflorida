@@ -66,9 +66,13 @@ export default function ListingCard({
         />
 
         <div className="flex items-center gap-2 mt-2">
-          <button className="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm min-h-[44px]">
+          <Link
+            href={`/get-quotes?company=${business.slug}`}
+            onClick={(e) => e.stopPropagation()}
+            className="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm min-h-[44px] text-center"
+          >
             Get a Free Quote
-          </button>
+          </Link>
           <CompareCheckbox businessId={business.id} />
         </div>
       </div>
