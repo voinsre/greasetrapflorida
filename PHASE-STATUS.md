@@ -1,7 +1,7 @@
 # Grease Trap Florida — Phase Status
 
 **Last updated:** 2026-04-04
-**Updated by:** Scraper service built (Phase 10B) — 2,416 lines TypeScript, Railway deploy pending
+**Updated by:** Scraper tightened — strict verification + pre-filter + expanded blacklist, deployed to Railway
 
 ---
 
@@ -429,23 +429,23 @@
 - **Deviations:** —
 
 ### Phase 10B: Scraper Service (Railway)
-- **Status:** 🟡 IN PROGRESS — code complete, pending Railway deploy
+- **Status:** ✅ DEPLOYED — strict verification + pre-filter active, dry run pending
 - **Date started:** April 4, 2026
 - **Structure:** `scraper/` directory — standalone Node.js service (NO Docker)
-- **Files created (11):**
+- **Files created (12):**
   - scraper/package.json, tsconfig.json, .env.example
-  - scraper/src/config.ts (222 lines) — 40 cities, 8 search terms, 20 grease keywords, service type map, blacklist
-  - scraper/src/utils.ts (410 lines) — slug generation, county lookup (200+ FL cities), text cleaning, email/pricing/years extraction
-  - scraper/src/discover.ts (253 lines) — Google Places API (New) Text Search, pagination, dedup, FL filter, blacklist filter
-  - scraper/src/scrape-websites.ts (245 lines) — 6-8 page scraper, keyword link discovery, 5 concurrent, browser headers
-  - scraper/src/verify.ts (126 lines) — tiered scoring (confirmed/plausible/rejected), grease keyword verification
-  - scraper/src/enrich.ts (251 lines) — description extraction, service matching, emergency 24/7, email, service areas
-  - scraper/src/load.ts (262 lines) — Supabase insert/update/delete, slug uniqueness, count recalculation
-  - scraper/src/update-existing.ts (234 lines) — monthly Place Details refresh, re-scrape changed websites
-  - scraper/src/notify.ts (174 lines) — Resend email reports with HTML formatting
-  - scraper/src/rebuild.ts (25 lines) — Vercel deploy hook trigger
-  - scraper/src/index.ts (214 lines) — orchestrator for expansion/weekly/monthly modes
-- **Total lines:** 2,416 TypeScript
+  - scraper/src/config.ts — 40 cities, 8 search terms, 20 grease keywords, service type map, expanded blacklist (90+ keywords)
+  - scraper/src/utils.ts — slug generation, county lookup (200+ FL cities), text cleaning, email/pricing/years extraction
+  - scraper/src/discover.ts — Google Places API (New) Text Search, pagination, dedup, FL filter, blacklist filter
+  - scraper/src/prefilter.ts — name-based pre-filter to cut scrape queue before website scraping
+  - scraper/src/scrape-websites.ts — 6-8 page scraper, keyword link discovery, 5 concurrent, browser headers
+  - scraper/src/verify.ts — strict scoring (3+ to accept, no plausible tier), hood/environmental/septic rules
+  - scraper/src/enrich.ts — description extraction, service matching, emergency 24/7, email, service areas
+  - scraper/src/load.ts — Supabase insert/update/delete, slug uniqueness, count recalculation
+  - scraper/src/update-existing.ts — monthly Place Details refresh, re-scrape changed websites
+  - scraper/src/notify.ts — Resend email reports with pre-filter stats
+  - scraper/src/rebuild.ts — Vercel deploy hook trigger
+  - scraper/src/index.ts — orchestrator: discover → pre-filter → scrape → verify → enrich → load → notify → rebuild
 - **Build:** `tsc` — zero errors
 - **Dependencies:** @supabase/supabase-js, resend, typescript, @types/node (native fetch, no axios/cheerio/puppeteer)
 - **Modes:**
@@ -524,4 +524,5 @@
 | 2026-04-04 | 8 | Phase 8: SEO + AEO + GEO hardening. 590 issues found, 585 fixed (99.2%). Canonical URLs on all 286 pages, og:image on all pages, heading hierarchy fixed, Organization JSON-LD, Speakable schema on 5 pages, E-E-A-T about page, 5 Supabase descriptions shortened. | 5 remaining: 3 titles 61-63 chars (long city names), 2 Legislation schema (intentional) |
 | 2026-04-04 | 9 | Pre-deploy hardening: 404 page, error boundary, loading state, web manifest, twitter card, security headers (HSTS, X-Frame-Options, nosniff, Referrer-Policy), honeypot spam prevention on all API routes + forms, RLS verified | 286 pages, zero build errors |
 | 2026-04-04 | 10B | Scraper service: 2,416 lines TypeScript, 11 source files, 3 modes (expansion/weekly/monthly), Railway deploy pending login | Native fetch, Google Places API (New), Supabase, Resend, Vercel deploy hook |
+| 2026-04-04 | 10B | Scraper tightened: strict verify (3+ score, no plausible), pre-filter before scraping, 90+ blacklist keywords, hood/environmental/septic rules. Deployed to Railway. | Dry run found 1,391 garbage — too loose. Expected: ~300-500 scrape queue, 30-80 new businesses |
 | | | | |

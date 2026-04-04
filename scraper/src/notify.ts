@@ -8,6 +8,8 @@ export interface NotificationReport {
   startTime: Date;
   endTime: Date;
   newDiscovered: number;
+  preFilterPassed?: number;
+  preFilterRejected?: number;
   newAdded: number;
   newAddedNames: string[];
   rejected: number;
@@ -91,6 +93,7 @@ export async function sendNotification(
   <h3>Discovery & Processing</h3>
   <table style="width: 100%; border-collapse: collapse; margin: 16px 0;">
     <tr><td style="padding: 6px 12px; border: 1px solid #ddd; background: #f8f8f8;"><strong>New discovered</strong></td><td style="padding: 6px 12px; border: 1px solid #ddd;">${report.newDiscovered}</td></tr>
+    ${report.preFilterPassed != null ? `<tr><td style="padding: 6px 12px; border: 1px solid #ddd; background: #f8f8f8;"><strong>Pre-filter</strong></td><td style="padding: 6px 12px; border: 1px solid #ddd;">${report.preFilterPassed} passed / ${report.preFilterRejected} rejected before scraping</td></tr>` : ""}
     <tr><td style="padding: 6px 12px; border: 1px solid #ddd; background: #f8f8f8;"><strong>New added</strong></td><td style="padding: 6px 12px; border: 1px solid #ddd;">${report.newAdded}</td></tr>
     <tr><td style="padding: 6px 12px; border: 1px solid #ddd; background: #f8f8f8;"><strong>Rejected</strong></td><td style="padding: 6px 12px; border: 1px solid #ddd;">${report.rejected}</td></tr>
     <tr><td style="padding: 6px 12px; border: 1px solid #ddd; background: #f8f8f8;"><strong>Existing updated</strong></td><td style="padding: 6px 12px; border: 1px solid #ddd;">${report.existingUpdated}</td></tr>

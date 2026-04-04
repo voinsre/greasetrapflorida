@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { CITIES, SEARCH_TEMPLATES } from "./config.js";
 import { discoverBusinesses } from "./discover.js";
+import { preFilterBusinesses } from "./prefilter.js";
 import { scrapeBusinessWebsites } from "./scrape-websites.js";
 import { verifyBusiness } from "./verify.js";
 import { enrichBusiness } from "./enrich.js";
@@ -49,26 +50,25 @@ async function runExpansionOrWeekly(
   console.log(`\n=== DISCOVERY ===`);
   const discovery = await discoverBusinesses(CITIES, SEARCH_TEMPLATES);
 
-  // For weekly mode, only process new businesses
-  const toScrape =
-    mode === "weekly"
-      ? discovery.newQueue
-      : discovery.newQueue;
+  // 2. Pre-filter: remove blacklisted and irrelevant businesses before scraping
+  console.log(`\n=== PRE-FILTER ===`);
+  const preFilter = preFilterBusinesses(discovery.newQueue);
 
-  console.log(`\n=== SCRAPING ${toScrape.length} websites ===`);
-  const scraped = await scrapeBusinessWebsites(toScrape);
+  // 3. Scrape only businesses that passed pre-filter
+  console.log(`\n=== SCRAPING ${preFilter.passed.length} websites ===`);
+  const scraped = await scrapeBusinessWebsites(preFilter.passed);
 
   // 3. Verify
   console.log(`\n=== VERIFYING ===`);
   const verified: Array<{
-    business: (typeof toScrape)[0];
+    business: (typeof preFilter.passed)[0];
     scraped: (typeof scraped)[0];
     result: ReturnType<typeof verifyBusiness>;
   }> = [];
   const rejectionReasons: Record<string, number> = {};
 
   for (let i = 0; i < scraped.length; i++) {
-    const biz = toScrape[i];
+    const biz = preFilter.passed[i];
     const scrapedBiz = scraped[i];
     const result = verifyBusiness(biz, scrapedBiz);
 
@@ -115,6 +115,8 @@ async function runExpansionOrWeekly(
     startTime,
     endTime,
     newDiscovered: discovery.newQueue.length,
+    preFilterPassed: preFilter.passedCount,
+    preFilterRejected: preFilter.rejectedCount,
     newAdded: loadReport.inserted,
     newAddedNames: loadReport.insertedNames,
     rejected: scraped.length - verified.length,

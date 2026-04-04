@@ -139,18 +139,47 @@ export const SERVICE_TYPE_MAP: Record<string, string[]> = {
 // ── Blacklist name keywords ──────────────────────────────────────────────────
 
 export const BLACKLIST_KEYWORDS: string[] = [
-  "hvac", "carpet", "pressure washing", "pest control", "roofing",
+  // Original
+  "hvac", "pest control", "roofing",
   "painting", "landscaping", "pool", "lawn", "mold", "restoration",
-  "demolition", "well pump", "fire protection", "handyman",
-  "home improvement", "appliance", "garage door", "fence", "paving",
-  "concrete", "electrical", "locksmith", "moving", "storage", "roto-rooter",
+  "demolition", "handyman",
+  "home improvement", "appliance", "concrete", "electrical",
+
+  // Franchise/chain names
+  "servpro", "servicemaster", "stanley steemer", "mr. rooter", "mr rooter",
+  "roto-rooter", "rotorooter", "wind river", "clog kings",
+
+  // Supply/retail stores
+  "ferguson", "home depot", "winsupply", "plumbing supply", "supply company",
+  "supply store", "bond plumbing supply", "southern supply",
+
+  // Waste/hauling companies (non-grease)
+  "waste pro", "gfl environmental", "waste connections", "coastal waste",
+  "waste management", "junk removal", "hauling", "dumpster", "roll-off",
+  "rolloff", "bin there dump that", "trash removal",
+
+  // Unrelated services
+  "air duct", "dryer vent", "carpet", "pressure cleaning", "pressure washing",
+  "power washing", "water damage", "flood cleanup", "chimney", "attic",
+  "insulation", "car wash", "detailing", "kitchen for rent", "food truck city",
+  "tile", "flooring", "remodeling", "renovation", "grout", "epoxy",
+  "leak detection", "leak locator", "leak squad", "water treatment",
+  "water filtration", "generator", "tractor", "excavating", "paving",
+  "sprinkler", "irrigation", "backflow only", "backflow testing",
+  "well drilling", "well service", "well pump", "pump repair", "pump service",
+  "pump sales", "fire inspector", "fire protection", "environmental consulting",
+  "environmental testing", "air conditioning", "ac repair", "refrigeration",
+  "garage door", "fence", "locksmith", "moving", "storage", "maid service",
+  "cleaning service", "janitorial", "steamer", "steam cleaning",
+  "hazardous waste", "medical waste", "solid waste", "recycling center",
+  "transfer station", "landfill",
 ];
 
 // ── Google types to skip (non-service retail/restaurant) ─────────────────────
 
 export const SKIP_GOOGLE_TYPES: string[] = [
   "restaurant", "store", "shopping_mall", "gas_station",
-  "car_repair", "lodging",
+  "car_repair", "car_dealer", "lodging",
 ];
 
 export const SERVICE_GOOGLE_TYPES: string[] = [
