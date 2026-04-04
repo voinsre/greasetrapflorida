@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -50,6 +51,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${inter.className} h-full antialiased`}>
+      <head>
+        <Script src="https://analytics.ahrefs.com/analytics.js" data-key="HI3wTVrGkAWfez3iRmtonQ" strategy="afterInteractive" />
+      </head>
       <body className="min-h-full flex flex-col">
         <CompareProvider>
           <Header />
