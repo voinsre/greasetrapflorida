@@ -6,6 +6,7 @@ import { createStaticClient } from '@/lib/supabase/static';
 import { isVerified } from '@/components/directory/VerifiedBadge';
 import DirectoryShell from '@/components/directory/DirectoryShell';
 import { ChevronRight } from 'lucide-react';
+import { applyOverrides } from "@/lib/seo-overrides";
 
 export async function generateStaticParams() {
   const supabase = createStaticClient();
@@ -23,9 +24,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .select('name')
     .eq('slug', slug)
     .single();
-  if (!service) return {};
+  if (!service) return applyOverrides(`/services/${slug}`, {});
   const title = `${service.name} in Florida`;
-  return {
+  return applyOverrides(`/services/${slug}`, {
     title: { absolute: title },
     description: `Find companies offering ${service.name.toLowerCase()} in Florida. Compare ratings, verify licensing, and get free quotes from verified providers.`,
     openGraph: {
@@ -39,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     alternates: {
       canonical: `https://greasetrapflorida.com/services/${slug}`,
     },
-  };
+  });
 }
 
 // Unique SEO content per service type (only 10, so no templates)

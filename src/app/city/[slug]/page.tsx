@@ -7,6 +7,7 @@ import { isVerified } from '@/components/directory/VerifiedBadge';
 import DirectoryShell from '@/components/directory/DirectoryShell';
 import ListingCard from '@/components/directory/ListingCard';
 import { MapPin, ChevronRight, Star, BookOpen, Shield, DollarSign, Wrench } from 'lucide-react';
+import { applyOverrides } from "@/lib/seo-overrides";
 
 export async function generateStaticParams() {
   const supabase = createStaticClient();
@@ -27,9 +28,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .select('name')
     .eq('slug', slug)
     .single();
-  if (!city) return {};
+  if (!city) return applyOverrides(`/city/${slug}`, {});
   const title = `Grease Trap Cleaning ${city.name}, Florida`;
-  return {
+  return applyOverrides(`/city/${slug}`, {
     title: { absolute: title },
     description: `Find licensed grease trap cleaning companies in ${city.name}, Florida. Compare ratings, services, and request free quotes from verified local providers.`,
     openGraph: {
@@ -43,7 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     alternates: {
       canonical: `https://greasetrapflorida.com/city/${slug}`,
     },
-  };
+  });
 }
 
 const CITY_TEMPLATES = [

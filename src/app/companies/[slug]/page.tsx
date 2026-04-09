@@ -22,6 +22,7 @@ import {
   ArrowRight,
   Navigation,
 } from 'lucide-react';
+import { applyOverrides } from "@/lib/seo-overrides";
 
 export async function generateStaticParams() {
   const supabase = createStaticClient();
@@ -117,7 +118,7 @@ async function getBusiness(slug: string) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const result = await getBusiness(slug);
-  if (!result) return { title: { absolute: 'Company Not Found' } };
+  if (!result) return applyOverrides(`/companies/${slug}`, { title: { absolute: 'Company Not Found' } });
 
   const { business } = result;
   let title = `${business.name} - Grease Trap Service ${business.city}, FL`;
@@ -125,7 +126,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title = `${business.name.slice(0, 35)}... - ${business.city}, FL`;
   }
 
-  return {
+  return applyOverrides(`/companies/${slug}`, {
     title: { absolute: title },
     description: `${business.name} provides grease trap services in ${business.city}, ${business.county || 'Florida'}. ${business.rating && Number(business.rating) >= 2.0 ? `Rated ${Number(business.rating).toFixed(1)} stars.` : ''} Get a free quote today.`.slice(0, 160),
     alternates: { canonical: `https://greasetrapflorida.com/companies/${slug}` },
@@ -137,7 +138,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [{ url: '/images/og-image.webp', width: 1200, height: 630 }],
       type: 'website',
     },
-  };
+  });
 }
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
