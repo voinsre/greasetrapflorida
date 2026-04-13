@@ -82,13 +82,13 @@ const COUNTY_DATA: Record<string, CountyData> = {
 
   'hillsborough': {
     intro:
-      'Hillsborough County Public Utilities Department runs one of Florida\'s most structured Grease Management Programs, requiring all food service establishments in Tampa and surrounding areas to obtain a FOG permit before operating. Under Hillsborough County\'s grease ordinance, traps and interceptors must be cleaned at least every 90 days, with higher-volume kitchens often requiring monthly service. The county conducts periodic inspections and can issue fines for non-compliance. Tampa\'s booming food scene — from the historic Ybor City restaurant district to the expanding SoHo and Seminole Heights dining corridors — means competition among service providers keeps quality high and pricing fair. All waste haulers must be DEP-licensed and provide grease manifests. Browse verified Hillsborough County providers below.',
+      'Hillsborough County Public Utilities Department runs one of Florida\'s most structured Grease Management Programs, requiring all food service establishments in Tampa and surrounding areas to obtain a FOG permit before operating. Under the Hillsborough County Utilities Pretreatment Ordinance, traps and interceptors must be cleaned at least every 90 days, with higher-volume kitchens often requiring monthly service. The county conducts periodic inspections and can issue fines for non-compliance. Tampa\'s booming food scene — from the historic Ybor City restaurant district to the expanding SoHo and Seminole Heights dining corridors — means competition among service providers keeps quality high and pricing fair. All waste haulers must be DEP-licensed and provide grease manifests. Browse verified Hillsborough County providers below.',
     metaDescription:
       'Find grease trap cleaning companies in Hillsborough County. Grease Management Program-permitted providers with 90-day compliance service and free quotes.',
     faqs: [
       {
         q: 'Who enforces grease trap compliance in Hillsborough County?',
-        a: 'Hillsborough County Public Utilities Department enforces FOG compliance through its Grease Management Program. The department issues FOG permits, conducts periodic inspections, and can issue fines for non-compliant food service establishments in Tampa and surrounding areas.',
+        a: 'Hillsborough County Public Utilities Department enforces FOG compliance through its Grease Management Program under the Hillsborough County Utilities Pretreatment Ordinance. The department issues FOG permits, conducts periodic inspections, and can issue fines for non-compliant food service establishments in Tampa and surrounding areas.',
       },
       {
         q: 'Do Hillsborough County restaurants need a FOG permit?',
@@ -103,13 +103,13 @@ const COUNTY_DATA: Record<string, CountyData> = {
 
   'orange': {
     intro:
-      'Orange County Utilities administers the FOG Control Program governing grease trap compliance for the greater Orlando area. With Walt Disney World, Universal Studios, and the Orange County Convention Center driving enormous seasonal dining volume, food service establishments face uniquely high grease output demands. Restaurants must obtain a FOG permit through Orange County Utilities, and cleaning frequency is set per permit based on establishment size and output. Theme-park-adjacent dining districts, International Drive restaurants, and downtown Orlando\'s growing culinary scene all require consistent pump-out schedules that account for tourist-season surges. DEP-licensed haulers must provide manifest documentation for every service call. Compare FOG-permitted grease trap companies serving Orange County in our directory.',
+      'Orange County Utilities administers the FOG Control Program under Orange County Code Chapter 35, Article III (Pretreatment Program), governing grease trap compliance for the greater Orlando area. With Walt Disney World, Universal Studios, and the Orange County Convention Center driving enormous seasonal dining volume, food service establishments face uniquely high grease output demands. Restaurants must obtain a FOG permit through Orange County Utilities, and cleaning frequency is set per permit based on establishment size and output. Theme-park-adjacent dining districts, International Drive restaurants, and downtown Orlando\'s growing culinary scene all require consistent pump-out schedules that account for tourist-season surges. DEP-licensed haulers must provide manifest documentation for every service call. Compare FOG-permitted grease trap companies serving Orange County in our directory.',
     metaDescription:
-      'Find grease trap cleaning companies in Orange County. FOG Control Program-permitted providers serving Orlando\'s tourism-driven restaurant industry. Free quotes.',
+      'Find grease trap cleaning companies in Orange County. FOG Control Program-permitted providers serving Orlando\'s restaurant industry. Free quotes.',
     faqs: [
       {
         q: 'Who enforces grease trap compliance in Orange County?',
-        a: 'Orange County Utilities administers the FOG Control Program for the greater Orlando area. The department issues FOG permits, sets cleaning frequencies, and monitors compliance for all food service establishments including theme-park-adjacent dining operations.',
+        a: 'Orange County Utilities administers the FOG Control Program under Orange County Code Chapter 35, Article III (Pretreatment Program). The department issues FOG permits, sets cleaning frequencies, and monitors compliance for all food service establishments including theme-park-adjacent dining operations.',
       },
       {
         q: 'Do Orange County restaurants need a FOG permit?',

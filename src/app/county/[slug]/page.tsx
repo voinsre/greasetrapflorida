@@ -298,7 +298,7 @@ export default async function CountyPage({ params }: Props) {
             Grease Trap Cleaning in {county.name} County, FL
           </h1>
           <p className="mt-3 text-gray-300">
-            {businesses.length} Companies &bull; {cityCount} Cities
+            {businesses.length} Companies &bull; {cityCount} {cityCount === 1 ? 'City' : 'Cities'}
           </p>
         </div>
       </section>
