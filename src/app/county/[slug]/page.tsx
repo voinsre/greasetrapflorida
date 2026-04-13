@@ -6,6 +6,7 @@ import { createStaticClient } from '@/lib/supabase/static';
 import { isVerified } from '@/components/directory/VerifiedBadge';
 import DirectoryShell from '@/components/directory/DirectoryShell';
 import { MapPin, ChevronRight, BookOpen, Shield, DollarSign } from 'lucide-react';
+import COUNTY_DATA from '@/data/county-data';
 
 export async function generateStaticParams() {
   const supabase = createStaticClient();
@@ -28,9 +29,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .single();
   if (!county) return {};
   const title = `Grease Trap Cleaning in ${county.name}, FL`;
+  const countyContent = COUNTY_DATA[slug];
+  const description = countyContent?.metaDescription
+    ?? `Find licensed grease trap cleaning companies in ${county.name} County, Florida. Compare ratings, services, and get free quotes from verified providers.`;
   return {
     title: { absolute: title },
-    description: `Find licensed grease trap cleaning companies in ${county.name} County, Florida. Compare ratings, services, and get free quotes from verified providers.`,
+    description,
     openGraph: {
       title,
       description: `Licensed grease trap companies in ${county.name} County, FL.`,
@@ -203,8 +207,10 @@ export default async function CountyPage({ params }: Props) {
     .slice(0, 3)
     .map((c) => c.name)
     .join(', ') || 'the surrounding area';
+  const countyData = COUNTY_DATA[slug];
   const templateIndex = hashString(slug) % COUNTY_TEMPLATES.length;
-  const templateContent = COUNTY_TEMPLATES[templateIndex](county.name, businesses.length, cityCount, topCities);
+  const templateContent = countyData?.intro
+    ?? COUNTY_TEMPLATES[templateIndex](county.name, businesses.length, cityCount, topCities);
 
   // FAQ
   const faqs = [
