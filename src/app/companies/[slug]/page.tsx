@@ -23,6 +23,7 @@ import {
   Navigation,
 } from 'lucide-react';
 import { applyOverrides } from "@/lib/seo-overrides";
+import { getLinkOverrides } from "@/lib/link-overrides";
 
 export async function generateStaticParams() {
   const supabase = createStaticClient();
@@ -620,6 +621,17 @@ export default async function CompanyPage({ params }: Props) {
               </div>
             </section>
 
+
+            {/* SEO Agent: per-slug internal links */}
+            {getLinkOverrides(`/companies/${slug}`).length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-2 text-sm">
+                {getLinkOverrides(`/companies/${slug}`).map((link) => (
+                  <Link key={link.href} href={link.href} className="text-amber-600 underline hover:text-amber-800">
+                    {link.text}
+                  </Link>
+                ))}
+              </div>
+            )}
             {/* Claim CTA */}
             <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
