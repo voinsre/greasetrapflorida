@@ -178,7 +178,7 @@ export default async function GuidePage({ params }: Props) {
           {/* Main Content */}
           <article className="flex-1 min-w-0">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">{guide.title}</h1>
-            <MarkdownContent content={guide.content} />
+            <MarkdownContent content={guide.content.split(/## Frequently Asked Questions/i)[0]} />
 
             {/* FAQ Accordion */}
             {faqs.length > 0 && (

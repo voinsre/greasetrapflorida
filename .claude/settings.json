@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node scripts/scrape-websites-v2.mjs)",
+      "Bash(node scripts/enrich-v2.mjs)",
+      "Bash(node scripts/update-db-v2.mjs)",
+      "Bash(node -e ':*)",
+      "Bash(git commit -m ':*)",
+      "Bash(node scripts/listing-audit.mjs)",
+      "Bash(node scripts/cleanup-removals.mjs)",
+      "Bash(wc -l c:/Users/altas/Projects/greasetrapflorida/scraper/src/*.ts)",
+      "Bash(npm list:*)",
+      "Bash(railway version:*)",
+      "Bash(railway --version)",
+      "Bash(railway whoami:*)",
+      "Bash(railway login:*)",
+      "Bash(railway init:*)",
+      "Bash(railway --help)",
+      "Bash(railway list:*)",
+      "Bash(railway environment:*)",
+      "Bash(railway service:*)",
+      "Bash(railway add:*)",
+      "Bash(railway variables:*)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('\\\\n'.join\\(f'{k}={\\\\\"***\\\\\" if any\\(s in k.upper\\(\\) for s in [\\\\\"KEY\\\\\",\\\\\"SECRET\\\\\",\\\\\"ROLE\\\\\"]\\) else v}' for k,v in d.items\\(\\)\\)\\)\")",
+      "Bash(railway settings:*)",
+      "Bash(railway up:*)",
+      "Bash(railway logs:*)",
+      "Bash(railway down:*)",
+      "Bash(railway deployment:*)",
+      "Bash(railway status:*)",
+      "Bash(curl -X POST \"https://api.vercel.com/v1/integrations/deploy/prj_S1rQUI4G1T4gw2fxr8bUZ7mi78Dv/jjDgzUDO9T\")",
+      "Bash(ls c:/Users/altas/Projects/greasetrapflorida/data/*.json)",
+      "Bash(node scripts/remove-6-businesses.mjs)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\altas\\Projects\\greasetrapflorida\\scraper\\src"
+    ]
+  }
+}

@@ -42,6 +42,10 @@ yarn-error.log*
 /scraper/dist/
 /scraper/node_modules/
 
+# google service account keys
+gen-lang-client-0883509855-72a40f150171.json
+gsc-raw-greasetrapflorida.json
+
 # vercel
 .vercel
 
