@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     openGraph: {
       title,
-      description: `Licensed grease trap companies in ${county.name} County, FL.`,
+      description,
       url: `https://greasetrapflorida.com/county/${slug}`,
       siteName: 'Grease Trap Florida',
       images: [{ url: '/images/og-image.webp', width: 1200, height: 630 }],
@@ -212,8 +212,10 @@ export default async function CountyPage({ params }: Props) {
   const templateContent = countyData?.intro
     ?? COUNTY_TEMPLATES[templateIndex](county.name, businesses.length, cityCount, topCities);
 
-  // FAQ
+  // FAQ — county-specific questions first, then generic
+  const countyFaqs = countyData?.faqs ?? [];
   const faqs = [
+    ...countyFaqs,
     {
       q: `How many grease trap companies serve ${county.name} County?`,
       a: `There are currently ${businesses.length} grease trap service companies listed in our ${county.name} County directory. These providers offer cleaning, pumping, installation, and emergency services across ${cityCount} cities in the county.`,
@@ -318,6 +320,55 @@ export default async function CountyPage({ params }: Props) {
               </Link>
             </p>
           )}
+        </section>
+      </div>
+
+      {/* Compliance Resources */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mb-2">
+          <h2 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+            <Shield className="w-5 h-5 text-amber-500" />
+            {county.name} County Compliance Resources
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {compliancePage && (
+              <Link
+                href={`/compliance/${compliancePage.slug}`}
+                className="flex items-center gap-2 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 hover:bg-amber-100 transition-colors font-medium"
+              >
+                <Shield className="w-4 h-4 shrink-0" />
+                {county.name} County Requirements
+              </Link>
+            )}
+            <Link
+              href="/compliance/chapter-62-705-guide"
+              className="flex items-center gap-2 text-sm text-gray-700 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-100 transition-colors"
+            >
+              <BookOpen className="w-4 h-4 shrink-0" />
+              Chapter 62-705 Guide
+            </Link>
+            <Link
+              href="/compliance/fines-and-penalties"
+              className="flex items-center gap-2 text-sm text-gray-700 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-100 transition-colors"
+            >
+              <Shield className="w-4 h-4 shrink-0" />
+              Fines &amp; Penalties
+            </Link>
+            <Link
+              href="/compliance/grease-waste-manifest-guide"
+              className="flex items-center gap-2 text-sm text-gray-700 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-100 transition-colors"
+            >
+              <BookOpen className="w-4 h-4 shrink-0" />
+              Grease Waste Manifest Guide
+            </Link>
+            <Link
+              href="/cost/grease-trap-cleaning-cost"
+              className="flex items-center gap-2 text-sm text-gray-700 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-100 transition-colors"
+            >
+              <DollarSign className="w-4 h-4 shrink-0" />
+              Cleaning Cost Guide
+            </Link>
+          </div>
         </section>
       </div>
 
